@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import portraitSrc from "@/imports/abdul-hanan-portrait.jpeg";
 
-/* ─── 📐 Minimal Professional SVG Icons (No Emojis / No "Toy" Artifacts) ── */
-const Icon = ({ d, size = 19, strokeWidth = 1.8 }: { d: string; size?: number; strokeWidth?: number }) => (
+/* ─── 📐 Sleek Vector Icons ─────────────────────────────────── */
+const Icon = ({ d, size = 18, strokeWidth = 1.8 }: { d: string; size?: number; strokeWidth?: number }) => (
   <svg
     aria-hidden="true"
     width={size}
@@ -31,8 +31,8 @@ const MoonIcon = () => <Icon d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />;
 const HeadsetIcon = () => <Icon d="M3 18v-6a9 9 0 0 1 18 0v6M3 18a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3v5zM21 18a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3v5z" />;
 const SheetIcon = () => <Icon d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h6" />;
 const ChartIcon = () => <Icon d="M18 20V10M12 20V4M6 20v-6" />;
-const ArrowUpRight = ({ size = 16 }: { size?: number }) => <Icon d="M7 17L17 7M7 7h10v10" size={size} strokeWidth={2.2} />;
-const ArrowDown = ({ size = 16 }: { size?: number }) => <Icon d="M12 5v14M19 12l-7 7-7-7" size={size} strokeWidth={2.2} />;
+const ArrowUpRight = ({ size = 15 }: { size?: number }) => <Icon d="M7 17L17 7M7 7h10v10" size={size} strokeWidth={2.2} />;
+const ArrowDown = ({ size = 15 }: { size?: number }) => <Icon d="M12 5v14M19 12l-7 7-7-7" size={size} strokeWidth={2.2} />;
 const MenuIcon = () => <Icon d="M4 6h16M4 12h16M4 18h16" size={22} />;
 const CloseIcon = () => <Icon d="M18 6L6 18M6 6l12 12" size={22} />;
 const GlobeIcon = () => <Icon d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 0c2.5 2.7 4 6.2 4 10s-1.5 7.3-4 10m0-20c-2.5 2.7-4 6.2-4 10s1.5 7.3 4 10m-8-10h16" />;
@@ -48,12 +48,11 @@ const PauseIcon = () => (
   </svg>
 );
 const LinkedInIcon = () => (
-  <svg aria-hidden="true" width={18} height={18} viewBox="0 0 24 24" fill="currentColor">
+  <svg aria-hidden="true" width={17} height={17} viewBox="0 0 24 24" fill="currentColor">
     <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.6 1.6 0 1 0 0-3.2 1.6 1.6 0 0 0 0 3.2m1.4 9.74V9.96H5.06v8.54z" />
   </svg>
 );
 
-/* ─── 🔗 Robust Base URL Asset Helper ──────────────────────── */
 const getAssetUrl = (fileName: string) => {
   const base = import.meta.env.BASE_URL.endsWith("/")
     ? import.meta.env.BASE_URL
@@ -61,7 +60,6 @@ const getAssetUrl = (fileName: string) => {
   return `${base}${encodeURIComponent(fileName)}`;
 };
 
-/* ─── 🧭 Navigation Links ───────────────────────────────────── */
 const NAV = [
   { label: "About", href: "#about", icon: <PersonIcon /> },
   { label: "Expertise", href: "#teaching", icon: <BookIcon /> },
@@ -72,7 +70,6 @@ const NAV = [
   { label: "Contact", href: "#contact", icon: <MailIcon /> },
 ];
 
-/* ─── 🎙️ Voice Audio Metadata ───────────────────────────────── */
 const VOICE_SAMPLES = [
   {
     n: "01",
@@ -100,7 +97,6 @@ const VOICE_SAMPLES = [
   },
 ];
 
-/* ─── 🎵 Polished Native Audio Player Component ────────────── */
 function AudioPlayerCard({
   sample,
   dark,
@@ -158,13 +154,13 @@ function AudioPlayerCard({
       className="rounded-2xl p-6 border flex flex-col justify-between gap-5 transition-all hover:border-[#E86D35]/50 shadow-sm"
       style={{
         backgroundColor: dark ? "#11261F" : "#FFFFFF",
-        borderColor: dark ? "rgba(255,255,255,0.1)" : "#E2E8F0",
+        borderColor: dark ? "rgba(255,255,255,0.08)" : "#E2E8F0",
       }}
     >
       <div>
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-mono font-bold tracking-wider text-[#E86D35]">
-            SAMPLE {sample.n}
+          <span className="text-xs font-bold tracking-widest text-[#E86D35] uppercase">
+            Sample {sample.n}
           </span>
           <span
             className="text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider"
@@ -199,7 +195,7 @@ function AudioPlayerCard({
         onError={() => setHasError(true)}
       />
 
-      <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex flex-col gap-2.5">
+      <div className="pt-4 border-t border-gray-100 dark:border-gray-800/80 flex flex-col gap-2.5">
         {hasError ? (
           <div className="flex items-center justify-between text-sm text-red-400">
             <span>Audio stream failed</span>
@@ -219,7 +215,7 @@ function AudioPlayerCard({
 
             <div
               onClick={handleSeek}
-              className="relative flex-1 h-3 bg-gray-200 dark:bg-gray-800 rounded-full cursor-pointer overflow-hidden py-1"
+              className="relative flex-1 h-2.5 bg-gray-200 dark:bg-gray-800 rounded-full cursor-pointer overflow-hidden"
             >
               <div
                 className="h-full bg-[#E86D35] rounded-full transition-all"
@@ -227,7 +223,7 @@ function AudioPlayerCard({
               />
             </div>
 
-            <span className="font-mono text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-300 tabular-nums">
+            <span className="text-xs font-semibold text-gray-600 dark:text-gray-300 tabular-nums">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
           </div>
@@ -237,7 +233,6 @@ function AudioPlayerCard({
   );
 }
 
-/* ─── 🚀 Main Application ─────────────────────────────────────── */
 export default function App() {
   const [dark, setDark] = useState(() => {
     const stored = localStorage.getItem("theme");
@@ -260,7 +255,6 @@ export default function App() {
       subject
     )}`;
 
-  // Universal Device-Agnostic CV Downloader (iOS Safari, Android, PC)
   const handleDownloadCV = async (e: React.MouseEvent) => {
     e.preventDefault();
     const cvUrl = getAssetUrl("Abdul_Hanan_CV.pdf");
@@ -285,14 +279,13 @@ export default function App() {
   return (
     <div
       style={{
-        backgroundColor: dark ? "#091712" : "#F7F5EE",
+        backgroundColor: dark ? "#0A1712" : "#F7F5EE",
         color: dark ? "#F3F4F6" : "#0F172A",
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        fontFamily: '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       }}
       className="min-h-screen transition-colors duration-200 antialiased selection:bg-[#E86D35]/25 selection:text-[#E86D35]"
     >
-      {/* ── 📱 Mobile Left Drawer Overlay ──────────────────── */}
+      {/* ── 📱 Mobile Navigation Overlay ───────────────────── */}
       {mobileMenuOpen && (
         <div
           className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs lg:hidden transition-opacity"
@@ -300,7 +293,7 @@ export default function App() {
         />
       )}
 
-      {/* ── 📱 Mobile Drawer Menu ──────────────────────────── */}
+      {/* ── 📱 Mobile Slide Drawer ─────────────────────────── */}
       <aside
         className={`fixed top-0 left-0 bottom-0 z-50 w-72 max-w-[85vw] p-6 shadow-2xl flex flex-col justify-between transform transition-transform duration-300 ease-out lg:hidden ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
@@ -354,7 +347,7 @@ export default function App() {
         </div>
 
         <div className="pt-4 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
-          <span className="text-sm font-bold text-gray-500 dark:text-gray-400 font-mono">THEME</span>
+          <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Appearance</span>
           <button
             onClick={toggleDark}
             className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E86D35]/15 text-[#E86D35]"
@@ -364,11 +357,11 @@ export default function App() {
         </div>
       </aside>
 
-      {/* ── 📌 Top Navigation Bar ──────────────────────────── */}
+      {/* ── 📌 Desktop Header ──────────────────────────────── */}
       <header
         className="sticky top-0 z-40 backdrop-blur-md border-b transition-colors"
         style={{
-          backgroundColor: dark ? "rgba(9,23,18,0.88)" : "rgba(247,245,238,0.92)",
+          backgroundColor: dark ? "rgba(10,23,18,0.88)" : "rgba(247,245,238,0.92)",
           borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
         }}
       >
@@ -425,7 +418,7 @@ export default function App() {
       {/* ── 🌟 Hero Section ─────────────────────────────────── */}
       <section className="max-w-[1360px] mx-auto px-4 pt-14 pb-12 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12 items-center">
         <div className="flex flex-col gap-6">
-          <span className="text-sm font-mono font-bold tracking-wider uppercase text-[#E86D35]">
+          <span className="text-xs sm:text-sm font-bold tracking-widest uppercase text-[#E86D35]">
             Urdu Tutor · Language Data Specialist · Faisalabad, Pakistan
           </span>
 
@@ -447,7 +440,7 @@ export default function App() {
             dir="rtl"
             className="text-3xl sm:text-4xl leading-relaxed text-right max-w-lg font-medium"
             style={{
-              fontFamily: '"Noto Nastaliq Urdu", "Urdu Typesetting", Tahoma, serif',
+              fontFamily: '"Noto Nastaliq Urdu", "Urdu Typesetting", serif',
               color: dark ? "#6EE7B7" : "#1E5943",
             }}
           >
@@ -507,14 +500,14 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── 🏷️ Banner Strip ─────────────────────────────────── */}
+      {/* ── 🏷️ Clean Banner Strip ────────────────────────────── */}
       <div style={{ backgroundColor: "#E86D35" }} className="py-4 px-4 text-white">
         <div className="max-w-[1360px] mx-auto flex flex-col sm:flex-row sm:items-center gap-2">
-          <span className="font-mono text-sm font-black tracking-widest uppercase opacity-95">
+          <span className="text-xs font-bold tracking-widest uppercase opacity-95">
             For Language Teams &amp; Recruiters
           </span>
           <span className="hidden sm:inline opacity-40 mx-1">|</span>
-          <span className="text-base font-medium">
+          <span className="text-sm sm:text-base font-medium">
             Combining phonetics awareness, customer operations discipline, and clean script automation.
           </span>
         </div>
@@ -524,7 +517,7 @@ export default function App() {
       <section id="about" className="max-w-[1360px] mx-auto px-4 py-16">
         <div className="mb-4 flex items-center gap-2">
           <span style={{ color: "#E86D35" }}><PersonIcon /></span>
-          <span className="font-mono text-sm font-bold tracking-wider uppercase text-[#E86D35]">01 / Profile</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">01 / Profile</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10 items-start">
@@ -563,7 +556,7 @@ export default function App() {
                   borderColor: dark ? "rgba(255,255,255,0.1)" : "#E2E8F0",
                 }}
               >
-                <p className="text-xs font-mono font-bold tracking-widest text-[#E86D35] uppercase mb-1">{f.label}</p>
+                <p className="text-xs font-bold tracking-widest text-[#E86D35] uppercase mb-1">{f.label}</p>
                 <p className="text-lg font-bold" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>{f.sub}</p>
               </div>
             ))}
@@ -571,7 +564,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── 📚 Section 2: Teaching & Clean Editorial Bilingual Area ── */}
+      {/* ── 📚 Section 2: Teaching & Bilingual Showcase ────── */}
       <section
         id="teaching"
         className="py-16 border-y"
@@ -583,7 +576,7 @@ export default function App() {
         <div className="max-w-[1360px] mx-auto px-4">
           <div className="mb-4 flex items-center gap-2">
             <span style={{ color: "#E86D35" }}><BookIcon /></span>
-            <span className="font-mono text-sm font-bold tracking-wider uppercase text-[#E86D35]">02 / Teaching &amp; Dialect</span>
+            <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">02 / Teaching &amp; Dialect</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-8" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>
@@ -604,14 +597,14 @@ export default function App() {
                   borderColor: dark ? "rgba(255,255,255,0.08)" : "#E2E8F0",
                 }}
               >
-                <span className="font-mono text-3xl font-black block mb-2 text-[#E86D35]">{c.n}</span>
+                <span className="text-3xl font-extrabold block mb-2 text-[#E86D35]">{c.n}</span>
                 <h3 className="font-bold text-lg mb-2" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>{c.title}</h3>
                 <p className="text-sm leading-relaxed" style={{ color: dark ? "#CBD5E1" : "#475569" }}>{c.desc}</p>
               </div>
             ))}
           </div>
 
-          {/* ── 🌟 Fixed Editorial Dual-Column Bilingual Showcase ── */}
+          {/* Bilingual Context Card */}
           <div
             className="rounded-3xl p-6 sm:p-9 border shadow-xl transition-all"
             style={{
@@ -620,7 +613,7 @@ export default function App() {
             }}
           >
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-4 mb-6">
-              <span className="text-xs font-mono uppercase tracking-widest text-[#E86D35] font-bold">
+              <span className="text-xs uppercase tracking-widest text-[#E86D35] font-bold">
                 Bilingual Context Breakdown
               </span>
               <span className="text-xs font-semibold text-white/80 bg-white/10 px-3.5 py-1 rounded-full border border-white/15">
@@ -629,27 +622,25 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              {/* Left: Authentic Urdu */}
               <div className="flex flex-col gap-2">
-                <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">
+                <span className="text-xs uppercase tracking-wider text-emerald-400 font-bold">
                   Original Urdu Script
                 </span>
                 <p
                   lang="ur"
                   dir="rtl"
                   className="text-3xl sm:text-4xl lg:text-5xl text-right leading-loose text-white font-medium my-1"
-                  style={{ fontFamily: '"Noto Nastaliq Urdu", "Urdu Typesetting", Tahoma, serif' }}
+                  style={{ fontFamily: '"Noto Nastaliq Urdu", "Urdu Typesetting", serif' }}
                 >
                   یہ جملہ اردو میں ہے۔
                 </p>
-                <p className="text-base text-emerald-300 font-mono tracking-wide mt-1">
+                <p className="text-base text-emerald-300 font-medium tracking-wide mt-1">
                   Yeh jumla Urdu mein hai.
                 </p>
               </div>
 
-              {/* Right: English Breakdown */}
               <div className="flex flex-col gap-2 md:border-l md:border-white/15 md:pl-8">
-                <span className="text-xs font-mono uppercase tracking-wider text-[#E86D35] font-bold">
+                <span className="text-xs uppercase tracking-wider text-[#E86D35] font-bold">
                   Translation &amp; Structure
                 </span>
                 <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug">
@@ -668,7 +659,7 @@ export default function App() {
       <section id="voice" className="max-w-[1360px] mx-auto px-4 py-16">
         <div className="mb-4 flex items-center gap-2">
           <span style={{ color: "#E86D35" }}><WaveIcon /></span>
-          <span className="font-mono text-sm font-bold tracking-wider uppercase text-[#E86D35]">03 / Voice Samples</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">03 / Voice Samples</span>
         </div>
 
         <div className="mb-8">
@@ -692,7 +683,7 @@ export default function App() {
         <div className="max-w-[1360px] mx-auto px-4">
           <div className="mb-4 flex items-center gap-2">
             <span style={{ color: "#E86D35" }}><DataIcon /></span>
-            <span className="font-mono text-sm font-bold tracking-wider uppercase text-[#E86D35]">04 / AI Data Support</span>
+            <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">04 / AI Data Support</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Precision language data workflows.</h2>
@@ -729,11 +720,11 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── 💼 Section 5: Experience ────────────────────────── */}
+      {/* ── 💼 Section 5: Experience (All Eyebrows Fixed) ────── */}
       <section id="work" className="max-w-[1360px] mx-auto px-4 py-16">
         <div className="mb-4 flex items-center gap-2">
           <span style={{ color: "#E86D35" }}><TrendIcon /></span>
-          <span className="font-mono text-sm font-bold tracking-wider uppercase text-[#E86D35]">05 / Experience</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">05 / Experience</span>
         </div>
 
         <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-8" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>
@@ -773,9 +764,16 @@ export default function App() {
                 {item.icon}
               </div>
               <div>
-                <p className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider mb-1 text-[#E86D35]">{item.eyebrow}</p>
-                <h3 className="font-bold text-lg mb-1" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>{item.title}</h3>
-                <p className="text-sm sm:text-base leading-relaxed" style={{ color: dark ? "#CBD5E1" : "#475569" }}>{item.desc}</p>
+                {/* 👈 Sleek Professional Non-Monospace Eyebrow */}
+                <p className="text-xs font-bold uppercase tracking-widest mb-1.5 text-[#E86D35]">
+                  {item.eyebrow}
+                </p>
+                <h3 className="font-bold text-lg mb-1" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>
+                  {item.title}
+                </h3>
+                <p className="text-sm sm:text-base leading-relaxed" style={{ color: dark ? "#CBD5E1" : "#475569" }}>
+                  {item.desc}
+                </p>
               </div>
             </div>
           ))}
@@ -794,7 +792,7 @@ export default function App() {
         <div className="max-w-[1360px] mx-auto px-4">
           <div className="mb-4 flex items-center gap-2">
             <span style={{ color: "#E86D35" }}><GradCapIcon /></span>
-            <span className="font-mono text-sm font-bold tracking-wider uppercase text-[#E86D35]">06 / Education</span>
+            <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">06 / Education</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-8" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>
@@ -829,8 +827,12 @@ export default function App() {
               >
                 <div className="shrink-0 w-2.5 h-2.5 rounded-full mt-2.5 bg-[#E86D35]" />
                 <div>
-                  <p className="font-mono text-xs sm:text-sm font-semibold mb-1" style={{ color: dark ? "#94A3B8" : "#64748B" }}>{e.date}</p>
-                  <h3 className="font-bold text-lg mb-0.5" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>{e.title}</h3>
+                  <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: dark ? "#94A3B8" : "#64748B" }}>
+                    {e.date}
+                  </p>
+                  <h3 className="font-bold text-lg mb-0.5" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>
+                    {e.title}
+                  </h3>
                   <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-1">{e.inst}</p>
                   {e.note && <p className="text-sm" style={{ color: dark ? "#CBD5E1" : "#64748B" }}>{e.note}</p>}
                 </div>
@@ -845,7 +847,7 @@ export default function App() {
         <div className="max-w-[1360px] mx-auto px-4">
           <div className="mb-4 flex items-center gap-2">
             <span style={{ color: "#E86D35" }}><MailIcon /></span>
-            <span className="font-mono text-sm font-bold tracking-wider uppercase text-[#E86D35]">07 / Contact</span>
+            <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">07 / Contact</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">Initiate a conversation.</h2>
@@ -916,7 +918,7 @@ export default function App() {
                 key={c.label}
                 className="rounded-2xl p-5 bg-white/5 border border-white/10"
               >
-                <p className="font-mono text-xs font-bold text-white/50 mb-1 uppercase tracking-wider">{c.label}</p>
+                <p className="text-xs font-bold text-white/50 mb-1 uppercase tracking-wider">{c.label}</p>
                 {c.href ? (
                   <a
                     href={c.href}
