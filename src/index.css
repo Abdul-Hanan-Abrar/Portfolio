@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+:root {
+  --green-deep: #123B2D;
+  --green-secondary: #1E5943;
+  --green-footer: #0D2C22;
+  --orange: #E86D35;
+  --orange-hover: #D05A22;
+  --dark-text: #18201B;
+  --muted-text: #627066;
+  --bg-paper: #F6F3EC;
+  --bg-card: #FFFDF8;
+  --bg-green-soft: #E8EEE6;
+  --border-color: #D5D0C4;
+  --focus-ring: #E86D35;
+}
+
+.dark {
+  --bg-paper: #0f1f18;
+  --bg-card: #162a20;
+  --bg-green-soft: #1a2e24;
+  --dark-text: #F0EDE6;
+  --muted-text: #8fa895;
+  --border-color: #2a3d32;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background-color: var(--bg-paper);
+  color: var(--dark-text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.font-urdu {
+  font-family: 'Noto Nastaliq Urdu', 'Naskh', serif;
+}
+
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-mono-dm {
+  font-family: 'DM Mono', monospace;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* Scrollbar hide */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
