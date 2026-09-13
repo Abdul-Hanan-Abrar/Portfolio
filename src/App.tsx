@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef } from "react";
+import heroPhoto from "./imports/WhatsApp_Image_2026-08-28_at_11.53.53_AM.jpeg";
+import aboutPhoto from "./imports/WhatsApp_Image_2026-08-28_at_11.52.11_AM.jpeg";
+import bizLedgerImg from "./imports/Opera_Snapshot_2026-08-28_172607_BizLedger.html.png";
+import qrToolImg from "./imports/Opera_Snapshot_2026-08-28_172707_claude.ai.png";
 
 // ─── External URLs & Dynamic Paths ───────────────────────────────────────────
 const RESUME_URL = `${import.meta.env.BASE_URL}resume.pdf`;
@@ -6,39 +10,29 @@ const PORTFOLIO_URL = "https://abdul-hanan-abrar.github.io/Portfolio/";
 const LINKEDIN = "https://www.linkedin.com/in/abdul-hanan-abrar-8b6a9140b/";
 const EMAIL = "abdulhananabrar941@gmail.com";
 
-// ─── Image Assets (Loaded via Base URL to bypass Vite build-time module resolution errors) ─────
-const heroPhoto = `${import.meta.env.BASE_URL}WhatsApp_Image_2026-08-28_at_11.53.53_AM.jpeg`;
-const aboutPhoto = `${import.meta.env.BASE_URL}WhatsApp_Image_2026-08-28_at_11.52.11_AM.jpeg`;
-const bizLedgerImg = `${import.meta.env.BASE_URL}Opera_Snapshot_2026-08-28_172607_BizLedger.html.png`;
-const qrToolImg = `${import.meta.env.BASE_URL}Opera_Snapshot_2026-08-28_172707_claude.ai.png`;
-
-// ─── Native App Email Action Dispatcher ───────────────────────────────────────
+// ─── Direct Mobile Gmail App Dispatcher ───────────────────────────────────────
 const handleEmailClick = (e: React.MouseEvent) => {
   e.preventDefault();
   const ua = navigator.userAgent || "";
   const isAndroid = /Android/i.test(ua);
-  const isIOS =
-    /iPhone|iPad|iPod/i.test(ua) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isIOS = /iPhone|iPad|iPod/i.test(ua);
 
   if (isAndroid) {
-    // 1. Direct Intent to launch native Android Gmail Compose Screen
+    // Launches native Android Gmail App directly into compose window
     window.location.href = `intent:#Intent;action=android.intent.action.SENDTO;data=mailto:${EMAIL};package=com.google.android.gm;end`;
-
-    // 2. Safety Fallback to system default mail client if Gmail is uninstalled
+    // Fallback to default mail client if Gmail is uninstalled
     setTimeout(() => {
       window.location.href = `mailto:${EMAIL}`;
-    }, 600);
+    }, 500);
   } else if (isIOS) {
-    // 1. Direct deep-link for iOS Gmail App
+    // Launches native iOS Gmail App compose screen
     window.location.href = `googlegmail:///co?to=${EMAIL}`;
-
-    // 2. Safety Fallback to Apple Mail if Gmail App is not present
+    // Fallback to default Apple Mail client
     setTimeout(() => {
       window.location.href = `mailto:${EMAIL}`;
-    }, 600);
+    }, 500);
   } else {
-    // Desktop: Web Gmail Compose Tab
+    // Desktop: Opens web Gmail compose tab
     window.open(
       `https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`,
       "_blank",
@@ -47,28 +41,28 @@ const handleEmailClick = (e: React.MouseEvent) => {
   }
 };
 
-// ─── Color Constants (High-Contrast & Theme-Protected) ───────────────────────
+// ─── Color Constants ─────────────────────────────────────────────────────────
 const C = {
   bg: "#F8F7F4",
   white: "#FFFFFF",
   altBg: "#F1EEE9",
   text: "#161616",
-  body: "#2A2A2A",
-  muted: "#5A5A5A",
+  body: "#3C3C3C",
+  muted: "#787878",
   green: "#1D5C3A",
   darkGreen: "#0F3D24",
   lightGreen: "#EBF5EE",
   greenBorder: "#B8DCC3",
-  amber: "#B86A1D",
+  amber: "#C47B2B",
   lightAmber: "#FBF3E8",
   amberBorder: "#E8C99A",
-  border: "#D5CFCE",
+  border: "#E3DED7",
 };
 
 // ─── UI Helpers ──────────────────────────────────────────────────────────────
 function SectionLabel({ children }: { children: string }) {
   return (
-    <span className="text-xs font-bold uppercase tracking-widest" style={{ color: C.green }}>
+    <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: C.green }}>
       {children}
     </span>
   );
@@ -76,7 +70,7 @@ function SectionLabel({ children }: { children: string }) {
 
 function SectionHeading({ children, light = false }: { children: string; light?: boolean }) {
   return (
-    <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-6" style={{ color: light ? "#FFFFFF" : C.text }}>
+    <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-6" style={{ color: light ? "#fff" : C.text }}>
       {children}
     </h2>
   );
@@ -85,7 +79,7 @@ function SectionHeading({ children, light = false }: { children: string; light?:
 function Tag({ children, green = false }: { children: string; green?: boolean }) {
   return (
     <span
-      className="inline-block text-xs font-semibold px-3 py-1 rounded-full"
+      className="inline-block text-xs font-medium px-3 py-1 rounded-full"
       style={
         green
           ? { background: C.lightGreen, color: C.darkGreen, border: `1px solid ${C.greenBorder}` }
@@ -112,7 +106,7 @@ function BtnPrimary({
 }) {
   const cls =
     "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90 active:scale-95 text-center";
-  const style = { background: C.green, color: "#FFFFFF" };
+  const style = { background: C.green, color: "#fff" };
   if (href) {
     return (
       <a href={href} download={download} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls} style={style}>
@@ -162,7 +156,7 @@ function BtnOutlineWhite({
 }) {
   const cls =
     "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:bg-white/10 active:scale-95 text-center";
-  const style = { border: "1.5px solid rgba(255,255,255,0.7)", color: "#FFFFFF" };
+  const style = { border: "1.5px solid rgba(255,255,255,0.5)", color: "#fff" };
   if (href) {
     return (
       <a href={href} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls} style={style}>
@@ -199,7 +193,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     >
       <div
         className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl"
-        style={{ background: C.white, color: C.text }}
+        style={{ background: C.white }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-full" style={{ background: "#0a0a0a" }}>
@@ -235,7 +229,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             <button
               onClick={onClose}
               className="px-5 py-2 rounded-lg text-sm font-semibold transition-all hover:opacity-90"
-              style={{ background: C.green, color: "#FFFFFF" }}
+              style={{ background: C.green, color: "#fff" }}
             >
               Close
             </button>
@@ -387,16 +381,15 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
 
-  // Enforce light-theme color-scheme globally on document to neutralize mobile Auto-Dark mode
+  // Injects color-scheme meta tag to lock font colors across phone light/dark settings
   useEffect(() => {
-    document.documentElement.style.setProperty("color-scheme", "light");
-    let metaScheme = document.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
-    if (!metaScheme) {
-      metaScheme = document.createElement("meta");
-      metaScheme.name = "color-scheme";
-      document.head.appendChild(metaScheme);
+    let meta = document.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.name = "color-scheme";
+      document.head.appendChild(meta);
     }
-    metaScheme.content = "light";
+    meta.content = "light";
   }, []);
 
   const navLinks = [
@@ -456,6 +449,7 @@ export default function App() {
     },
   ];
 
+  // ─── Direct URLs Configured for public/ ──────────────────────────────────────
   const voiceSamples = [
     {
       id: "audio-conversational",
@@ -506,31 +500,26 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        background: C.bg,
-        color: C.text,
-        fontFamily: "'DM Sans', sans-serif",
-        colorScheme: "light",
-      }}
-    >
-      {/* ── Mobile Dark/Light Mode Theme Shield ── */}
+    <div style={{ background: C.bg, color: C.text, fontFamily: "'DM Sans', sans-serif" }}>
+
+      {/* ── Text Readability & Theme Protection Shield ── */}
       <style>{`
         :root, html, body {
           color-scheme: light !important;
-          background-color: ${C.bg} !important;
+          forced-color-adjust: none !important;
+          -webkit-font-smoothing: antialiased;
+        }
+        * {
           forced-color-adjust: none !important;
         }
         input, select, textarea {
-          color: ${C.text} !important;
-          -webkit-text-fill-color: ${C.text} !important;
-          background-color: ${C.bg} !important;
-          opacity: 1 !important;
+          color: #161616 !important;
+          -webkit-text-fill-color: #161616 !important;
+          background-color: #F8F7F4 !important;
         }
         input::placeholder, textarea::placeholder {
-          color: ${C.muted} !important;
-          -webkit-text-fill-color: ${C.muted} !important;
-          opacity: 0.8 !important;
+          color: #787878 !important;
+          -webkit-text-fill-color: #787878 !important;
         }
         option {
           background-color: #FFFFFF !important;
@@ -543,7 +532,7 @@ export default function App() {
       <nav
         className="fixed top-0 left-0 right-0 z-40"
         style={{
-          background: "rgba(248,247,244,0.95)",
+          background: "rgba(248,247,244,0.92)",
           backdropFilter: "blur(12px)",
           borderBottom: `1px solid ${C.border}`,
         }}
@@ -579,7 +568,6 @@ export default function App() {
           <button
             className="lg:hidden flex flex-col gap-1.5 p-2"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle navigation menu"
           >
             <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} style={{ background: C.text }} />
             <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "opacity-0" : ""}`} style={{ background: C.text }} />
@@ -646,11 +634,11 @@ export default function App() {
                 </div>
               </div>
 
-              <p className="text-base font-semibold mb-3" style={{ color: C.green }}>
+              <p className="text-base font-medium mb-3" style={{ color: C.green }}>
                 AI Urdu Language Tutor · Customer Support & Operations Specialist · Computer Science Student
               </p>
 
-              <p className="urdu text-xl sm:text-2xl mb-4 leading-loose font-bold" style={{ color: C.green }}>
+              <p className="urdu text-xl sm:text-2xl mb-4 leading-loose font-semibold" style={{ color: C.green }}>
                 اردو زبان میں اے آئی کو سکھانا — میری خاصیت ہے
               </p>
 
@@ -666,8 +654,8 @@ export default function App() {
                   href={RESUME_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors hover:opacity-80 inline-flex items-center justify-center"
-                  style={{ border: `1.5px solid ${C.border}`, color: C.body, background: C.white }}
+                  className="text-sm font-medium px-5 py-2.5 rounded-lg transition-colors hover:opacity-80 inline-flex items-center justify-center"
+                  style={{ border: `1.5px solid ${C.border}`, color: C.body }}
                 >
                   Download Resume
                 </a>
@@ -675,7 +663,7 @@ export default function App() {
 
               <button
                 onClick={() => scrollTo("voice")}
-                className="text-sm font-semibold transition-opacity hover:opacity-70 block mb-5 text-left"
+                className="text-sm font-medium transition-opacity hover:opacity-70 block mb-5"
                 style={{ color: C.muted }}
               >
                 ↓ Listen to Urdu Voice Samples
@@ -728,8 +716,8 @@ export default function App() {
                   style={{ background: C.white, border: `1px solid ${C.border}`, boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}
                 >
                   <span className="text-2xl mb-3 block">{c.icon}</span>
-                  <h3 className="font-bold text-sm mb-2" style={{ color: C.text }}>{c.title}</h3>
-                  <p className="text-xs leading-relaxed" style={{ color: C.body }}>{c.desc}</p>
+                  <h3 className="font-semibold text-sm mb-2" style={{ color: C.text }}>{c.title}</h3>
+                  <p className="text-xs leading-relaxed" style={{ color: C.muted }}>{c.desc}</p>
                 </div>
               ))}
             </div>
@@ -771,8 +759,8 @@ export default function App() {
               </div>
 
               <blockquote
-                className="my-6 pl-4 py-2 text-sm italic font-semibold"
-                style={{ borderLeft: `3px solid ${C.amber}`, color: C.body, background: C.lightAmber }}
+                className="my-6 pl-4 py-2 text-sm italic font-medium"
+                style={{ borderLeft: `3px solid ${C.amber}`, color: C.body }}
               >
                 "I'm most comfortable where communication meets problem solving."
               </blockquote>
@@ -801,7 +789,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── AI Tutor (Dark Section with High-Contrast Text) ── */}
+      {/* ── AI Tutor ── */}
       <section id="ai-tutor" className="py-16 sm:py-20 relative overflow-hidden" style={{ background: C.darkGreen }}>
         <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-10" style={{ background: C.green }} />
         <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full opacity-10" style={{ background: C.green }} />
@@ -809,16 +797,16 @@ export default function App() {
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FBBF24" }}>
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: C.amber }}>
                 Open to AI & Language Opportunities
               </span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-3 mb-2 text-white leading-tight">
                 Training AI in Urdu —<br />The Right Way
               </h2>
-              <p className="urdu text-lg mb-5 font-semibold" style={{ color: "#86EFAC" }}>
+              <p className="urdu text-lg mb-5" style={{ color: "#a7d4b8" }}>
                 اردو میں اے آئی کو سکھانا — صحیح طریقے سے
               </p>
-              <p className="text-sm leading-relaxed mb-6" style={{ color: "#E2F1E8" }}>
+              <p className="text-sm leading-relaxed mb-6" style={{ color: "#c8dfd2" }}>
                 Most AI systems still struggle with authentic, natural Urdu — the kind spoken in homes, offices and on the street in Pakistan. As a native Urdu speaker with professional bilingual experience, I want to help AI companies build systems that truly understand how Urdu is spoken, written and mixed with English in real-life contexts.
               </p>
 
@@ -831,8 +819,8 @@ export default function App() {
                   "Voice clarity and tone control — usable for speech and text datasets",
                   "Available for structured, ongoing training collaboration",
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm font-medium" style={{ color: "#E2F1E8" }}>
-                    <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full" style={{ background: "#FBBF24" }} />
+                  <li key={item} className="flex items-start gap-3 text-sm" style={{ color: "#c8dfd2" }}>
+                    <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full" style={{ background: C.amber }} />
                     {item}
                   </li>
                 ))}
@@ -856,11 +844,11 @@ export default function App() {
                 <div
                   key={c.title}
                   className="rounded-xl p-4 transition-all duration-200 hover:bg-white/10"
-                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}
+                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
                 >
                   <span className="text-xl mb-2 block">{c.icon}</span>
                   <h4 className="font-semibold text-sm text-white mb-1">{c.title}</h4>
-                  <p className="text-xs leading-relaxed" style={{ color: "#C8DFD2" }}>{c.desc}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: "#a7c4b5" }}>{c.desc}</p>
                 </div>
               ))}
             </div>
@@ -883,8 +871,8 @@ export default function App() {
                   Currently Here
                 </span>
               </div>
-              <p className="font-bold text-sm mb-1" style={{ color: C.green }}>Customer Support & Operations Specialist</p>
-              <div className="flex flex-wrap gap-3 text-xs mb-3 font-medium" style={{ color: C.muted }}>
+              <p className="font-semibold text-sm mb-1" style={{ color: C.green }}>Customer Support & Operations Specialist</p>
+              <div className="flex flex-wrap gap-3 text-xs mb-3" style={{ color: C.muted }}>
                 <span>Faisalabad, Pakistan</span>
                 <span>·</span>
                 <span>June 2024 – Present</span>
@@ -909,8 +897,8 @@ export default function App() {
                     style={{ background: C.bg, border: `1px solid ${C.border}` }}
                   >
                     <span className="text-lg mb-2 block">{c.icon}</span>
-                    <h4 className="font-bold text-xs mb-1" style={{ color: C.text }}>{c.title}</h4>
-                    <p className="text-xs leading-relaxed" style={{ color: C.body }}>{c.desc}</p>
+                    <h4 className="font-semibold text-xs mb-1" style={{ color: C.text }}>{c.title}</h4>
+                    <p className="text-xs leading-relaxed" style={{ color: C.muted }}>{c.desc}</p>
                   </div>
                 ))}
               </div>
@@ -944,7 +932,7 @@ export default function App() {
             <div className="p-8">
               <h3 className="text-xl font-bold mb-1" style={{ color: C.text }}>Bachelor of Science in Computer Science</h3>
               <p className="font-semibold text-sm mb-1" style={{ color: C.green }}>University of Agriculture, Faisalabad (UAF)</p>
-              <p className="text-xs mb-4 font-medium" style={{ color: C.muted }}>Currently Pursuing · Semester 5 · Expected Graduation 2028</p>
+              <p className="text-xs mb-4" style={{ color: C.muted }}>Currently Pursuing · Semester 5 · Expected Graduation 2028</p>
               <p className="text-sm leading-relaxed mb-5" style={{ color: C.body }}>
                 Studying Computer Science while building practical professional experience in customer support, operations, technology and digital tools.
               </p>
@@ -999,11 +987,11 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <SectionLabel>Built by Me</SectionLabel>
           <SectionHeading>Selected Work</SectionHeading>
-          <p className="text-sm max-w-xl mb-10" style={{ color: C.body }}>
+          <p className="text-sm max-w-xl mb-10" style={{ color: C.muted }}>
             Practical problems I've worked on and solutions I've built — from offline retail software to AI-ready tools and operational Excel systems.
           </p>
 
-          <h3 className="font-bold text-sm mb-4" style={{ color: C.text }}>Software Projects</h3>
+          <h3 className="font-semibold text-sm mb-4" style={{ color: C.muted }}>Software Projects</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-10">
             {projects.map((p) => (
               <div
@@ -1032,15 +1020,15 @@ export default function App() {
 
                 <div className="p-5 flex flex-col flex-1">
                   <h3 className="text-lg font-bold mb-0.5" style={{ color: C.text }}>{p.title}</h3>
-                  <p className="text-xs font-semibold mb-3" style={{ color: C.muted }}>{p.subtitle}</p>
+                  <p className="text-xs font-medium mb-3" style={{ color: C.muted }}>{p.subtitle}</p>
                   <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: C.body }}>{p.description}</p>
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {p.tags.map((t) => <Tag key={t}>{t}</Tag>)}
                   </div>
-                  {p.meta && <p className="text-xs mb-3 font-medium" style={{ color: C.muted }}>{p.meta}</p>}
+                  {p.meta && <p className="text-xs mb-3" style={{ color: C.muted }}>{p.meta}</p>}
                   <button
                     onClick={() => setSelectedProject(p)}
-                    className="text-sm font-bold transition-colors hover:opacity-70 text-left"
+                    className="text-sm font-semibold transition-colors hover:opacity-70 text-left"
                     style={{ color: C.green }}
                   >
                     View Details →
@@ -1050,7 +1038,7 @@ export default function App() {
             ))}
           </div>
 
-          <h3 className="font-bold text-sm mb-4" style={{ color: C.text }}>Operations & Excel Projects</h3>
+          <h3 className="font-semibold text-sm mb-4" style={{ color: C.muted }}>Operations & Excel Projects</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             {[
               { status: "Active Use", title: "Inventory Tracking System", desc: "Excel workflow maintaining up-to-date pharmaceutical stock across multiple SKUs and reducing discrepancies." },
@@ -1068,30 +1056,30 @@ export default function App() {
                   style={
                     c.status === "Active Use"
                       ? { background: C.lightGreen, color: C.darkGreen }
-                      : { background: C.altBg, color: C.body }
+                      : { background: C.altBg, color: C.muted }
                   }
                 >
                   {c.status}
                 </span>
-                <h4 className="font-bold text-sm mb-2" style={{ color: C.text }}>{c.title}</h4>
-                <p className="text-xs leading-relaxed" style={{ color: C.body }}>{c.desc}</p>
+                <h4 className="font-semibold text-sm mb-2" style={{ color: C.text }}>{c.title}</h4>
+                <p className="text-xs leading-relaxed" style={{ color: C.muted }}>{c.desc}</p>
               </div>
             ))}
           </div>
 
           <div className="text-center">
-            <p className="text-sm mb-3 font-medium" style={{ color: C.muted }}>Want to see the full project portfolio?</p>
+            <p className="text-sm mb-3" style={{ color: C.muted }}>Want to see the full project portfolio?</p>
             <BtnPrimary href={PORTFOLIO_URL} target="_blank">Explore Full Portfolio →</BtnPrimary>
           </div>
         </div>
       </section>
 
-      {/* ── Voice Samples ── */}
+      {/* ── Voice Samples (Zero Latency HTML5 Audio) ── */}
       <section id="voice" className="py-16 sm:py-20" style={{ background: C.white }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <SectionLabel>Audio Samples</SectionLabel>
           <SectionHeading>Hear How I Communicate</SectionHeading>
-          <p className="text-sm max-w-xl mb-8" style={{ color: C.body }}>
+          <p className="text-sm max-w-xl mb-8" style={{ color: C.muted }}>
             Communication is one of the most important parts of my work. Short samples demonstrating my Urdu style across different professional situations.
           </p>
 
@@ -1112,7 +1100,7 @@ export default function App() {
           </div>
 
           <div className="text-center">
-            <p className="text-sm mb-3 font-medium" style={{ color: C.muted }}>Want to hear the complete collection?</p>
+            <p className="text-sm mb-3" style={{ color: C.muted }}>Want to hear the complete collection?</p>
             <BtnPrimary href={PORTFOLIO_URL} target="_blank">View Full Voice Portfolio →</BtnPrimary>
           </div>
         </div>
@@ -1167,7 +1155,7 @@ export default function App() {
                     {s.step}
                   </div>
                   <h3 className="font-bold text-sm mb-1" style={{ color: C.text }}>{s.title}</h3>
-                  <p className="text-xs leading-relaxed" style={{ color: C.body }}>{s.desc}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: C.muted }}>{s.desc}</p>
                 </div>
               ))}
             </div>
@@ -1182,7 +1170,7 @@ export default function App() {
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.text }}>Download My Resume</h2>
               <p className="text-sm mb-3" style={{ color: C.body }}>A concise overview of my experience, skills, education and contact information — ready to share.</p>
-              <p className="urdu text-base font-bold" style={{ color: C.amber }}>میرا ریزومے ڈاؤن لوڈ کریں</p>
+              <p className="urdu text-base" style={{ color: C.amber }}>میرا ریزومے ڈاؤن لوڈ کریں</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
               <BtnPrimary href={RESUME_URL} target="_blank">Download PDF Resume</BtnPrimary>
@@ -1191,7 +1179,7 @@ export default function App() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-80 text-center"
-                style={{ border: `1.5px solid ${C.amber}`, color: C.amber, background: C.white }}
+                style={{ border: `1.5px solid ${C.amber}`, color: C.amber }}
               >
                 View LinkedIn ↗
               </a>
@@ -1204,7 +1192,7 @@ export default function App() {
       <section className="py-16 sm:py-20" style={{ background: C.green }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Want to See More?</h2>
-          <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: "#EBF5EE" }}>
+          <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: "#a7d4b8" }}>
             This website gives you a quick picture of who I am. My portfolio goes deeper into projects, work samples and Urdu voice samples.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
@@ -1214,7 +1202,7 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:bg-white/10 text-center"
-              style={{ color: "#FFFFFF", border: "1.5px solid rgba(255,255,255,0.4)" }}
+              style={{ color: "#a7d4b8", border: "1.5px solid rgba(255,255,255,0.2)" }}
             >
               Back to LinkedIn ↗
             </a>
@@ -1237,25 +1225,19 @@ export default function App() {
                 <a
                   href={`mailto:${EMAIL}`}
                   onClick={handleEmailClick}
-                  className="flex items-center gap-3 text-sm font-semibold hover:opacity-70 transition-opacity"
-                  style={{ color: C.text }}
+                  className="flex items-center gap-3 text-sm hover:opacity-70 transition-opacity"
+                  style={{ color: C.body }}
                 >
                   <span className="text-base">✉️</span> {EMAIL}
                 </a>
-                <a
-                  href={LINKEDIN}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-sm font-semibold hover:opacity-70 transition-opacity"
-                  style={{ color: C.text }}
-                >
+                <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm hover:opacity-70 transition-opacity" style={{ color: C.body }}>
                   <span className="text-base">🔗</span> LinkedIn Profile ↗
                 </a>
-                <p className="flex items-center gap-3 text-sm font-medium" style={{ color: C.body }}>
+                <p className="flex items-center gap-3 text-sm" style={{ color: C.body }}>
                   <span className="text-base">📍</span> Faisalabad, Pakistan 🇵🇰
                 </p>
               </div>
-              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: C.muted }}>Open To:</p>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: C.muted }}>Open To:</p>
               <div className="flex flex-wrap gap-2">
                 {["AI Urdu Training", "Language Annotation", "Remote Work", "Freelance", "Customer Support Roles", "Software Collaboration"].map((t) => (
                   <Tag key={t} green>{t}</Tag>
@@ -1263,7 +1245,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Form with Theme Protected Inputs */}
+            {/* Form */}
             <div
               className="rounded-2xl p-6 sm:p-8"
               style={{ background: C.white, border: `1px solid ${C.border}`, boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}
@@ -1281,7 +1263,7 @@ export default function App() {
                     { label: "Email Address", key: "email", type: "email", placeholder: "your@email.com" },
                   ].map((f) => (
                     <div key={f.key}>
-                      <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>{f.label}</label>
+                      <label className="block text-xs font-semibold mb-1.5" style={{ color: C.text }}>{f.label}</label>
                       <input
                         type={f.type}
                         required
@@ -1292,7 +1274,7 @@ export default function App() {
                         style={{
                           border: `1.5px solid ${C.border}`,
                           color: C.text,
-                          backgroundColor: C.bg,
+                          background: C.bg,
                         }}
                         onFocus={(e) => (e.target.style.borderColor = C.green)}
                         onBlur={(e) => (e.target.style.borderColor = C.border)}
@@ -1301,17 +1283,13 @@ export default function App() {
                   ))}
 
                   <div>
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>Topic</label>
+                    <label className="block text-xs font-semibold mb-1.5" style={{ color: C.text }}>Topic</label>
                     <select
                       required
                       value={formData.topic}
                       onChange={(e) => setFormData((d) => ({ ...d, topic: e.target.value }))}
                       className="w-full text-sm px-3.5 py-2.5 rounded-lg outline-none transition-all"
-                      style={{
-                        border: `1.5px solid ${C.border}`,
-                        color: formData.topic ? C.text : C.muted,
-                        backgroundColor: C.bg,
-                      }}
+                      style={{ border: `1.5px solid ${C.border}`, color: formData.topic ? C.text : C.muted, background: C.bg }}
                     >
                       <option value="" disabled>Select a topic</option>
                       <option>AI Urdu Training Opportunity</option>
@@ -1324,7 +1302,7 @@ export default function App() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>Message</label>
+                    <label className="block text-xs font-semibold mb-1.5" style={{ color: C.text }}>Message</label>
                     <textarea
                       required
                       rows={4}
@@ -1332,11 +1310,7 @@ export default function App() {
                       value={formData.message}
                       onChange={(e) => setFormData((d) => ({ ...d, message: e.target.value }))}
                       className="w-full text-sm px-3.5 py-2.5 rounded-lg outline-none transition-all resize-none"
-                      style={{
-                        border: `1.5px solid ${C.border}`,
-                        color: C.text,
-                        backgroundColor: C.bg,
-                      }}
+                      style={{ border: `1.5px solid ${C.border}`, color: C.text, background: C.bg }}
                       onFocus={(e) => (e.target.style.borderColor = C.green)}
                       onBlur={(e) => (e.target.style.borderColor = C.border)}
                     />
@@ -1362,7 +1336,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="mb-6">
             <h3 className="text-xl font-bold text-white mb-1">Abdul Hanan</h3>
-            <p className="text-sm font-medium" style={{ color: "#A0A0A0" }}>
+            <p className="text-sm" style={{ color: "#787878" }}>
               AI Urdu Tutor · Customer Support & Operations · Computer Science · Faisalabad, Pakistan 🇵🇰
             </p>
           </div>
@@ -1371,17 +1345,17 @@ export default function App() {
               <button
                 key={l.id}
                 onClick={() => scrollTo(l.id)}
-                className="text-sm font-medium transition-colors hover:text-white"
-                style={{ color: "#A0A0A0" }}
+                className="text-sm transition-colors hover:text-white"
+                style={{ color: "#787878" }}
               >
                 {l.label}
               </button>
             ))}
-            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-sm font-medium transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>LinkedIn ↗</a>
-            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="text-sm font-medium transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>Download Resume</a>
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#787878" }}>LinkedIn ↗</a>
+            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#787878" }}>Download Resume</a>
           </div>
           <div style={{ borderTop: "1px solid #2a2a2a" }} className="pt-6">
-            <p className="text-xs" style={{ color: "#808080" }}>© 2026 Abdul Hanan. All rights reserved.</p>
+            <p className="text-xs" style={{ color: "#555" }}>© 2026 Abdul Hanan. All rights reserved.</p>
           </div>
         </div>
       </footer>
