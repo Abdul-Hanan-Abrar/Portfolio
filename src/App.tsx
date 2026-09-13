@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import heroPhoto from "./imports/WhatsApp_Image_2026-08-28_at_11.53.53_AM.jpeg";
-import aboutPhoto from "./imports/WhatsApp_Image_2026-08-28_at_11.52.11_AM.jpeg";
-import bizLedgerImg from "./imports/Opera_Snapshot_2026-08-28_172607_BizLedger.html.png";
-import qrToolImg from "./imports/Opera_Snapshot_2026-08-28_172707_claude.ai.png";
 
 // ─── External URLs & Dynamic Paths ───────────────────────────────────────────
 const RESUME_URL = `${import.meta.env.BASE_URL}resume.pdf`;
 const PORTFOLIO_URL = "https://abdul-hanan-abrar.github.io/Portfolio/";
 const LINKEDIN = "https://www.linkedin.com/in/abdul-hanan-abrar-8b6a9140b/";
 const EMAIL = "abdulhananabrar941@gmail.com";
+
+// ─── Image Assets (Loaded via Base URL to bypass Vite build-time module resolution errors) ─────
+const heroPhoto = `${import.meta.env.BASE_URL}WhatsApp_Image_2026-08-28_at_11.53.53_AM.jpeg`;
+const aboutPhoto = `${import.meta.env.BASE_URL}WhatsApp_Image_2026-08-28_at_11.52.11_AM.jpeg`;
+const bizLedgerImg = `${import.meta.env.BASE_URL}Opera_Snapshot_2026-08-28_172607_BizLedger.html.png`;
+const qrToolImg = `${import.meta.env.BASE_URL}Opera_Snapshot_2026-08-28_172707_claude.ai.png`;
 
 // ─── Native App Email Action Dispatcher ───────────────────────────────────────
 const handleEmailClick = (e: React.MouseEvent) => {
