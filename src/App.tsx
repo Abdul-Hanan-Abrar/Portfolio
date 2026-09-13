@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef } from "react";
-import heroPhoto from "./imports/WhatsApp_Image_2026-08-28_at_11.53.53_AM.jpeg";
-import aboutPhoto from "./imports/WhatsApp_Image_2026-08-28_at_11.52.11_AM.jpeg";
-import bizLedgerImg from "./imports/Opera_Snapshot_2026-08-28_172607_BizLedger.html.png";
-import qrToolImg from "./imports/Opera_Snapshot_2026-08-28_172707_claude.ai.png";
 
 // ─── External URLs & Dynamic Paths ───────────────────────────────────────────
-const RESUME_URL = `${import.meta.env.BASE_URL}resume.pdf`;
+// Exact match with your uploaded files in public/
+const RESUME_URL = `${import.meta.env.BASE_URL}Resume.pdf`;
 const PORTFOLIO_URL = "https://abdul-hanan-abrar.github.io/Portfolio/";
 const LINKEDIN = "https://www.linkedin.com/in/abdul-hanan-abrar-8b6a9140b/";
 const EMAIL = "abdulhananabrar941@gmail.com";
 
-// ─── Direct Mobile Gmail App Dispatcher ───────────────────────────────────────
+// ─── Assets Loaded from public/ (Bypasses Vite Bundler Resolution) ───────────
+const heroPhoto = `${import.meta.env.BASE_URL}IMG-2024.jpg`;
+const aboutPhoto = `${import.meta.env.BASE_URL}IMG-2025.jpg`;
+const bizLedgerImg = `${import.meta.env.BASE_URL}BizLedger.png`;
+const qrToolImg = `${import.meta.env.BASE_URL}QR-Code.png`;
+
+// ─── Dual-Platform Gmail Dispatcher ───────────────────────────────────────────
 const handleEmailClick = (e: React.MouseEvent) => {
   e.preventDefault();
   const ua = navigator.userAgent || "";
@@ -18,21 +21,19 @@ const handleEmailClick = (e: React.MouseEvent) => {
   const isIOS = /iPhone|iPad|iPod/i.test(ua);
 
   if (isAndroid) {
-    // Launches native Android Gmail App directly into compose window
+    // 1. Mobile Android: Launch native Gmail App directly to Compose
     window.location.href = `intent:#Intent;action=android.intent.action.SENDTO;data=mailto:${EMAIL};package=com.google.android.gm;end`;
-    // Fallback to default mail client if Gmail is uninstalled
     setTimeout(() => {
       window.location.href = `mailto:${EMAIL}`;
     }, 500);
   } else if (isIOS) {
-    // Launches native iOS Gmail App compose screen
+    // 2. Mobile iOS: Launch native Gmail iOS App to Compose
     window.location.href = `googlegmail:///co?to=${EMAIL}`;
-    // Fallback to default Apple Mail client
     setTimeout(() => {
       window.location.href = `mailto:${EMAIL}`;
     }, 500);
   } else {
-    // Desktop: Opens web Gmail compose tab
+    // 3. Desktop / Laptop: Launch Gmail Web Compose Tab
     window.open(
       `https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`,
       "_blank",
@@ -240,7 +241,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   );
 }
 
-// ─── Native Zero-Latency Audio Card ───────────────────────────────────────────
+// ─── Native Audio Card Component ──────────────────────────────────────────────
 function AudioCard({
   title,
   titleUrdu,
@@ -346,7 +347,7 @@ function AudioCard({
 
         <p className="text-xs" style={{ color: C.muted }}>{description}</p>
 
-        {/* ── Visual Scrubber ── */}
+        {/* Visual Scrubber */}
         <div className="mt-2 flex flex-col gap-1.5">
           <input
             type="range"
@@ -381,7 +382,7 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
 
-  // Injects color-scheme meta tag to lock font colors across phone light/dark settings
+  // Prevents mobile OS forced-dark mode from breaking text/input readability
   useEffect(() => {
     let meta = document.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
     if (!meta) {
@@ -423,6 +424,7 @@ export default function App() {
     setMobileOpen(false);
   };
 
+  // Projects mapped to the new PNG filenames in public/
   const projects: Project[] = [
     {
       title: "BizLedger",
@@ -449,7 +451,7 @@ export default function App() {
     },
   ];
 
-  // ─── Direct URLs Configured for public/ ──────────────────────────────────────
+  // Voice samples mapped to public/ audio files
   const voiceSamples = [
     {
       id: "audio-conversational",
@@ -502,7 +504,7 @@ export default function App() {
   return (
     <div style={{ background: C.bg, color: C.text, fontFamily: "'DM Sans', sans-serif" }}>
 
-      {/* ── Text Readability & Theme Protection Shield ── */}
+      {/* ── Theme Shield: Forces crisp contrast and stops theme inversion ── */}
       <style>{`
         :root, html, body {
           color-scheme: light !important;
@@ -568,6 +570,7 @@ export default function App() {
           <button
             className="lg:hidden flex flex-col gap-1.5 p-2"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle navigation menu"
           >
             <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} style={{ background: C.text }} />
             <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "opacity-0" : ""}`} style={{ background: C.text }} />
@@ -1074,7 +1077,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── Voice Samples (Zero Latency HTML5 Audio) ── */}
+      {/* ── Voice Samples ── */}
       <section id="voice" className="py-16 sm:py-20" style={{ background: C.white }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <SectionLabel>Audio Samples</SectionLabel>
