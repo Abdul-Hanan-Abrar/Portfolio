@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 
 // ─── External URLs & Dynamic Paths ───────────────────────────────────────────
-// Exact match with your uploaded files in public/
 const RESUME_URL = `${import.meta.env.BASE_URL}Resume.pdf`;
-const PORTFOLIO_URL = "https://abdul-hanan-abrar.github.io/Portfolio/";
+const PERSONAL_WEBSITE_URL = "https://abdul-hanan-abrar.github.io/abdulhanan/";
 const LINKEDIN = "https://www.linkedin.com/in/abdul-hanan-abrar-8b6a9140b/";
 const EMAIL = "abdulhananabrar941@gmail.com";
 
-// ─── Assets Loaded from public/ (Bypasses Vite Bundler Resolution) ───────────
+// ─── Public Folder Asset References (Zero Rollup Import Errors) ───────────────
 const heroPhoto = `${import.meta.env.BASE_URL}IMG-2024.jpg`;
 const aboutPhoto = `${import.meta.env.BASE_URL}IMG-2025.jpg`;
 const bizLedgerImg = `${import.meta.env.BASE_URL}BizLedger.png`;
@@ -21,19 +20,19 @@ const handleEmailClick = (e: React.MouseEvent) => {
   const isIOS = /iPhone|iPad|iPod/i.test(ua);
 
   if (isAndroid) {
-    // 1. Mobile Android: Launch native Gmail App directly to Compose
+    // Mobile Android: Launch native Gmail App directly into Compose
     window.location.href = `intent:#Intent;action=android.intent.action.SENDTO;data=mailto:${EMAIL};package=com.google.android.gm;end`;
     setTimeout(() => {
       window.location.href = `mailto:${EMAIL}`;
     }, 500);
   } else if (isIOS) {
-    // 2. Mobile iOS: Launch native Gmail iOS App to Compose
+    // Mobile iOS: Launch native Gmail iOS App Compose screen
     window.location.href = `googlegmail:///co?to=${EMAIL}`;
     setTimeout(() => {
       window.location.href = `mailto:${EMAIL}`;
     }, 500);
   } else {
-    // 3. Desktop / Laptop: Launch Gmail Web Compose Tab
+    // Desktop / Laptop: Open Gmail Web Compose in new tab
     window.open(
       `https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`,
       "_blank",
@@ -42,19 +41,19 @@ const handleEmailClick = (e: React.MouseEvent) => {
   }
 };
 
-// ─── Color Constants ─────────────────────────────────────────────────────────
+// ─── Design Tokens ────────────────────────────────────────────────────────────
 const C = {
   bg: "#F8F7F4",
   white: "#FFFFFF",
   altBg: "#F1EEE9",
   text: "#161616",
-  body: "#3C3C3C",
-  muted: "#787878",
+  body: "#2D2D2D",
+  muted: "#6B6B6B",
   green: "#1D5C3A",
   darkGreen: "#0F3D24",
   lightGreen: "#EBF5EE",
   greenBorder: "#B8DCC3",
-  amber: "#C47B2B",
+  amber: "#B86A1D",
   lightAmber: "#FBF3E8",
   amberBorder: "#E8C99A",
   border: "#E3DED7",
@@ -63,7 +62,7 @@ const C = {
 // ─── UI Helpers ──────────────────────────────────────────────────────────────
 function SectionLabel({ children }: { children: string }) {
   return (
-    <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: C.green }}>
+    <span className="text-xs font-bold uppercase tracking-widest" style={{ color: C.green }}>
       {children}
     </span>
   );
@@ -80,7 +79,7 @@ function SectionHeading({ children, light = false }: { children: string; light?:
 function Tag({ children, green = false }: { children: string; green?: boolean }) {
   return (
     <span
-      className="inline-block text-xs font-medium px-3 py-1 rounded-full"
+      className="inline-block text-xs font-semibold px-3 py-1 rounded-full"
       style={
         green
           ? { background: C.lightGreen, color: C.darkGreen, border: `1px solid ${C.greenBorder}` }
@@ -157,7 +156,7 @@ function BtnOutlineWhite({
 }) {
   const cls =
     "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:bg-white/10 active:scale-95 text-center";
-  const style = { border: "1.5px solid rgba(255,255,255,0.5)", color: "#fff" };
+  const style = { border: "1.5px solid rgba(255,255,255,0.6)", color: "#fff" };
   if (href) {
     return (
       <a href={href} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls} style={style}>
@@ -241,7 +240,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   );
 }
 
-// ─── Native Audio Card Component ──────────────────────────────────────────────
+// ─── Native Zero-Latency Audio Card ───────────────────────────────────────────
 function AudioCard({
   title,
   titleUrdu,
@@ -324,7 +323,7 @@ function AudioCard({
         <div className="flex items-start justify-between gap-3">
           <div>
             <h4 className="font-semibold text-sm" style={{ color: C.text }}>{title}</h4>
-            <p className="urdu text-sm mt-0.5" style={{ color: C.green }}>{titleUrdu}</p>
+            <p className="urdu text-base mt-1" style={{ color: C.green }}>{titleUrdu}</p>
           </div>
           <button
             onClick={onTogglePlay}
@@ -382,7 +381,7 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
 
-  // Prevents mobile OS forced-dark mode from breaking text/input readability
+  // Enforces light-theme globally to prevent mobile dark-mode auto-inversion
   useEffect(() => {
     let meta = document.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
     if (!meta) {
@@ -424,7 +423,6 @@ export default function App() {
     setMobileOpen(false);
   };
 
-  // Projects mapped to the new PNG filenames in public/
   const projects: Project[] = [
     {
       title: "BizLedger",
@@ -451,7 +449,7 @@ export default function App() {
     },
   ];
 
-  // Voice samples mapped to public/ audio files
+  // ─── ALL 4 Voice Samples from public/ ────────────────────────────────────────
   const voiceSamples = [
     {
       id: "audio-conversational",
@@ -466,6 +464,20 @@ export default function App() {
       titleUrdu: "اردو انگریزی — مشترکہ گفتگو",
       description: "Natural switching between Urdu and English — the way Pakistanis actually communicate.",
       audioSrc: `${import.meta.env.BASE_URL}Natural%20Urdu-English%20Communication.m4a`,
+    },
+    {
+      id: "audio-reading",
+      title: "Clear Urdu Reading & Explanation",
+      titleUrdu: "صاف اردو پڑھائی اور فطری وضاحت",
+      description: "Articulate pronunciation, rhythmic delivery, and precise phonetics for language modeling.",
+      audioSrc: `${import.meta.env.BASE_URL}Clear%20Urdu%20Reading%20&%20Natural%20Explanation.m4a`,
+    },
+    {
+      id: "audio-listening",
+      title: "Careful Listening & Unclear Speech",
+      titleUrdu: "محتاط سماعت اور غیر واضح گفتگو",
+      description: "Evaluating complex acoustic cues, accents, and colloquial phrasing.",
+      audioSrc: `${import.meta.env.BASE_URL}Careful%20Listening%20&%20Unclear%20Speech.m4a`,
     },
   ];
 
@@ -504,8 +516,18 @@ export default function App() {
   return (
     <div style={{ background: C.bg, color: C.text, fontFamily: "'DM Sans', sans-serif" }}>
 
-      {/* ── Theme Shield: Forces crisp contrast and stops theme inversion ── */}
+      {/* ── Nastaliq Font Import & System Theme Shield ── */}
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap');
+
+        .urdu {
+          font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Urdu Typesetting', serif !important;
+          direction: rtl;
+          text-align: right;
+          line-height: 2.4 !important;
+          word-spacing: 2px;
+        }
+
         :root, html, body {
           color-scheme: light !important;
           forced-color-adjust: none !important;
@@ -534,7 +556,7 @@ export default function App() {
       <nav
         className="fixed top-0 left-0 right-0 z-40"
         style={{
-          background: "rgba(248,247,244,0.92)",
+          background: "rgba(248,247,244,0.95)",
           backdropFilter: "blur(12px)",
           borderBottom: `1px solid ${C.border}`,
         }}
@@ -563,7 +585,8 @@ export default function App() {
 
           <div className="hidden lg:flex items-center gap-3">
             <BtnOutlineAmber href={RESUME_URL} target="_blank">Resume</BtnOutlineAmber>
-            <BtnPrimary href={PORTFOLIO_URL} target="_blank">Portfolio</BtnPrimary>
+            {/* Links out directly to your Personal Website */}
+            <BtnPrimary href={PERSONAL_WEBSITE_URL} target="_blank">Personal Site ↗</BtnPrimary>
             <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-sm font-medium" style={{ color: C.muted }}>LinkedIn ↗</a>
           </div>
 
@@ -598,16 +621,17 @@ export default function App() {
             ))}
             <div className="flex gap-3 mt-3 pt-3" style={{ borderTop: `1px solid ${C.border}` }}>
               <BtnOutlineAmber href={RESUME_URL} target="_blank">Resume</BtnOutlineAmber>
-              <BtnPrimary href={PORTFOLIO_URL} target="_blank">Portfolio</BtnPrimary>
+              <BtnPrimary href={PERSONAL_WEBSITE_URL} target="_blank">Personal Site ↗</BtnPrimary>
             </div>
           </div>
         )}
       </nav>
 
-      {/* ── Hero ── */}
-      <section id="home" className="pt-24 pb-16 sm:pt-28 sm:pb-20">
+      {/* ── Hero (Big Face Icon & Prominent Presentation) ── */}
+      <section id="home" className="pt-24 pb-16 sm:pt-32 sm:pb-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_auto] gap-10 lg:gap-16 items-center">
+            
             <div>
               <span
                 className="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-5"
@@ -616,20 +640,15 @@ export default function App() {
                 Faisalabad, Pakistan · BSc Computer Science · 2+ Years Experience
               </span>
 
-              <div className="flex items-center gap-5 sm:gap-8 mb-4">
-                <h1
-                  className="font-bold leading-none tracking-tight"
-                  style={{ color: C.text, fontSize: "clamp(3rem, 7vw, 5.5rem)", lineHeight: 1.0 }}
-                >
-                  ABDUL<br />HANAN
-                </h1>
+              {/* Mobile Big Face Presentation */}
+              <div className="lg:hidden flex justify-center mb-6">
                 <div
-                  className="lg:hidden flex-shrink-0 overflow-hidden rounded-full"
+                  className="overflow-hidden rounded-full"
                   style={{
-                    width: "clamp(90px, 18vw, 160px)",
-                    height: "clamp(90px, 18vw, 160px)",
-                    border: `3px solid ${C.greenBorder}`,
-                    boxShadow: `0 0 0 5px ${C.lightGreen}`,
+                    width: 180,
+                    height: 180,
+                    border: `4px solid ${C.green}`,
+                    boxShadow: `0 0 0 8px ${C.lightGreen}, 0 10px 30px rgba(29,92,58,0.2)`,
                     background: C.altBg,
                   }}
                 >
@@ -637,17 +656,27 @@ export default function App() {
                 </div>
               </div>
 
-              <p className="text-base font-medium mb-3" style={{ color: C.green }}>
+              <h1
+                className="font-bold leading-none tracking-tight mb-4"
+                style={{ color: C.text, fontSize: "clamp(2.8rem, 6.5vw, 5.2rem)", lineHeight: 1.05 }}
+              >
+                ABDUL<br />HANAN
+              </h1>
+
+              <p className="text-base sm:text-lg font-semibold mb-3" style={{ color: C.green }}>
                 AI Urdu Language Tutor · Customer Support & Operations Specialist · Computer Science Student
               </p>
 
-              <p className="urdu text-xl sm:text-2xl mb-4 leading-loose font-semibold" style={{ color: C.green }}>
-                اردو زبان میں اے آئی کو سکھانا — میری خاصیت ہے
-              </p>
+              {/* Nastaliq Urdu Display */}
+              <div className="my-5 p-4 rounded-xl" style={{ background: C.lightGreen, border: `1px solid ${C.greenBorder}` }}>
+                <p className="urdu text-2xl sm:text-3xl font-semibold" style={{ color: C.darkGreen }}>
+                  اردو زبان میں اے آئی کو سکھانا — میری خاصیت ہے
+                </p>
+              </div>
 
               <p className="text-base leading-relaxed mb-6 max-w-xl" style={{ color: C.body }}>
                 Native Urdu speaker with two years of professional bilingual experience — ready to help AI companies
-                build systems that truly understand how Urdu is spoken, written and mixed with English in real-life contexts.
+                build systems that truly understand how Urdu is spoken, written, and mixed with English in real-life contexts.
               </p>
 
               <div className="flex flex-wrap gap-3 mb-4">
@@ -658,7 +687,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-medium px-5 py-2.5 rounded-lg transition-colors hover:opacity-80 inline-flex items-center justify-center"
-                  style={{ border: `1.5px solid ${C.border}`, color: C.body }}
+                  style={{ border: `1.5px solid ${C.border}`, color: C.body, background: C.white }}
                 >
                   Download Resume
                 </a>
@@ -666,10 +695,10 @@ export default function App() {
 
               <button
                 onClick={() => scrollTo("voice")}
-                className="text-sm font-medium transition-opacity hover:opacity-70 block mb-5"
+                className="text-sm font-semibold transition-opacity hover:opacity-70 block mb-5 text-left"
                 style={{ color: C.muted }}
               >
-                ↓ Listen to Urdu Voice Samples
+                ↓ Listen to 4 Urdu Voice Samples
               </button>
 
               <div className="flex flex-wrap gap-2">
@@ -679,20 +708,22 @@ export default function App() {
               </div>
             </div>
 
+            {/* Desktop Big Face Portrait (360px) */}
             <div className="hidden lg:flex items-center justify-center">
               <div
-                className="flex-shrink-0 overflow-hidden rounded-full"
+                className="overflow-hidden rounded-full transition-transform duration-300 hover:scale-[1.02]"
                 style={{
-                  width: 280,
-                  height: 280,
-                  border: `4px solid ${C.greenBorder}`,
-                  boxShadow: `0 0 0 10px ${C.lightGreen}, 0 12px 48px rgba(29,92,58,0.18)`,
+                  width: 360,
+                  height: 360,
+                  border: `5px solid ${C.green}`,
+                  boxShadow: `0 0 0 12px ${C.lightGreen}, 0 20px 60px rgba(29,92,58,0.22)`,
                   background: C.altBg,
                 }}
               >
                 <img src={heroPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
               </div>
             </div>
+
           </div>
         </div>
       </section>
@@ -743,10 +774,10 @@ export default function App() {
                 <div
                   className="flex-shrink-0 lg:hidden overflow-hidden rounded-full"
                   style={{
-                    width: 100,
-                    height: 100,
+                    width: 110,
+                    height: 110,
                     border: `3px solid ${C.greenBorder}`,
-                    boxShadow: `0 0 0 4px ${C.lightGreen}`,
+                    boxShadow: `0 0 0 5px ${C.lightGreen}`,
                     background: C.altBg,
                   }}
                 >
@@ -762,8 +793,8 @@ export default function App() {
               </div>
 
               <blockquote
-                className="my-6 pl-4 py-2 text-sm italic font-medium"
-                style={{ borderLeft: `3px solid ${C.amber}`, color: C.body }}
+                className="my-6 pl-4 py-2 text-sm italic font-semibold"
+                style={{ borderLeft: `3px solid ${C.amber}`, color: C.body, background: C.lightAmber }}
               >
                 "I'm most comfortable where communication meets problem solving."
               </blockquote>
@@ -778,8 +809,8 @@ export default function App() {
               <div
                 className="overflow-hidden rounded-full"
                 style={{
-                  width: 260,
-                  height: 260,
+                  width: 280,
+                  height: 280,
                   border: `4px solid ${C.greenBorder}`,
                   boxShadow: `0 0 0 8px ${C.lightGreen}, 0 8px 32px rgba(29,92,58,0.14)`,
                   background: C.altBg,
@@ -792,7 +823,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── AI Tutor ── */}
+      {/* ── AI Tutor (Dark Section with High-Contrast Text & Nastaliq) ── */}
       <section id="ai-tutor" className="py-16 sm:py-20 relative overflow-hidden" style={{ background: C.darkGreen }}>
         <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-10" style={{ background: C.green }} />
         <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full opacity-10" style={{ background: C.green }} />
@@ -800,17 +831,17 @@ export default function App() {
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: C.amber }}>
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FBBF24" }}>
                 Open to AI & Language Opportunities
               </span>
               <h2 className="text-3xl sm:text-4xl font-bold mt-3 mb-2 text-white leading-tight">
                 Training AI in Urdu —<br />The Right Way
               </h2>
-              <p className="urdu text-lg mb-5" style={{ color: "#a7d4b8" }}>
+              <p className="urdu text-2xl mb-5 font-medium" style={{ color: "#86EFAC" }}>
                 اردو میں اے آئی کو سکھانا — صحیح طریقے سے
               </p>
-              <p className="text-sm leading-relaxed mb-6" style={{ color: "#c8dfd2" }}>
-                Most AI systems still struggle with authentic, natural Urdu — the kind spoken in homes, offices and on the street in Pakistan. As a native Urdu speaker with professional bilingual experience, I want to help AI companies build systems that truly understand how Urdu is spoken, written and mixed with English in real-life contexts.
+              <p className="text-sm leading-relaxed mb-6" style={{ color: "#E2F1E8" }}>
+                Most AI systems still struggle with authentic, natural Urdu — the kind spoken in homes, offices, and on the street in Pakistan. As a native Urdu speaker with professional bilingual experience, I want to help AI companies build systems that truly understand how Urdu is spoken, written, and mixed with English in real-life contexts.
               </p>
 
               <ul className="space-y-2.5 mb-8">
@@ -822,8 +853,8 @@ export default function App() {
                   "Voice clarity and tone control — usable for speech and text datasets",
                   "Available for structured, ongoing training collaboration",
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm" style={{ color: "#c8dfd2" }}>
-                    <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full" style={{ background: C.amber }} />
+                  <li key={item} className="flex items-start gap-3 text-sm font-medium" style={{ color: "#E2F1E8" }}>
+                    <span className="mt-2 flex-shrink-0 w-1.5 h-1.5 rounded-full" style={{ background: "#FBBF24" }} />
                     {item}
                   </li>
                 ))}
@@ -847,11 +878,11 @@ export default function App() {
                 <div
                   key={c.title}
                   className="rounded-xl p-4 transition-all duration-200 hover:bg-white/10"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}
                 >
                   <span className="text-xl mb-2 block">{c.icon}</span>
                   <h4 className="font-semibold text-sm text-white mb-1">{c.title}</h4>
-                  <p className="text-xs leading-relaxed" style={{ color: "#a7c4b5" }}>{c.desc}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: "#C8DFD2" }}>{c.desc}</p>
                 </div>
               ))}
             </div>
@@ -985,7 +1016,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── Projects ── */}
+      {/* ── Selected Work ── */}
       <section id="projects" className="py-16 sm:py-20" style={{ background: C.altBg }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <SectionLabel>Built by Me</SectionLabel>
@@ -1071,19 +1102,19 @@ export default function App() {
           </div>
 
           <div className="text-center">
-            <p className="text-sm mb-3" style={{ color: C.muted }}>Want to see the full project portfolio?</p>
-            <BtnPrimary href={PORTFOLIO_URL} target="_blank">Explore Full Portfolio →</BtnPrimary>
+            <p className="text-sm mb-3" style={{ color: C.muted }}>Looking for my primary personal profile?</p>
+            <BtnPrimary href={PERSONAL_WEBSITE_URL} target="_blank">Visit Personal Website →</BtnPrimary>
           </div>
         </div>
       </section>
 
-      {/* ── Voice Samples ── */}
+      {/* ── Complete Voice Samples Section (All 4 Samples) ── */}
       <section id="voice" className="py-16 sm:py-20" style={{ background: C.white }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <SectionLabel>Audio Samples</SectionLabel>
+          <SectionLabel>Audio Portfolio</SectionLabel>
           <SectionHeading>Hear How I Communicate</SectionHeading>
-          <p className="text-sm max-w-xl mb-8" style={{ color: C.muted }}>
-            Communication is one of the most important parts of my work. Short samples demonstrating my Urdu style across different professional situations.
+          <p className="text-sm max-w-xl mb-8" style={{ color: C.body }}>
+            Four comprehensive samples showcasing conversational nuance, code-switching, articulate reading, and speech perception in authentic Urdu.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
@@ -1100,11 +1131,6 @@ export default function App() {
                 }
               />
             ))}
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm mb-3" style={{ color: C.muted }}>Want to hear the complete collection?</p>
-            <BtnPrimary href={PORTFOLIO_URL} target="_blank">View Full Voice Portfolio →</BtnPrimary>
           </div>
         </div>
       </section>
@@ -1131,41 +1157,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── How I Work ── */}
-      <section className="py-16 sm:py-20" style={{ background: C.white }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <SectionLabel>My Approach</SectionLabel>
-          <SectionHeading>How I Work</SectionHeading>
-
-          <div className="relative">
-            <div
-              className="hidden lg:block absolute top-8 left-[12.5%] right-[12.5%] h-px"
-              style={{ background: C.border }}
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { step: "01", title: "Understand", desc: "Listen carefully and understand the actual problem." },
-                { step: "02", title: "Investigate", desc: "Look at the details instead of making assumptions." },
-                { step: "03", title: "Solve", desc: "Find a practical solution that works in the real situation." },
-                { step: "04", title: "Improve", desc: "Look for ways to prevent the same problem from happening again." },
-              ].map((s) => (
-                <div key={s.step} className="text-center relative">
-                  <div
-                    className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 relative z-10 font-bold text-white text-sm"
-                    style={{ background: C.green }}
-                  >
-                    {s.step}
-                  </div>
-                  <h3 className="font-bold text-sm mb-1" style={{ color: C.text }}>{s.title}</h3>
-                  <p className="text-xs leading-relaxed" style={{ color: C.muted }}>{s.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── Resume CTA ── */}
       <section className="py-16 sm:py-20" style={{ background: C.lightAmber, borderTop: `1px solid ${C.amberBorder}` }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -1173,7 +1164,7 @@ export default function App() {
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.text }}>Download My Resume</h2>
               <p className="text-sm mb-3" style={{ color: C.body }}>A concise overview of my experience, skills, education and contact information — ready to share.</p>
-              <p className="urdu text-base" style={{ color: C.amber }}>میرا ریزومے ڈاؤن لوڈ کریں</p>
+              <p className="urdu text-lg font-semibold" style={{ color: C.amber }}>میرا ریزومے ڈاؤن لوڈ کریں</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
               <BtnPrimary href={RESUME_URL} target="_blank">Download PDF Resume</BtnPrimary>
@@ -1182,7 +1173,7 @@ export default function App() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-80 text-center"
-                style={{ border: `1.5px solid ${C.amber}`, color: C.amber }}
+                style={{ border: `1.5px solid ${C.amber}`, color: C.amber, background: C.white }}
               >
                 View LinkedIn ↗
               </a>
@@ -1191,23 +1182,23 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── Portfolio CTA ── */}
+      {/* ── Personal Website CTA ── */}
       <section className="py-16 sm:py-20" style={{ background: C.green }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Want to See More?</h2>
-          <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: "#a7d4b8" }}>
-            This website gives you a quick picture of who I am. My portfolio goes deeper into projects, work samples and Urdu voice samples.
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Visit My Personal Website</h2>
+          <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: "#EBF5EE" }}>
+            Explore my main personal portal, background highlights, and overall profile.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <BtnOutlineWhite href={PORTFOLIO_URL} target="_blank">Explore Full Portfolio →</BtnOutlineWhite>
+            <BtnOutlineWhite href={PERSONAL_WEBSITE_URL} target="_blank">Open Personal Website ↗</BtnOutlineWhite>
             <a
               href={LINKEDIN}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:bg-white/10 text-center"
-              style={{ color: "#a7d4b8", border: "1.5px solid rgba(255,255,255,0.2)" }}
+              style={{ color: "#EBF5EE", border: "1.5px solid rgba(255,255,255,0.4)" }}
             >
-              Back to LinkedIn ↗
+              Connect on LinkedIn ↗
             </a>
           </div>
         </div>
@@ -1228,19 +1219,25 @@ export default function App() {
                 <a
                   href={`mailto:${EMAIL}`}
                   onClick={handleEmailClick}
-                  className="flex items-center gap-3 text-sm hover:opacity-70 transition-opacity"
-                  style={{ color: C.body }}
+                  className="flex items-center gap-3 text-sm font-semibold hover:opacity-70 transition-opacity"
+                  style={{ color: C.text }}
                 >
                   <span className="text-base">✉️</span> {EMAIL}
                 </a>
-                <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm hover:opacity-70 transition-opacity" style={{ color: C.body }}>
+                <a
+                  href={LINKEDIN}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-sm font-semibold hover:opacity-70 transition-opacity"
+                  style={{ color: C.text }}
+                >
                   <span className="text-base">🔗</span> LinkedIn Profile ↗
                 </a>
-                <p className="flex items-center gap-3 text-sm" style={{ color: C.body }}>
+                <p className="flex items-center gap-3 text-sm font-medium" style={{ color: C.body }}>
                   <span className="text-base">📍</span> Faisalabad, Pakistan 🇵🇰
                 </p>
               </div>
-              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: C.muted }}>Open To:</p>
+              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: C.muted }}>Open To:</p>
               <div className="flex flex-wrap gap-2">
                 {["AI Urdu Training", "Language Annotation", "Remote Work", "Freelance", "Customer Support Roles", "Software Collaboration"].map((t) => (
                   <Tag key={t} green>{t}</Tag>
@@ -1266,7 +1263,7 @@ export default function App() {
                     { label: "Email Address", key: "email", type: "email", placeholder: "your@email.com" },
                   ].map((f) => (
                     <div key={f.key}>
-                      <label className="block text-xs font-semibold mb-1.5" style={{ color: C.text }}>{f.label}</label>
+                      <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>{f.label}</label>
                       <input
                         type={f.type}
                         required
@@ -1286,7 +1283,7 @@ export default function App() {
                   ))}
 
                   <div>
-                    <label className="block text-xs font-semibold mb-1.5" style={{ color: C.text }}>Topic</label>
+                    <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>Topic</label>
                     <select
                       required
                       value={formData.topic}
@@ -1305,7 +1302,7 @@ export default function App() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold mb-1.5" style={{ color: C.text }}>Message</label>
+                    <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>Message</label>
                     <textarea
                       required
                       rows={4}
@@ -1339,7 +1336,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="mb-6">
             <h3 className="text-xl font-bold text-white mb-1">Abdul Hanan</h3>
-            <p className="text-sm" style={{ color: "#787878" }}>
+            <p className="text-sm" style={{ color: "#A0A0A0" }}>
               AI Urdu Tutor · Customer Support & Operations · Computer Science · Faisalabad, Pakistan 🇵🇰
             </p>
           </div>
@@ -1349,16 +1346,17 @@ export default function App() {
                 key={l.id}
                 onClick={() => scrollTo(l.id)}
                 className="text-sm transition-colors hover:text-white"
-                style={{ color: "#787878" }}
+                style={{ color: "#A0A0A0" }}
               >
                 {l.label}
               </button>
             ))}
-            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#787878" }}>LinkedIn ↗</a>
-            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#787878" }}>Download Resume</a>
+            <a href={PERSONAL_WEBSITE_URL} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>Personal Website ↗</a>
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>LinkedIn ↗</a>
+            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>Download Resume</a>
           </div>
           <div style={{ borderTop: "1px solid #2a2a2a" }} className="pt-6">
-            <p className="text-xs" style={{ color: "#555" }}>© 2026 Abdul Hanan. All rights reserved.</p>
+            <p className="text-xs" style={{ color: "#666" }}>© 2026 Abdul Hanan. All rights reserved.</p>
           </div>
         </div>
       </footer>
