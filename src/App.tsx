@@ -1,840 +1,990 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import portraitSrc from "@/imports/abdul-hanan-portrait.jpeg";
+import { useState, useEffect, useRef } from "react";
+import heroPhoto from "./imports/WhatsApp_Image_2026-08-28_at_11.53.53_AM.jpeg";
+import aboutPhoto from "./imports/WhatsApp_Image_2026-08-28_at_11.52.11_AM.jpeg";
+import bizLedgerImg from "./imports/Opera_Snapshot_2026-08-28_172607_BizLedger.html.png";
+import qrToolImg from "./imports/Opera_Snapshot_2026-08-28_172707_claude.ai.png";
 
-/* ─── 📐 Sleek Vector Icons ─────────────────────────────────── */
-const Icon = ({ d, size = 18, strokeWidth = 1.8 }: { d: string; size?: number; strokeWidth?: number }) => (
-  <svg
-    aria-hidden="true"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={strokeWidth}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="shrink-0"
-  >
-    <path d={d} />
-  </svg>
-);
+// ─── External URLs & Dynamic Paths ───────────────────────────────────────────
+const RESUME_URL = `${import.meta.env.BASE_URL}resume.pdf`;
+const PORTFOLIO_URL = "https://abdul-hanan-abrar.github.io/Portfolio/";
+const LINKEDIN = "https://www.linkedin.com/in/abdul-hanan-abrar-8b6a9140b/";
+const EMAIL = "abdulhananabrar941@gmail.com";
 
-const PersonIcon = () => <Icon d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />;
-const BookIcon = () => <Icon d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5zM6 6h10M6 10h10" />;
-const WaveIcon = () => <Icon d="M2 10v4M6 6v12M10 3v18M14 8v8M18 5v14M22 10v4" />;
-const DataIcon = () => <Icon d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" />;
-const TrendIcon = () => <Icon d="M3 3v18h18M18 9l-5 5-4-4-4 4" />;
-const GradCapIcon = () => <Icon d="M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 2 6 2 6 2s3 0 6-2v-5" />;
-const MailIcon = () => <Icon d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM22 6l-10 7L2 6" />;
-const SunIcon = () => <Icon d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />;
-const MoonIcon = () => <Icon d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />;
-const HeadsetIcon = () => <Icon d="M3 18v-6a9 9 0 0 1 18 0v6M3 18a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3v5zM21 18a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3v5z" />;
-const SheetIcon = () => <Icon d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h6" />;
-const ChartIcon = () => <Icon d="M18 20V10M12 20V4M6 20v-6" />;
-const ArrowUpRight = ({ size = 15 }: { size?: number }) => <Icon d="M7 17L17 7M7 7h10v10" size={size} strokeWidth={2.2} />;
-const ArrowDown = ({ size = 15 }: { size?: number }) => <Icon d="M12 5v14M19 12l-7 7-7-7" size={size} strokeWidth={2.2} />;
-const MenuIcon = () => <Icon d="M4 6h16M4 12h16M4 18h16" size={22} />;
-const CloseIcon = () => <Icon d="M18 6L6 18M6 6l12 12" size={22} />;
-const GlobeIcon = () => <Icon d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 0c2.5 2.7 4 6.2 4 10s-1.5 7.3-4 10m0-20c-2.5 2.7-4 6.2-4 10s1.5 7.3 4 10m-8-10h16" />;
-const PlayIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-    <polygon points="6 3 20 12 6 21 6 3" />
-  </svg>
-);
-const PauseIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-    <rect x="6" y="4" width="4" height="16" rx="1" />
-    <rect x="14" y="4" width="4" height="16" rx="1" />
-  </svg>
-);
-const LinkedInIcon = () => (
-  <svg aria-hidden="true" width={17} height={17} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.6 1.6 0 1 0 0-3.2 1.6 1.6 0 0 0 0 3.2m1.4 9.74V9.96H5.06v8.54z" />
-  </svg>
-);
+// ─── Native App Email Action Dispatcher ───────────────────────────────────────
+const handleEmailClick = (e: React.MouseEvent) => {
+  e.preventDefault();
+  const ua = navigator.userAgent || "";
+  const isAndroid = /Android/i.test(ua);
+  const isIOS =
+    /iPhone|iPad|iPod/i.test(ua) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
-const getAssetUrl = (fileName: string) => {
-  const base = import.meta.env.BASE_URL.endsWith("/")
-    ? import.meta.env.BASE_URL
-    : `${import.meta.env.BASE_URL}/`;
-  return `${base}${encodeURIComponent(fileName)}`;
+  if (isAndroid) {
+    // 1. Direct Intent to launch native Android Gmail Compose Screen
+    window.location.href = `intent:#Intent;action=android.intent.action.SENDTO;data=mailto:${EMAIL};package=com.google.android.gm;end`;
+
+    // 2. Safety Fallback to system default mail client if Gmail is uninstalled
+    setTimeout(() => {
+      window.location.href = `mailto:${EMAIL}`;
+    }, 600);
+  } else if (isIOS) {
+    // 1. Direct deep-link for iOS Gmail App
+    window.location.href = `googlegmail:///co?to=${EMAIL}`;
+
+    // 2. Safety Fallback to Apple Mail if Gmail App is not present
+    setTimeout(() => {
+      window.location.href = `mailto:${EMAIL}`;
+    }, 600);
+  } else {
+    // Desktop: Web Gmail Compose Tab
+    window.open(
+      `https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
 };
 
-const NAV = [
-  { label: "About", href: "#about", icon: <PersonIcon /> },
-  { label: "Expertise", href: "#teaching", icon: <BookIcon /> },
-  { label: "Voice Samples", href: "#voice", icon: <WaveIcon /> },
-  { label: "AI Language Data", href: "#data", icon: <DataIcon /> },
-  { label: "Experience", href: "#work", icon: <TrendIcon /> },
-  { label: "Education", href: "#education", icon: <GradCapIcon /> },
-  { label: "Contact", href: "#contact", icon: <MailIcon /> },
-];
+// ─── Color Constants (High-Contrast & Theme-Protected) ───────────────────────
+const C = {
+  bg: "#F8F7F4",
+  white: "#FFFFFF",
+  altBg: "#F1EEE9",
+  text: "#161616",
+  body: "#2A2A2A",
+  muted: "#5A5A5A",
+  green: "#1D5C3A",
+  darkGreen: "#0F3D24",
+  lightGreen: "#EBF5EE",
+  greenBorder: "#B8DCC3",
+  amber: "#B86A1D",
+  lightAmber: "#FBF3E8",
+  amberBorder: "#E8C99A",
+  border: "#D5CFCE",
+};
 
-const VOICE_SAMPLES = [
-  {
-    n: "01",
-    title: "Natural Conversational Urdu",
-    desc: "Everyday pace, fluid register, and natural inflection patterns.",
-    fileName: "Natural Conversational Urdu.m4a",
-  },
-  {
-    n: "02",
-    title: "Clear Urdu Reading & Natural Explanation",
-    desc: "Precise diction followed by intuitive, step-by-step clarification.",
-    fileName: "Clear Urdu Reading & Natural Explanation.m4a",
-  },
-  {
-    n: "03",
-    title: "Natural Urdu-English Communication",
-    desc: "Smooth code-switching and bilingual bridging for complex ideas.",
-    fileName: "Natural Urdu-English Communication.m4a",
-  },
-  {
-    n: "04",
-    title: "Careful Listening & Unclear Speech",
-    desc: "Handling degraded acoustics, accented murmurs, and distorted speech.",
-    fileName: "Careful Listening & Unclear Speech.m4a",
-  },
-];
+// ─── UI Helpers ──────────────────────────────────────────────────────────────
+function SectionLabel({ children }: { children: string }) {
+  return (
+    <span className="text-xs font-bold uppercase tracking-widest" style={{ color: C.green }}>
+      {children}
+    </span>
+  );
+}
 
-function AudioPlayerCard({
-  sample,
-  dark,
+function SectionHeading({ children, light = false }: { children: string; light?: boolean }) {
+  return (
+    <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-6" style={{ color: light ? "#FFFFFF" : C.text }}>
+      {children}
+    </h2>
+  );
+}
+
+function Tag({ children, green = false }: { children: string; green?: boolean }) {
+  return (
+    <span
+      className="inline-block text-xs font-semibold px-3 py-1 rounded-full"
+      style={
+        green
+          ? { background: C.lightGreen, color: C.darkGreen, border: `1px solid ${C.greenBorder}` }
+          : { background: C.altBg, color: C.body, border: `1px solid ${C.border}` }
+      }
+    >
+      {children}
+    </span>
+  );
+}
+
+function BtnPrimary({
+  children,
+  onClick,
+  href,
+  download,
+  target,
 }: {
-  sample: (typeof VOICE_SAMPLES)[number];
-  dark: boolean;
+  children: string;
+  onClick?: () => void;
+  href?: string;
+  download?: string | boolean;
+  target?: string;
 }) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [hasError, setHasError] = useState(false);
+  const cls =
+    "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90 active:scale-95 text-center";
+  const style = { background: C.green, color: "#FFFFFF" };
+  if (href) {
+    return (
+      <a href={href} download={download} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls} style={style}>
+        {children}
+      </a>
+    );
+  }
+  return <button onClick={onClick} className={cls} style={style}>{children}</button>;
+}
 
-  const audioSrc = getAssetUrl(sample.fileName);
+function BtnOutlineAmber({
+  children,
+  onClick,
+  href,
+  download,
+  target,
+}: {
+  children: string;
+  onClick?: () => void;
+  href?: string;
+  download?: string | boolean;
+  target?: string;
+}) {
+  const cls =
+    "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90 active:scale-95 text-center";
+  const style = { border: `1.5px solid ${C.amber}`, color: C.amber, background: "transparent" };
+  if (href) {
+    return (
+      <a href={href} download={download} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls} style={style}>
+        {children}
+      </a>
+    );
+  }
+  return <button onClick={onClick} className={cls} style={style}>{children}</button>;
+}
 
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      document.querySelectorAll("audio").forEach((el) => {
-        if (el !== audioRef.current) el.pause();
-      });
-      audioRef.current.play().catch(() => setHasError(true));
-    }
-  };
+function BtnOutlineWhite({
+  children,
+  onClick,
+  href,
+  target,
+}: {
+  children: string;
+  onClick?: () => void;
+  href?: string;
+  target?: string;
+}) {
+  const cls =
+    "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:bg-white/10 active:scale-95 text-center";
+  const style = { border: "1.5px solid rgba(255,255,255,0.7)", color: "#FFFFFF" };
+  if (href) {
+    return (
+      <a href={href} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls} style={style}>
+        {children}
+      </a>
+    );
+  }
+  return <button onClick={onClick} className={cls} style={style}>{children}</button>;
+}
 
-  const handleTimeUpdate = () => {
-    if (!audioRef.current) return;
-    setCurrentTime(audioRef.current.currentTime);
-    setProgress((audioRef.current.currentTime / (audioRef.current.duration || 1)) * 100);
-  };
+// ─── Project Modal ────────────────────────────────────────────────────────────
+type Project = {
+  title: string;
+  subtitle: string;
+  status: string;
+  description: string;
+  tags: string[];
+  image: string;
+  meta?: string;
+  fullDescription: string;
+};
 
-  const handleLoadedMetadata = () => {
-    if (audioRef.current) setDuration(audioRef.current.duration);
-  };
-
-  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!audioRef.current) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clickPos = (e.clientX - rect.left) / rect.width;
-    audioRef.current.currentTime = clickPos * audioRef.current.duration;
-  };
-
-  const formatTime = (secs: number) => {
-    if (isNaN(secs) || secs === 0) return "0:00";
-    const m = Math.floor(secs / 60);
-    const s = Math.floor(secs % 60);
-    return `${m}:${s < 10 ? "0" : ""}${s}`;
-  };
+function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
 
   return (
     <div
-      className="rounded-2xl p-6 border flex flex-col justify-between gap-5 transition-all hover:border-[#E86D35]/50 shadow-sm"
-      style={{
-        backgroundColor: dark ? "#11261F" : "#FFFFFF",
-        borderColor: dark ? "rgba(255,255,255,0.08)" : "#E2E8F0",
-      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(15,61,36,0.75)", backdropFilter: "blur(4px)" }}
+      onClick={onClose}
     >
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-bold tracking-widest text-[#E86D35] uppercase">
-            Sample {sample.n}
-          </span>
-          <span
-            className="text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider"
-            style={{
-              backgroundColor: dark ? "rgba(232,109,53,0.18)" : "#FFF1EC",
-              color: "#E86D35",
-            }}
+      <div
+        className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl"
+        style={{ background: C.white, color: C.text }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="relative w-full" style={{ background: "#0a0a0a" }}>
+          <img src={project.image} alt={project.title} className="w-full object-contain max-h-[50vh]" />
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg transition-opacity hover:opacity-80"
+            style={{ background: "rgba(0,0,0,0.6)" }}
           >
-            Audio Stream
+            ×
+          </button>
+          <span
+            className="absolute top-3 left-3 text-xs font-semibold px-3 py-1 rounded-full"
+            style={
+              project.status === "Completed"
+                ? { background: C.lightGreen, color: C.darkGreen }
+                : { background: C.lightAmber, color: C.amber }
+            }
+          >
+            {project.status}
           </span>
         </div>
-        <h3 className="font-bold text-lg leading-snug mb-2" style={{ color: dark ? "#F8FAFC" : "#0F172A" }}>
-          {sample.title}
-        </h3>
-        <p className="text-sm leading-relaxed" style={{ color: dark ? "#CBD5E1" : "#475569" }}>
-          {sample.desc}
-        </p>
-      </div>
 
-      <audio
-        ref={audioRef}
-        src={audioSrc}
-        preload="metadata"
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-        onEnded={() => {
-          setIsPlaying(false);
-          setProgress(0);
-        }}
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-        onError={() => setHasError(true)}
-      />
-
-      <div className="pt-4 border-t border-gray-100 dark:border-gray-800/80 flex flex-col gap-2.5">
-        {hasError ? (
-          <div className="flex items-center justify-between text-sm text-red-400">
-            <span>Audio stream failed</span>
-            <a href={audioSrc} download className="underline font-medium hover:text-red-300">
-              Download file
-            </a>
+        <div className="p-6 sm:p-8">
+          <h3 className="text-2xl font-bold mb-1" style={{ color: C.text }}>{project.title}</h3>
+          <p className="text-sm font-medium mb-4" style={{ color: C.muted }}>{project.subtitle}</p>
+          <p className="text-sm leading-relaxed mb-4" style={{ color: C.body }}>{project.fullDescription}</p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {project.tags.map((t) => <Tag key={t}>{t}</Tag>)}
           </div>
-        ) : (
-          <div className="flex items-center gap-3.5">
+          {project.meta && <p className="text-xs" style={{ color: C.muted }}>{project.meta}</p>}
+          <div className="mt-6 flex justify-end">
             <button
-              onClick={togglePlay}
-              aria-label={isPlaying ? "Pause audio" : "Play audio sample"}
-              className="shrink-0 w-11 h-11 rounded-full flex items-center justify-center bg-[#E86D35] hover:bg-[#D05A22] text-white transition-all shadow-md active:scale-95 cursor-pointer"
+              onClick={onClose}
+              className="px-5 py-2 rounded-lg text-sm font-semibold transition-all hover:opacity-90"
+              style={{ background: C.green, color: "#FFFFFF" }}
             >
-              {isPlaying ? <PauseIcon /> : <PlayIcon />}
+              Close
             </button>
-
-            <div
-              onClick={handleSeek}
-              className="relative flex-1 h-2.5 bg-gray-200 dark:bg-gray-800 rounded-full cursor-pointer overflow-hidden"
-            >
-              <div
-                className="h-full bg-[#E86D35] rounded-full transition-all"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-
-            <span className="text-xs font-semibold text-gray-600 dark:text-gray-300 tabular-nums">
-              {formatTime(currentTime)} / {formatTime(duration)}
-            </span>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
 }
 
-export default function App() {
-  const [dark, setDark] = useState(() => {
-    const stored = localStorage.getItem("theme");
-    if (stored) return stored === "dark";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
+// ─── Native Zero-Latency Audio Card ───────────────────────────────────────────
+function AudioCard({
+  title,
+  titleUrdu,
+  description,
+  audioSrc,
+  isPlaying,
+  onTogglePlay,
+}: {
+  title: string;
+  titleUrdu: string;
+  description: string;
+  audioSrc: string;
+  isPlaying: boolean;
+  onTogglePlay: () => void;
+}) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState("0:00");
+  const [duration, setDuration] = useState("0:00");
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const formatTime = (secs: number) => {
+    if (isNaN(secs) || secs === Infinity) return "0:00";
+    const minutes = Math.floor(secs / 60);
+    const seconds = Math.floor(secs % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-    localStorage.setItem("theme", dark ? "dark" : "light");
-  }, [dark]);
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
+    } else {
+      audioRef.current.pause();
+    }
+  }, [isPlaying]);
 
-  const toggleDark = useCallback(() => setDark((d) => !d), []);
-  const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
+  const handleTimeUpdate = () => {
+    if (!audioRef.current) return;
+    const curr = audioRef.current.currentTime;
+    const dur = audioRef.current.duration || 0;
+    setProgress(dur > 0 ? (curr / dur) * 100 : 0);
+    setCurrentTime(formatTime(curr));
+  };
 
-  const gmailComposeUrl = (subject: string) =>
-    `https://mail.google.com/mail/u/0/?view=cm&fs=1&to=abdulhananabrar941@gmail.com&su=${encodeURIComponent(
-      subject
-    )}`;
+  const handleLoadedMetadata = () => {
+    if (!audioRef.current) return;
+    setDuration(formatTime(audioRef.current.duration));
+  };
 
-  const handleDownloadCV = async (e: React.MouseEvent) => {
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!audioRef.current) return;
+    const val = parseFloat(e.target.value);
+    const seekTime = (val / 100) * (audioRef.current.duration || 0);
+    audioRef.current.currentTime = seekTime;
+    setProgress(val);
+  };
+
+  return (
+    <div
+      className="rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md"
+      style={{
+        background: C.white,
+        border: isPlaying ? `1.5px solid ${C.green}` : `1px solid ${C.border}`,
+        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+      }}
+    >
+      <audio
+        ref={audioRef}
+        src={audioSrc}
+        preload="metadata"
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+        onEnded={onTogglePlay}
+      />
+
+      <div className="p-5 flex flex-col gap-3">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h4 className="font-semibold text-sm" style={{ color: C.text }}>{title}</h4>
+            <p className="urdu text-sm mt-0.5" style={{ color: C.green }}>{titleUrdu}</p>
+          </div>
+          <button
+            onClick={onTogglePlay}
+            className="flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-sm"
+            style={{ background: isPlaying ? C.darkGreen : C.green }}
+            aria-label={isPlaying ? `Pause ${title}` : `Play ${title}`}
+          >
+            {isPlaying ? (
+              <svg width="12" height="14" viewBox="0 0 12 14" fill="white">
+                <rect x="0" y="0" width="4" height="14" rx="1" />
+                <rect x="8" y="0" width="4" height="14" rx="1" />
+              </svg>
+            ) : (
+              <svg width="12" height="14" viewBox="0 0 12 14" fill="white" className="translate-x-0.5">
+                <path d="M1 0.5L11 7L1 13.5V0.5Z" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        <p className="text-xs" style={{ color: C.muted }}>{description}</p>
+
+        {/* ── Visual Scrubber ── */}
+        <div className="mt-2 flex flex-col gap-1.5">
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="0.1"
+            value={progress}
+            onChange={handleSeek}
+            className="w-full h-1.5 rounded-lg appearance-none cursor-pointer"
+            style={{
+              accentColor: C.green,
+              background: `linear-gradient(to right, ${C.green} ${progress}%, ${C.border} ${progress}%)`,
+            }}
+          />
+          <div className="flex justify-between text-[11px] font-mono" style={{ color: C.muted }}>
+            <span>{currentTime}</span>
+            <span>{duration}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Application ─────────────────────────────────────────────────────────
+export default function App() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeAudioId, setActiveAudioId] = useState<string | null>(null);
+  const [formData, setFormData] = useState({ name: "", email: "", topic: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formSent, setFormSent] = useState(false);
+
+  // Enforce light-theme color-scheme globally on document to neutralize mobile Auto-Dark mode
+  useEffect(() => {
+    document.documentElement.style.setProperty("color-scheme", "light");
+    let metaScheme = document.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
+    if (!metaScheme) {
+      metaScheme = document.createElement("meta");
+      metaScheme.name = "color-scheme";
+      document.head.appendChild(metaScheme);
+    }
+    metaScheme.content = "light";
+  }, []);
+
+  const navLinks = [
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "ai-tutor", label: "AI Tutor" },
+    { id: "experience", label: "Experience" },
+    { id: "skills", label: "Skills" },
+    { id: "projects", label: "Projects" },
+    { id: "voice", label: "Voice" },
+    { id: "contact", label: "Contact" },
+  ];
+
+  useEffect(() => {
+    const handler = () => {
+      const sections = navLinks.map((n) => n.id);
+      for (const id of [...sections].reverse()) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 100) {
+          setActiveSection(id);
+          return;
+        }
+      }
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setMobileOpen(false);
+  };
+
+  const projects: Project[] = [
+    {
+      title: "BizLedger",
+      subtitle: "Offline POS & Business Management App for Punjab Retail",
+      status: "In Development",
+      description:
+        "A fully self-contained, offline-first Point-of-Sale and business management application built for small retail shops across Punjab.",
+      fullDescription:
+        "BizLedger is a fully self-contained, offline-first Point-of-Sale and business management application built for small retail shops across Punjab. It requires no internet connection, no external server, and no monthly fees — everything runs directly in the browser using local storage. The application handles sales tracking, inventory management with low-stock alerts, expense recording, and monthly reporting. It targets over 1.3 million shops in Punjab that currently operate without any digital POS software. Built entirely with HTML5 and JavaScript with zero dependencies.",
+      tags: ["HTML5", "JavaScript", "Offline-First", "POS System", "Punjab Retail"],
+      image: bizLedgerImg,
+      meta: "🏬 1.3M+ target shops · 📴 Zero internet needed",
+    },
+    {
+      title: "QR File Transfer Tool",
+      subtitle: "No Internet. No Cable. Just Scan.",
+      status: "Completed",
+      description:
+        "Transfer files from desktop to phone using QR codes — no internet connection and no USB cable required.",
+      fullDescription:
+        "The QR File Transfer Tool solves a genuinely recurring problem: getting files from a desktop computer to a phone without an internet connection or USB cable. The sender side encodes the file into a QR code displayed on screen. The receiver side, opened on the phone's browser, uses the BarcodeDetector API to scan the QR code via the phone's camera and decode the file. The entire system works over a local hotspot or even offline. Built entirely with vanilla HTML5 and JavaScript, with no server, no upload, and no cloud dependency.",
+      tags: ["HTML5", "JavaScript", "BarcodeDetector API", "QR Code", "File Transfer"],
+      image: qrToolImg,
+    },
+  ];
+
+  const voiceSamples = [
+    {
+      id: "audio-conversational",
+      title: "Natural Conversational Urdu",
+      titleUrdu: "قدرتی اردو گفتگو",
+      description: "A natural, conversational Urdu sample demonstrating authentic everyday speech.",
+      audioSrc: `${import.meta.env.BASE_URL}Natural%20Conversational%20Urdu.m4a`,
+    },
+    {
+      id: "audio-codeswitching",
+      title: "Natural Urdu-English Communication",
+      titleUrdu: "اردو انگریزی — مشترکہ گفتگو",
+      description: "Natural switching between Urdu and English — the way Pakistanis actually communicate.",
+      audioSrc: `${import.meta.env.BASE_URL}Natural%20Urdu-English%20Communication.m4a`,
+    },
+  ];
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const cvUrl = getAssetUrl("Abdul_Hanan_CV.pdf");
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch(cvUrl);
-      if (!response.ok) throw new Error("Fetch error");
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = "Abdul_Hanan_CV.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
+      const response = await fetch("https://formsubmit.co/ajax/4e10f0fcb6df30d7f3c7ddc9e146742d", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          Name: formData.name,
+          Email: formData.email,
+          Topic: formData.topic,
+          Message: formData.message,
+          _subject: `[Portfolio] New message from ${formData.name}: ${formData.topic}`,
+        }),
+      });
+
+      if (response.ok) {
+        setFormSent(true);
+      } else {
+        alert("Failed to send message. Please contact directly via email.");
+      }
     } catch {
-      window.open(cvUrl, "_blank", "noopener,noreferrer");
+      alert("Network error. Please reach out directly to abdulhananabrar941@gmail.com");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div
       style={{
-        backgroundColor: dark ? "#0A1712" : "#F7F5EE",
-        color: dark ? "#F3F4F6" : "#0F172A",
-        fontFamily: '"Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        background: C.bg,
+        color: C.text,
+        fontFamily: "'DM Sans', sans-serif",
+        colorScheme: "light",
       }}
-      className="min-h-screen transition-colors duration-200 antialiased selection:bg-[#E86D35]/25 selection:text-[#E86D35]"
     >
-      {/* ── 📱 Mobile Navigation Overlay ───────────────────── */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs lg:hidden transition-opacity"
-          onClick={closeMobileMenu}
-        />
-      )}
+      {/* ── Mobile Dark/Light Mode Theme Shield ── */}
+      <style>{`
+        :root, html, body {
+          color-scheme: light !important;
+          background-color: ${C.bg} !important;
+          forced-color-adjust: none !important;
+        }
+        input, select, textarea {
+          color: ${C.text} !important;
+          -webkit-text-fill-color: ${C.text} !important;
+          background-color: ${C.bg} !important;
+          opacity: 1 !important;
+        }
+        input::placeholder, textarea::placeholder {
+          color: ${C.muted} !important;
+          -webkit-text-fill-color: ${C.muted} !important;
+          opacity: 0.8 !important;
+        }
+        option {
+          background-color: #FFFFFF !important;
+          color: #161616 !important;
+          -webkit-text-fill-color: #161616 !important;
+        }
+      `}</style>
 
-      {/* ── 📱 Mobile Slide Drawer ─────────────────────────── */}
-      <aside
-        className={`fixed top-0 left-0 bottom-0 z-50 w-72 max-w-[85vw] p-6 shadow-2xl flex flex-col justify-between transform transition-transform duration-300 ease-out lg:hidden ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+      {/* ── Navbar ── */}
+      <nav
+        className="fixed top-0 left-0 right-0 z-40"
         style={{
-          backgroundColor: dark ? "#0D221A" : "#FFFFFF",
-          borderRight: dark ? "1px solid rgba(255,255,255,0.1)" : "1px solid #E2E8F0",
+          background: "rgba(248,247,244,0.95)",
+          backdropFilter: "blur(12px)",
+          borderBottom: `1px solid ${C.border}`,
         }}
       >
-        <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-800">
-            <span className="font-bold text-lg tracking-tight" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>
-              Abdul Hanan
-            </span>
-            <button
-              onClick={closeMobileMenu}
-              aria-label="Close navigation"
-              className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              <CloseIcon />
-            </button>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+          <button
+            onClick={() => scrollTo("home")}
+            className="text-lg font-bold tracking-tight"
+            style={{ color: C.text }}
+          >
+            Abdul Hanan
+          </button>
+
+          <div className="hidden lg:flex items-center gap-6">
+            {navLinks.map((n) => (
+              <button
+                key={n.id}
+                onClick={() => scrollTo(n.id)}
+                className="text-sm font-medium transition-colors"
+                style={{ color: activeSection === n.id ? C.green : C.muted }}
+              >
+                {n.label}
+              </button>
+            ))}
           </div>
 
-          <nav className="flex flex-col gap-1.5">
-            {NAV.map((n) => (
-              <a
-                key={n.href}
-                href={n.href}
-                onClick={closeMobileMenu}
-                className="flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-semibold transition-colors hover:bg-[#E86D35]/15 text-gray-800 dark:text-gray-100"
-              >
-                <span style={{ color: "#E86D35" }}>{n.icon}</span>
-                <span>{n.label}</span>
-              </a>
-            ))}
+          <div className="hidden lg:flex items-center gap-3">
+            <BtnOutlineAmber href={RESUME_URL} target="_blank">Resume</BtnOutlineAmber>
+            <BtnPrimary href={PORTFOLIO_URL} target="_blank">Portfolio</BtnPrimary>
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-sm font-medium" style={{ color: C.muted }}>LinkedIn ↗</a>
+          </div>
 
-            <div className="h-px bg-gray-200 dark:bg-gray-800 my-3" />
-
-            <a
-              href="https://abdul-hanan-abrar.github.io/abdulhanan/#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold text-[#E86D35] bg-[#E86D35]/10 hover:bg-[#E86D35]/20"
-            >
-              <span className="flex items-center gap-2.5">
-                <GlobeIcon /> Personal Website
-              </span>
-              <ArrowUpRight size={15} />
-            </a>
-          </nav>
-        </div>
-
-        <div className="pt-4 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
-          <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Appearance</span>
           <button
-            onClick={toggleDark}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E86D35]/15 text-[#E86D35]"
+            className="lg:hidden flex flex-col gap-1.5 p-2"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle navigation menu"
           >
-            {dark ? <SunIcon /> : <MoonIcon />} {dark ? "Light mode" : "Dark mode"}
+            <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} style={{ background: C.text }} />
+            <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "opacity-0" : ""}`} style={{ background: C.text }} />
+            <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`} style={{ background: C.text }} />
           </button>
         </div>
-      </aside>
 
-      {/* ── 📌 Desktop Header ──────────────────────────────── */}
-      <header
-        className="sticky top-0 z-40 backdrop-blur-md border-b transition-colors"
-        style={{
-          backgroundColor: dark ? "rgba(10,23,18,0.88)" : "rgba(247,245,238,0.92)",
-          borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)",
-        }}
-      >
-        <div className="max-w-[1360px] mx-auto px-4 flex items-center justify-between h-16">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              aria-label="Open navigation menu"
-              className="lg:hidden p-2 rounded-xl text-gray-800 dark:text-gray-100 hover:bg-black/5 dark:hover:bg-white/5"
-            >
-              <MenuIcon />
-            </button>
-
-            <button
-              onClick={toggleDark}
-              aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-              className="p-2.5 rounded-xl transition-all"
-              style={{
-                color: "#E86D35",
-                backgroundColor: dark ? "rgba(232,109,53,0.15)" : "rgba(232,109,53,0.1)",
-              }}
-            >
-              {dark ? <SunIcon /> : <MoonIcon />}
-            </button>
-          </div>
-
-          <nav className="hidden lg:flex items-center gap-2">
-            {NAV.map((n) => (
-              <a
-                key={n.href}
-                href={n.href}
-                className="flex items-center gap-2 px-3.5 py-2 text-sm font-semibold rounded-lg transition-colors hover:text-[#E86D35] hover:bg-black/5 dark:hover:bg-white/5"
-                style={{ color: dark ? "#E2E8F0" : "#334155" }}
-              >
-                <span style={{ color: "#E86D35" }}>{n.icon}</span>
-                <span>{n.label}</span>
-              </a>
-            ))}
-          </nav>
-
-          <a
-            href="https://abdul-hanan-abrar.github.io/abdulhanan/#"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-full border border-[#E86D35] text-[#E86D35] hover:bg-[#E86D35] hover:text-white transition-all shadow-xs"
-          >
-            <GlobeIcon />
-            <span>Personal Site</span>
-            <ArrowUpRight size={14} />
-          </a>
-        </div>
-      </header>
-
-      {/* ── 🌟 Hero Section ─────────────────────────────────── */}
-      <section className="max-w-[1360px] mx-auto px-4 pt-14 pb-12 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12 items-center">
-        <div className="flex flex-col gap-6">
-          <span className="text-xs sm:text-sm font-bold tracking-widest uppercase text-[#E86D35]">
-            Urdu Tutor · Language Data Specialist · Faisalabad, Pakistan
-          </span>
-
-          <h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12]"
-            style={{ color: dark ? "#FFFFFF" : "#123B2D" }}
-          >
-            Clear language.<br />
-            <em className="not-italic" style={{ color: "#E86D35" }}>Careful data.</em><br />
-            Human connection.
-          </h1>
-
-          <p className="text-lg leading-relaxed max-w-xl" style={{ color: dark ? "#CBD5E1" : "#334155" }}>
-            I am <strong className="font-bold text-slate-900 dark:text-white">Abdul Hanan</strong>, a native Urdu speaker helping learners build verbal fluency and assisting AI engineering teams with high-precision bilingual datasets.
-          </p>
-
-          <p
-            lang="ur"
-            dir="rtl"
-            className="text-3xl sm:text-4xl leading-relaxed text-right max-w-lg font-medium"
-            style={{
-              fontFamily: '"Noto Nastaliq Urdu", "Urdu Typesetting", serif',
-              color: dark ? "#6EE7B7" : "#1E5943",
-            }}
-          >
-            السلام علیکم — زبان سیکھنے کا سفر خوشگوار ہو۔
-          </p>
-
-          <div className="flex flex-wrap items-center gap-4 mt-2">
-            <a
-              href={gmailComposeUrl("Urdu Tutoring or Data Collaboration")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-bold bg-[#E86D35] hover:bg-[#D05A22] text-white shadow-md transition-all active:scale-95"
-            >
-              <span>Email Abdul</span>
-              <ArrowUpRight size={16} />
-            </a>
-
-            <button
-              onClick={handleDownloadCV}
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-bold border-2 transition-all active:scale-95 cursor-pointer"
-              style={{
-                borderColor: dark ? "#34D399" : "#123B2D",
-                color: dark ? "#34D399" : "#123B2D",
-              }}
-            >
-              <ArrowDown size={16} />
-              <span>Download CV</span>
-            </button>
-          </div>
-
-          <div className="flex items-center gap-3 mt-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-sm font-semibold" style={{ color: dark ? "#94A3B8" : "#475569" }}>
-              Available for remote tutoring &amp; bilingual evaluation projects
-            </span>
-          </div>
-        </div>
-
-        {/* Hero Portrait */}
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <div
-              className="w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden shadow-2xl border-4"
-              style={{ borderColor: dark ? "#34D399" : "#123B2D" }}
-            >
-              <img src={portraitSrc} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
-            </div>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl font-bold tracking-tight" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>
-              Abdul Hanan
-            </p>
-            <p className="text-sm font-semibold mt-1" style={{ color: dark ? "#CBD5E1" : "#64748B" }}>
-              Native Urdu Tutor &amp; Language Data Support
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 🏷️ Clean Banner Strip ────────────────────────────── */}
-      <div style={{ backgroundColor: "#E86D35" }} className="py-4 px-4 text-white">
-        <div className="max-w-[1360px] mx-auto flex flex-col sm:flex-row sm:items-center gap-2">
-          <span className="text-xs font-bold tracking-widest uppercase opacity-95">
-            For Language Teams &amp; Recruiters
-          </span>
-          <span className="hidden sm:inline opacity-40 mx-1">|</span>
-          <span className="text-sm sm:text-base font-medium">
-            Combining phonetics awareness, customer operations discipline, and clean script automation.
-          </span>
-        </div>
-      </div>
-
-      {/* ── 👤 Section 1: About ─────────────────────────────── */}
-      <section id="about" className="max-w-[1360px] mx-auto px-4 py-16">
-        <div className="mb-4 flex items-center gap-2">
-          <span style={{ color: "#E86D35" }}><PersonIcon /></span>
-          <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">01 / Profile</span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10 items-start">
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-5" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>
-              A thoughtful bridge between people and language.
-            </h2>
-            <p className="text-base sm:text-lg leading-relaxed mb-4" style={{ color: dark ? "#CBD5E1" : "#334155" }}>
-              Whether guiding a student through Nastaliq orthography or validating automated transcriptions for subtle phonetic variations, I balance cultural intuition with technical rigor.
-            </p>
-            <p className="text-base sm:text-lg leading-relaxed mb-6" style={{ color: dark ? "#CBD5E1" : "#334155" }}>
-              My operational background includes customer support, quality assurance, dataset labeling, and automated Python reporting workflows.
-            </p>
-            <a
-              href="https://abdul-hanan-abrar.github.io/abdulhanan/#"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-bold text-[#E86D35] hover:underline"
-            >
-              <span>Explore personal developer portfolio</span>
-              <ArrowUpRight size={15} />
-            </a>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3.5">
-            {[
-              { label: "Native Speaker", sub: "Urdu (C2 Mastery)" },
-              { label: "Native Dialect", sub: "Punjabi (Regional Fluency)" },
-              { label: "Professional", sub: "English (B2 Working Proficiency)" },
-            ].map((f) => (
-              <div
-                key={f.sub}
-                className="rounded-2xl p-5 border shadow-xs"
-                style={{
-                  backgroundColor: dark ? "#11261F" : "#FFFFFF",
-                  borderColor: dark ? "rgba(255,255,255,0.1)" : "#E2E8F0",
-                }}
-              >
-                <p className="text-xs font-bold tracking-widest text-[#E86D35] uppercase mb-1">{f.label}</p>
-                <p className="text-lg font-bold" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>{f.sub}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 📚 Section 2: Teaching & Bilingual Showcase ────── */}
-      <section
-        id="teaching"
-        className="py-16 border-y"
-        style={{
-          backgroundColor: dark ? "#0D221A" : "#F1EDE4",
-          borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
-        }}
-      >
-        <div className="max-w-[1360px] mx-auto px-4">
-          <div className="mb-4 flex items-center gap-2">
-            <span style={{ color: "#E86D35" }}><BookIcon /></span>
-            <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">02 / Teaching &amp; Dialect</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-8" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>
-            Instruction built around clear mechanics.
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
-            {[
-              { n: "01", title: "Conversation & Articulation", desc: "Targeted practice on Urdu retroflex consonants, aspiration patterns, and natural spoken tempo." },
-              { n: "02", title: "Literary & Formal Script", desc: "Systematic introduction to Nastaliq orthography, connected letterforms, and reading comprehension." },
-              { n: "03", title: "Register & Regional Context", desc: "Navigating formal (Aap), polite (Tum), and casual registers across different conversational environments." },
-            ].map((c) => (
-              <div
-                key={c.n}
-                className="rounded-2xl p-6 border shadow-xs"
-                style={{
-                  backgroundColor: dark ? "#142F24" : "#FFFFFF",
-                  borderColor: dark ? "rgba(255,255,255,0.08)" : "#E2E8F0",
-                }}
-              >
-                <span className="text-3xl font-extrabold block mb-2 text-[#E86D35]">{c.n}</span>
-                <h3 className="font-bold text-lg mb-2" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>{c.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: dark ? "#CBD5E1" : "#475569" }}>{c.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Bilingual Context Card */}
+        {mobileOpen && (
           <div
-            className="rounded-3xl p-6 sm:p-9 border shadow-xl transition-all"
+            className="lg:hidden px-4 pb-4 pt-2 flex flex-col gap-1"
+            style={{ borderTop: `1px solid ${C.border}`, background: "rgba(248,247,244,0.98)" }}
+          >
+            {navLinks.map((n) => (
+              <button
+                key={n.id}
+                onClick={() => scrollTo(n.id)}
+                className="text-left text-sm font-medium py-2.5 px-3 rounded-lg transition-colors"
+                style={{
+                  color: activeSection === n.id ? C.green : C.body,
+                  background: activeSection === n.id ? C.lightGreen : "transparent",
+                }}
+              >
+                {n.label}
+              </button>
+            ))}
+            <div className="flex gap-3 mt-3 pt-3" style={{ borderTop: `1px solid ${C.border}` }}>
+              <BtnOutlineAmber href={RESUME_URL} target="_blank">Resume</BtnOutlineAmber>
+              <BtnPrimary href={PORTFOLIO_URL} target="_blank">Portfolio</BtnPrimary>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* ── Hero ── */}
+      <section id="home" className="pt-24 pb-16 sm:pt-28 sm:pb-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-20 items-center">
+            <div>
+              <span
+                className="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-5"
+                style={{ background: C.lightGreen, color: C.darkGreen, border: `1px solid ${C.greenBorder}` }}
+              >
+                Faisalabad, Pakistan · BSc Computer Science · 2+ Years Experience
+              </span>
+
+              <div className="flex items-center gap-5 sm:gap-8 mb-4">
+                <h1
+                  className="font-bold leading-none tracking-tight"
+                  style={{ color: C.text, fontSize: "clamp(3rem, 7vw, 5.5rem)", lineHeight: 1.0 }}
+                >
+                  ABDUL<br />HANAN
+                </h1>
+                <div
+                  className="lg:hidden flex-shrink-0 overflow-hidden rounded-full"
+                  style={{
+                    width: "clamp(90px, 18vw, 160px)",
+                    height: "clamp(90px, 18vw, 160px)",
+                    border: `3px solid ${C.greenBorder}`,
+                    boxShadow: `0 0 0 5px ${C.lightGreen}`,
+                    background: C.altBg,
+                  }}
+                >
+                  <img src={heroPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
+                </div>
+              </div>
+
+              <p className="text-base font-semibold mb-3" style={{ color: C.green }}>
+                AI Urdu Language Tutor · Customer Support & Operations Specialist · Computer Science Student
+              </p>
+
+              <p className="urdu text-xl sm:text-2xl mb-4 leading-loose font-bold" style={{ color: C.green }}>
+                اردو زبان میں اے آئی کو سکھانا — میری خاصیت ہے
+              </p>
+
+              <p className="text-base leading-relaxed mb-6 max-w-xl" style={{ color: C.body }}>
+                Native Urdu speaker with two years of professional bilingual experience — ready to help AI companies
+                build systems that truly understand how Urdu is spoken, written and mixed with English in real-life contexts.
+              </p>
+
+              <div className="flex flex-wrap gap-3 mb-4">
+                <BtnPrimary onClick={() => scrollTo("ai-tutor")}>Explore AI Tutor Work</BtnPrimary>
+                <BtnOutlineAmber onClick={() => scrollTo("experience")}>View Experience</BtnOutlineAmber>
+                <a
+                  href={RESUME_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors hover:opacity-80 inline-flex items-center justify-center"
+                  style={{ border: `1.5px solid ${C.border}`, color: C.body, background: C.white }}
+                >
+                  Download Resume
+                </a>
+              </div>
+
+              <button
+                onClick={() => scrollTo("voice")}
+                className="text-sm font-semibold transition-opacity hover:opacity-70 block mb-5 text-left"
+                style={{ color: C.muted }}
+              >
+                ↓ Listen to Urdu Voice Samples
+              </button>
+
+              <div className="flex flex-wrap gap-2">
+                {["Urdu — C2", "Punjabi — Fluent", "English — Professional", "AI Urdu Tutor", "Customer Support", "Operations"].map((t) => (
+                  <Tag key={t} green>{t}</Tag>
+                ))}
+              </div>
+            </div>
+
+            <div className="hidden lg:flex items-center justify-center">
+              <div
+                className="flex-shrink-0 overflow-hidden rounded-full"
+                style={{
+                  width: 280,
+                  height: 280,
+                  border: `4px solid ${C.greenBorder}`,
+                  boxShadow: `0 0 0 10px ${C.lightGreen}, 0 12px 48px rgba(29,92,58,0.18)`,
+                  background: C.altBg,
+                }}
+              >
+                <img src={heroPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Strengths ── */}
+      <section id="strengths" className="py-12 sm:py-16" style={{ background: C.altBg }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-8 lg:gap-12 items-start">
+            <div className="lg:pt-1">
+              <SectionLabel>Core Strengths</SectionLabel>
+              <SectionHeading>What I Bring</SectionHeading>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { icon: "🧠", title: "AI Urdu Tutor", desc: "Native Urdu speaker able to train, annotate and evaluate AI language models in authentic Urdu." },
+                { icon: "💬", title: "Customer Support", desc: "Clear, respectful bilingual communication with clients via phone, email and WhatsApp." },
+                { icon: "⚙️", title: "Operations", desc: "Inventory tracking, record management and operational problem solving — day to day." },
+                { icon: "🔍", title: "Problem Solving", desc: "Finding the root cause of a problem instead of just working around it." },
+                { icon: "💻", title: "Technology", desc: "BSc CS education with practical skills in Excel, Python and JavaScript." },
+              ].map((c) => (
+                <div
+                  key={c.title}
+                  className="rounded-xl p-5 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+                  style={{ background: C.white, border: `1px solid ${C.border}`, boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}
+                >
+                  <span className="text-2xl mb-3 block">{c.icon}</span>
+                  <h3 className="font-bold text-sm mb-2" style={{ color: C.text }}>{c.title}</h3>
+                  <p className="text-xs leading-relaxed" style={{ color: C.body }}>{c.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── About ── */}
+      <section id="about" className="py-16 sm:py-20" style={{ background: C.white }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+            <div>
+              <div className="flex items-center justify-between gap-6 mb-6">
+                <div>
+                  <SectionLabel>About Me</SectionLabel>
+                  <h2 className="text-3xl sm:text-4xl font-bold mt-2 leading-tight" style={{ color: C.text }}>
+                    A Little<br />About Me
+                  </h2>
+                </div>
+                <div
+                  className="flex-shrink-0 lg:hidden overflow-hidden rounded-full"
+                  style={{
+                    width: 100,
+                    height: 100,
+                    border: `3px solid ${C.greenBorder}`,
+                    boxShadow: `0 0 0 4px ${C.lightGreen}`,
+                    background: C.altBg,
+                  }}
+                >
+                  <img src={aboutPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
+                </div>
+              </div>
+
+              <div className="space-y-4 text-sm leading-relaxed" style={{ color: C.body }}>
+                <p>I'm Abdul Hanan, a BSc Computer Science student based in Faisalabad, Pakistan, with professional experience in customer support and operations at Aptly Pharmaceuticals.</p>
+                <p>My experience has taught me that good support is not only about answering questions — it's about understanding the real problem, communicating clearly, keeping accurate records and working with teams to reach a practical solution.</p>
+                <p>Beyond my day job, I build software independently — BizLedger, an offline POS system for small Punjab retailers; a QR file-transfer tool; and Python automation scripts that save real time at work.</p>
+                <p>I'm particularly comfortable in Urdu and English, and I'm actively looking to contribute to AI language projects where authentic Urdu communication matters.</p>
+              </div>
+
+              <blockquote
+                className="my-6 pl-4 py-2 text-sm italic font-semibold"
+                style={{ borderLeft: `3px solid ${C.amber}`, color: C.body, background: C.lightAmber }}
+              >
+                "I'm most comfortable where communication meets problem solving."
+              </blockquote>
+
+              <div className="flex flex-wrap gap-3">
+                <BtnPrimary onClick={() => scrollTo("ai-tutor")}>AI Tutor Work</BtnPrimary>
+                <BtnOutlineAmber href={RESUME_URL} target="_blank">Download Resume</BtnOutlineAmber>
+              </div>
+            </div>
+
+            <div className="hidden lg:flex justify-center items-start pt-4">
+              <div
+                className="overflow-hidden rounded-full"
+                style={{
+                  width: 260,
+                  height: 260,
+                  border: `4px solid ${C.greenBorder}`,
+                  boxShadow: `0 0 0 8px ${C.lightGreen}, 0 8px 32px rgba(29,92,58,0.14)`,
+                  background: C.altBg,
+                }}
+              >
+                <img src={aboutPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── AI Tutor (Dark Section with High-Contrast Text) ── */}
+      <section id="ai-tutor" className="py-16 sm:py-20 relative overflow-hidden" style={{ background: C.darkGreen }}>
+        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-10" style={{ background: C.green }} />
+        <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full opacity-10" style={{ background: C.green }} />
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FBBF24" }}>
+                Open to AI & Language Opportunities
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-bold mt-3 mb-2 text-white leading-tight">
+                Training AI in Urdu —<br />The Right Way
+              </h2>
+              <p className="urdu text-lg mb-5 font-semibold" style={{ color: "#86EFAC" }}>
+                اردو میں اے آئی کو سکھانا — صحیح طریقے سے
+              </p>
+              <p className="text-sm leading-relaxed mb-6" style={{ color: "#E2F1E8" }}>
+                Most AI systems still struggle with authentic, natural Urdu — the kind spoken in homes, offices and on the street in Pakistan. As a native Urdu speaker with professional bilingual experience, I want to help AI companies build systems that truly understand how Urdu is spoken, written and mixed with English in real-life contexts.
+              </p>
+
+              <ul className="space-y-2.5 mb-8">
+                {[
+                  "Native Urdu speaker — natural, idiomatic, regionally authentic",
+                  "Professional English fluency for bilingual code-switching training data",
+                  "Customer support background — real conversational scenarios, not just text",
+                  "Computer Science education — understands AI/ML workflow and requirements",
+                  "Voice clarity and tone control — usable for speech and text datasets",
+                  "Available for structured, ongoing training collaboration",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm font-medium" style={{ color: "#E2F1E8" }}>
+                    <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full" style={{ background: "#FBBF24" }} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex flex-wrap gap-3">
+                <BtnPrimary onClick={() => scrollTo("contact")}>Discuss an Opportunity</BtnPrimary>
+                <BtnOutlineWhite onClick={() => scrollTo("voice")}>▶ Hear Voice Samples</BtnOutlineWhite>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { icon: "🗣️", title: "Conversation Data", desc: "Natural Urdu dialogues, Q&A pairs and support scenarios for training datasets." },
+                { icon: "📝", title: "Text Annotation", desc: "Labelling, correcting and evaluating AI-generated Urdu text for accuracy and naturalness." },
+                { icon: "🔤", title: "Code-Switching", desc: "Urdu–English mixed speech — the way Pakistanis actually communicate daily." },
+                { icon: "🎙️", title: "Voice Samples", desc: "Recorded Urdu speech in natural, professional and instructional tones for ASR training." },
+                { icon: "✅", title: "AI Response Eval", desc: "Reviewing and rating AI-generated Urdu responses for fluency and cultural accuracy." },
+                { icon: "📚", title: "Tutoring Scenarios", desc: "Structured Urdu explanations ideal for AI tutor and education products." },
+              ].map((c) => (
+                <div
+                  key={c.title}
+                  className="rounded-xl p-4 transition-all duration-200 hover:bg-white/10"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)" }}
+                >
+                  <span className="text-xl mb-2 block">{c.icon}</span>
+                  <h4 className="font-semibold text-sm text-white mb-1">{c.title}</h4>
+                  <p className="text-xs leading-relaxed" style={{ color: "#C8DFD2" }}>{c.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Experience ── */}
+      <section id="experience" className="py-16 sm:py-20" style={{ background: C.white }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <SectionLabel>Professional History</SectionLabel>
+          <SectionHeading>Professional Experience</SectionHeading>
+
+          <div className="relative pl-6" style={{ borderLeft: `2px solid ${C.greenBorder}` }}>
+            <div className="absolute -left-2 top-0 w-4 h-4 rounded-full" style={{ background: C.green }} />
+            <div className="mb-6">
+              <div className="flex flex-wrap items-center gap-3 mb-1">
+                <h3 className="text-xl font-bold" style={{ color: C.text }}>Aptly Pharmaceuticals</h3>
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: C.lightGreen, color: C.darkGreen }}>
+                  Currently Here
+                </span>
+              </div>
+              <p className="font-bold text-sm mb-1" style={{ color: C.green }}>Customer Support & Operations Specialist</p>
+              <div className="flex flex-wrap gap-3 text-xs mb-3 font-medium" style={{ color: C.muted }}>
+                <span>Faisalabad, Pakistan</span>
+                <span>·</span>
+                <span>June 2024 – Present</span>
+              </div>
+              <p className="text-sm leading-relaxed max-w-2xl mb-5" style={{ color: C.body }}>
+                Working across customer support and operational tasks — helping clients with product-related questions,
+                coordinating with internal teams and maintaining accurate operational information.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {[
+                  { icon: "💬", title: "Customer Support", desc: "Answered product-related questions from clients and coordinated with internal teams to resolve issues efficiently." },
+                  { icon: "📂", title: "Client Records", desc: "Maintained written records of customer cases and interactions to keep information organized and accessible." },
+                  { icon: "📦", title: "Inventory Tracking", desc: "Maintained live Excel-based inventory tracking across major pharmaceutical product lines." },
+                  { icon: "✅", title: "Data Validation", desc: "Added validation rules to reduce stock discrepancies and improve data accuracy site-wide." },
+                  { icon: "📊", title: "Reporting Fix", desc: "Identified and fixed a DD/MM vs MM/DD date-format issue that was silently breaking monthly reports." },
+                  { icon: "⚙️", title: "Process Improvement", desc: "Built Excel tools that reduced manual work and improved efficiency in monthly reporting workflows." },
+                ].map((c) => (
+                  <div
+                    key={c.title}
+                    className="rounded-xl p-4 transition-all hover:shadow-md hover:-translate-y-0.5 duration-200"
+                    style={{ background: C.bg, border: `1px solid ${C.border}` }}
+                  >
+                    <span className="text-lg mb-2 block">{c.icon}</span>
+                    <h4 className="font-bold text-xs mb-1" style={{ color: C.text }}>{c.title}</h4>
+                    <p className="text-xs leading-relaxed" style={{ color: C.body }}>{c.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full"
+                style={{ background: C.lightGreen, color: C.darkGreen }}
+              >
+                📅 2+ years of customer support & operations experience
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Education ── */}
+      <section id="education" className="py-16 sm:py-20" style={{ background: C.altBg }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+          <SectionLabel>Academic Background</SectionLabel>
+          <SectionHeading>Education</SectionHeading>
+
+          <div
+            className="max-w-xl mx-auto rounded-2xl overflow-hidden"
             style={{
-              backgroundColor: dark ? "#112820" : "#123B2D",
-              borderColor: dark ? "rgba(255,255,255,0.12)" : "#0E2E23",
+              background: C.white,
+              border: `1px solid ${C.border}`,
+              boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
             }}
           >
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-4 mb-6">
-              <span className="text-xs uppercase tracking-widest text-[#E86D35] font-bold">
-                Bilingual Context Breakdown
-              </span>
-              <span className="text-xs font-semibold text-white/80 bg-white/10 px-3.5 py-1 rounded-full border border-white/15">
-                Urdu (Nastaliq) ⇄ English
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div className="flex flex-col gap-2">
-                <span className="text-xs uppercase tracking-wider text-emerald-400 font-bold">
-                  Original Urdu Script
-                </span>
-                <p
-                  lang="ur"
-                  dir="rtl"
-                  className="text-3xl sm:text-4xl lg:text-5xl text-right leading-loose text-white font-medium my-1"
-                  style={{ fontFamily: '"Noto Nastaliq Urdu", "Urdu Typesetting", serif' }}
-                >
-                  یہ جملہ اردو میں ہے۔
-                </p>
-                <p className="text-base text-emerald-300 font-medium tracking-wide mt-1">
-                  Yeh jumla Urdu mein hai.
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-2 md:border-l md:border-white/15 md:pl-8">
-                <span className="text-xs uppercase tracking-wider text-[#E86D35] font-bold">
-                  Translation &amp; Structure
-                </span>
-                <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug">
-                  "This sentence is in Urdu."
-                </p>
-                <p className="text-sm sm:text-base text-white/80 leading-relaxed mt-2">
-                  Demonstrating Subject-Object-Verb (SOV) order, feminine gender concord, and natural conversational phonology.
-                </p>
+            <div className="h-1" style={{ background: `linear-gradient(90deg, ${C.green}, ${C.amber})` }} />
+            <div className="p-8">
+              <h3 className="text-xl font-bold mb-1" style={{ color: C.text }}>Bachelor of Science in Computer Science</h3>
+              <p className="font-semibold text-sm mb-1" style={{ color: C.green }}>University of Agriculture, Faisalabad (UAF)</p>
+              <p className="text-xs mb-4 font-medium" style={{ color: C.muted }}>Currently Pursuing · Semester 5 · Expected Graduation 2028</p>
+              <p className="text-sm leading-relaxed mb-5" style={{ color: C.body }}>
+                Studying Computer Science while building practical professional experience in customer support, operations, technology and digital tools.
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {["HTML5", "JavaScript", "Python", "Data Structures", "OOP", "Databases"].map((t) => (
+                  <Tag key={t} green>{t}</Tag>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 🎙️ Section 3: Voice Samples ─────────────────────── */}
-      <section id="voice" className="max-w-[1360px] mx-auto px-4 py-16">
-        <div className="mb-4 flex items-center gap-2">
-          <span style={{ color: "#E86D35" }}><WaveIcon /></span>
-          <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">03 / Voice Samples</span>
-        </div>
+      {/* ── Skills ── */}
+      <section id="skills" className="py-16 sm:py-20" style={{ background: C.white }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <SectionLabel>Capabilities</SectionLabel>
+          <SectionHeading>Skills</SectionHeading>
 
-        <div className="mb-8">
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>
-            Direct Audio Samples
-          </h2>
-          <p className="text-base max-w-xl mt-2" style={{ color: dark ? "#CBD5E1" : "#475569" }}>
-            Authentic voice recordings demonstrating vocal clarity, dialect control, and conversational pacing.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-          {VOICE_SAMPLES.map((sample) => (
-            <AudioPlayerCard key={sample.n} sample={sample} dark={dark} />
-          ))}
-        </div>
-      </section>
-
-      {/* ── 📊 Section 4: AI Language Data ──────────────────── */}
-      <section id="data" style={{ backgroundColor: "#123B2D" }} className="py-16 text-white">
-        <div className="max-w-[1360px] mx-auto px-4">
-          <div className="mb-4 flex items-center gap-2">
-            <span style={{ color: "#E86D35" }}><DataIcon /></span>
-            <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">04 / AI Data Support</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Precision language data workflows.</h2>
-          <p className="text-base sm:text-lg mb-8 max-w-2xl text-white/85">
-            Available for evaluation rubrics, speech quality scoring, transcription audits, and bilingual validation datasets.
-          </p>
-
-          <div className="flex flex-wrap gap-3 mb-8">
-            {[
-              "Audio Transcription Scoring",
-              "Phonetic Annotation",
-              "Urdu Dialect Categorization",
-              "Dataset Validation",
-              "Python Automation",
-            ].map((skill) => (
-              <span
-                key={skill}
-                className="px-4 py-2 rounded-full text-sm font-semibold border border-[#E86D35]/50 bg-[#E86D35]/15 text-[#E86D35]"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-
-          <a
-            href={gmailComposeUrl("AI Language Data Collaboration")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-sm font-bold bg-[#E86D35] hover:bg-[#D05A22] text-white shadow-lg transition-all active:scale-95"
-          >
-            <span>Email Abdul</span>
-            <ArrowUpRight size={16} />
-          </a>
-        </div>
-      </section>
-
-      {/* ── 💼 Section 5: Experience (All Eyebrows Fixed) ────── */}
-      <section id="work" className="max-w-[1360px] mx-auto px-4 py-16">
-        <div className="mb-4 flex items-center gap-2">
-          <span style={{ color: "#E86D35" }}><TrendIcon /></span>
-          <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">05 / Experience</span>
-        </div>
-
-        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-8" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>
-          Operational discipline &amp; projects.
-        </h2>
-
-        <div className="flex flex-col">
-          {[
-            {
-              icon: <HeadsetIcon />,
-              eyebrow: "Customer Support & Operations",
-              title: "Aptly Pharmaceuticals",
-              desc: "Handled bilingual client communication and critical inventory management, maintaining a verified 92% customer satisfaction score.",
-            },
-            {
-              icon: <SheetIcon />,
-              eyebrow: "Automation Project",
-              title: "12-Sheet Validation System",
-              desc: "Engineered automated validation formulas that eliminated manual data-entry errors by more than 50%.",
-            },
-            {
-              icon: <ChartIcon />,
-              eyebrow: "Workflow Automation",
-              title: "Reporting Pipeline Optimization",
-              desc: "Automated recurring reporting workflows using Python scripts, resolving cross-platform date mismatch issues.",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="flex gap-5 py-6 border-b"
-              style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "#E2E8F0" }}
-            >
-              <div
-                className="shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-[#E86D35]"
-                style={{ backgroundColor: dark ? "rgba(232,109,53,0.15)" : "#FFF1EC" }}
-              >
-                {item.icon}
-              </div>
-              <div>
-                {/* 👈 Sleek Professional Non-Monospace Eyebrow */}
-                <p className="text-xs font-bold uppercase tracking-widest mb-1.5 text-[#E86D35]">
-                  {item.eyebrow}
-                </p>
-                <h3 className="font-bold text-lg mb-1" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>
-                  {item.title}
-                </h3>
-                <p className="text-sm sm:text-base leading-relaxed" style={{ color: dark ? "#CBD5E1" : "#475569" }}>
-                  {item.desc}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── 🎓 Section 6: Education ─────────────────────────── */}
-      <section
-        id="education"
-        className="py-16 border-y"
-        style={{
-          backgroundColor: dark ? "#0D221A" : "#F1EDE4",
-          borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
-        }}
-      >
-        <div className="max-w-[1360px] mx-auto px-4">
-          <div className="mb-4 flex items-center gap-2">
-            <span style={{ color: "#E86D35" }}><GradCapIcon /></span>
-            <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">06 / Education</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-8" style={{ color: dark ? "#F8FAFC" : "#123B2D" }}>
-            Academic Background
-          </h2>
-
-          <div className="flex flex-col max-w-2xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                date: "Sep 2024 — Expected 2028",
-                title: "BSc Computer Science",
-                inst: "University of Agriculture, Faisalabad (UAF)",
-                note: "Core Focus: Data Structures, Database Systems, Software Engineering",
+                title: "Communication",
+                items: ["Urdu — Native", "Punjabi — Fluent", "English — Professional", "AI Language Training", "Urdu Text Annotation"],
               },
               {
-                date: "2022 — 2024",
-                title: "Intermediate in Computer Science (ICS)",
-                inst: "Punjab Group of Colleges (PGC)",
-                note: null,
+                title: "Customer Support",
+                items: ["Query Handling", "Issue Resolution", "Case Documentation", "WhatsApp / Email / Phone"],
               },
               {
-                date: "2022",
-                title: "Microsoft Office Management Certification",
-                inst: "Career Institute",
-                note: null,
+                title: "Operations",
+                items: ["Inventory Tracking", "Record Management", "Process Improvement", "Reporting"],
               },
-            ].map((e, i) => (
-              <div
-                key={i}
-                className="flex gap-4 py-6 border-b"
-                style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "#E2E8F0" }}
-              >
-                <div className="shrink-0 w-2.5 h-2.5 rounded-full mt-2.5 bg-[#E86D35]" />
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: dark ? "#94A3B8" : "#64748B" }}>
-                    {e.date}
-                  </p>
-                  <h3 className="font-bold text-lg mb-0.5" style={{ color: dark ? "#FFFFFF" : "#123B2D" }}>
-                    {e.title}
-                  </h3>
-                  <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-1">{e.inst}</p>
-                  {e.note && <p className="text-sm" style={{ color: dark ? "#CBD5E1" : "#64748B" }}>{e.note}</p>}
+              {
+                title: "Technical",
+                items: ["Microsoft Excel", "Python", "HTML5", "JavaScript", "Problem Solving"],
+              },
+            ].map((col) => (
+              <div key={col.title}>
+                <h3 className="font-bold text-sm mb-3" style={{ color: C.text }}>{col.title}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {col.items.map((item) => <Tag key={item}>{item}</Tag>)}
                 </div>
               </div>
             ))}
@@ -842,123 +992,402 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── 📬 Section 7: Contact ───────────────────────────── */}
-      <section id="contact" style={{ backgroundColor: "#123B2D" }} className="py-16 text-white">
-        <div className="max-w-[1360px] mx-auto px-4">
-          <div className="mb-4 flex items-center gap-2">
-            <span style={{ color: "#E86D35" }}><MailIcon /></span>
-            <span className="text-xs font-bold tracking-widest uppercase text-[#E86D35]">07 / Contact</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">Initiate a conversation.</h2>
-          <p className="text-base sm:text-lg mb-6 max-w-xl text-white/85">
-            For tutoring inquiries, speech data roles, or technical collaborations, reach out directly.
+      {/* ── Projects ── */}
+      <section id="projects" className="py-16 sm:py-20" style={{ background: C.altBg }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <SectionLabel>Built by Me</SectionLabel>
+          <SectionHeading>Selected Work</SectionHeading>
+          <p className="text-sm max-w-xl mb-10" style={{ color: C.body }}>
+            Practical problems I've worked on and solutions I've built — from offline retail software to AI-ready tools and operational Excel systems.
           </p>
 
-          <p
-            lang="ur"
-            dir="rtl"
-            className="text-2xl sm:text-3xl text-right mb-8 text-emerald-200"
-            style={{ fontFamily: '"Noto Nastaliq Urdu", serif' }}
-          >
-            آپ سے بات کرنے کا انتظار ہے۔
-          </p>
+          <h3 className="font-bold text-sm mb-4" style={{ color: C.text }}>Software Projects</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-10">
+            {projects.map((p) => (
+              <div
+                key={p.title}
+                className="rounded-2xl overflow-hidden flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
+                style={{ background: C.white, border: `1px solid ${C.border}`, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
+              >
+                <div className="w-full overflow-hidden relative" style={{ background: "#0a0a0a", maxHeight: "200px" }}>
+                  <img
+                    src={p.image}
+                    alt={p.title + " screenshot"}
+                    className="w-full object-cover object-top"
+                    style={{ maxHeight: "200px" }}
+                  />
+                  <span
+                    className="absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full"
+                    style={
+                      p.status === "Completed"
+                        ? { background: C.lightGreen, color: C.darkGreen }
+                        : { background: C.lightAmber, color: C.amber }
+                    }
+                  >
+                    {p.status}
+                  </span>
+                </div>
 
-          <div className="flex flex-wrap gap-4 mb-10">
-            <a
-              href={gmailComposeUrl("Portfolio Direct Contact")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full text-sm font-bold bg-[#E86D35] hover:bg-[#D05A22] text-white shadow-xl transition-all active:scale-95"
-            >
-              <span>Email Abdul</span>
-              <ArrowUpRight size={16} />
-            </a>
-
-            <a
-              href="https://linkedin.com/in/abdul-hanan-abrar-8b6a9140b"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-7 py-4 rounded-full text-sm font-bold border border-white/25 hover:bg-white/10 text-white transition-all"
-            >
-              <LinkedInIcon />
-              <span>LinkedIn</span>
-              <ArrowUpRight size={16} />
-            </a>
+                <div className="p-5 flex flex-col flex-1">
+                  <h3 className="text-lg font-bold mb-0.5" style={{ color: C.text }}>{p.title}</h3>
+                  <p className="text-xs font-semibold mb-3" style={{ color: C.muted }}>{p.subtitle}</p>
+                  <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: C.body }}>{p.description}</p>
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {p.tags.map((t) => <Tag key={t}>{t}</Tag>)}
+                  </div>
+                  {p.meta && <p className="text-xs mb-3 font-medium" style={{ color: C.muted }}>{p.meta}</p>}
+                  <button
+                    onClick={() => setSelectedProject(p)}
+                    className="text-sm font-bold transition-colors hover:opacity-70 text-left"
+                    style={{ color: C.green }}
+                  >
+                    View Details →
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <h3 className="font-bold text-sm mb-4" style={{ color: C.text }}>Operations & Excel Projects</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             {[
-              {
-                label: "Gmail (Direct)",
-                value: "abdulhananabrar941@gmail.com",
-                href: gmailComposeUrl("Direct Message"),
-                external: true,
-              },
-              {
-                label: "Phone / WhatsApp",
-                value: "+92-326-1550100",
-                href: "tel:+923261550100",
-                external: false,
-              },
-              {
-                label: "Location",
-                value: "Faisalabad, Pakistan (PKT)",
-                href: null,
-                external: false,
-              },
-              {
-                label: "Developer Portfolio",
-                value: "abdul-hanan-abrar.github.io",
-                href: "https://abdul-hanan-abrar.github.io/abdulhanan/#",
-                external: true,
-              },
+              { status: "Active Use", title: "Inventory Tracking System", desc: "Excel workflow maintaining up-to-date pharmaceutical stock across multiple SKUs and reducing discrepancies." },
+              { status: "Completed", title: "Reporting Workflow", desc: "Spreadsheet workflow reducing repetitive monthly reporting work and improving team efficiency." },
+              { status: "Completed", title: "Data Validation System", desc: "Validation rules across spreadsheets reducing operational data errors and improving consistency." },
+              { status: "Completed", title: "Date Format Error Fix", desc: "Found and fixed a DD/MM vs MM/DD date issue that was silently corrupting monthly reporting data." },
             ].map((c) => (
               <div
-                key={c.label}
-                className="rounded-2xl p-5 bg-white/5 border border-white/10"
+                key={c.title}
+                className="rounded-xl p-5 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
+                style={{ background: C.white, border: `1px solid ${C.border}` }}
               >
-                <p className="text-xs font-bold text-white/50 mb-1 uppercase tracking-wider">{c.label}</p>
-                {c.href ? (
-                  <a
-                    href={c.href}
-                    target={c.external ? "_blank" : undefined}
-                    rel={c.external ? "noopener noreferrer" : undefined}
-                    className="text-sm font-bold text-white hover:text-[#E86D35] transition-colors break-all flex items-center gap-1.5"
-                  >
-                    <span>{c.value}</span>
-                    {c.external && <ArrowUpRight size={13} />}
-                  </a>
-                ) : (
-                  <p className="text-sm font-bold text-white">{c.value}</p>
-                )}
+                <span
+                  className="text-xs font-semibold px-2.5 py-0.5 rounded-full mb-3 inline-block"
+                  style={
+                    c.status === "Active Use"
+                      ? { background: C.lightGreen, color: C.darkGreen }
+                      : { background: C.altBg, color: C.body }
+                  }
+                >
+                  {c.status}
+                </span>
+                <h4 className="font-bold text-sm mb-2" style={{ color: C.text }}>{c.title}</h4>
+                <p className="text-xs leading-relaxed" style={{ color: C.body }}>{c.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm mb-3 font-medium" style={{ color: C.muted }}>Want to see the full project portfolio?</p>
+            <BtnPrimary href={PORTFOLIO_URL} target="_blank">Explore Full Portfolio →</BtnPrimary>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Voice Samples ── */}
+      <section id="voice" className="py-16 sm:py-20" style={{ background: C.white }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <SectionLabel>Audio Samples</SectionLabel>
+          <SectionHeading>Hear How I Communicate</SectionHeading>
+          <p className="text-sm max-w-xl mb-8" style={{ color: C.body }}>
+            Communication is one of the most important parts of my work. Short samples demonstrating my Urdu style across different professional situations.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            {voiceSamples.map((sample) => (
+              <AudioCard
+                key={sample.id}
+                title={sample.title}
+                titleUrdu={sample.titleUrdu}
+                description={sample.description}
+                audioSrc={sample.audioSrc}
+                isPlaying={activeAudioId === sample.id}
+                onTogglePlay={() =>
+                  setActiveAudioId((current) => (current === sample.id ? null : sample.id))
+                }
+              />
+            ))}
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm mb-3 font-medium" style={{ color: C.muted }}>Want to hear the complete collection?</p>
+            <BtnPrimary href={PORTFOLIO_URL} target="_blank">View Full Voice Portfolio →</BtnPrimary>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why Work With Me ── */}
+      <section className="py-16 sm:py-20" style={{ background: C.altBg }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <SectionLabel>Why Me</SectionLabel>
+          <SectionHeading>Why Work With Me</SectionHeading>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              { title: "I Communicate Clearly", desc: "I focus on understanding what someone actually needs before trying to solve the problem — in Urdu, in English, or in both at once." },
+              { title: "I Notice the Details", desc: "Small errors in data or processes can create large downstream problems. I genuinely enjoy finding and fixing those issues." },
+              { title: "I Keep Learning", desc: "Studying Computer Science while building real practical skills through professional work and independent software projects." },
+            ].map((c) => (
+              <div key={c.title} className="pt-5">
+                <div className="w-8 h-0.5 mb-4" style={{ background: C.amber }} />
+                <h3 className="font-bold text-base mb-2" style={{ color: C.text }}>{c.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: C.body }}>{c.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── 🛡️ Footer ───────────────────────────────────────── */}
-      <footer
-        style={{
-          backgroundColor: "#071711",
-          borderTop: "1px solid rgba(255,255,255,0.08)",
-        }}
-        className="py-6"
-      >
-        <div className="max-w-[1360px] mx-auto px-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-white/60 text-sm">
-          <p>© 2026 Abdul Hanan. All rights reserved.</p>
-          <a
-            href="https://abdul-hanan-abrar.github.io/abdulhanan/#"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition-colors flex items-center gap-1.5 font-medium"
-          >
-            <span>Personal Site</span>
-            <ArrowUpRight size={13} />
-          </a>
+      {/* ── How I Work ── */}
+      <section className="py-16 sm:py-20" style={{ background: C.white }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <SectionLabel>My Approach</SectionLabel>
+          <SectionHeading>How I Work</SectionHeading>
+
+          <div className="relative">
+            <div
+              className="hidden lg:block absolute top-8 left-[12.5%] right-[12.5%] h-px"
+              style={{ background: C.border }}
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { step: "01", title: "Understand", desc: "Listen carefully and understand the actual problem." },
+                { step: "02", title: "Investigate", desc: "Look at the details instead of making assumptions." },
+                { step: "03", title: "Solve", desc: "Find a practical solution that works in the real situation." },
+                { step: "04", title: "Improve", desc: "Look for ways to prevent the same problem from happening again." },
+              ].map((s) => (
+                <div key={s.step} className="text-center relative">
+                  <div
+                    className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 relative z-10 font-bold text-white text-sm"
+                    style={{ background: C.green }}
+                  >
+                    {s.step}
+                  </div>
+                  <h3 className="font-bold text-sm mb-1" style={{ color: C.text }}>{s.title}</h3>
+                  <p className="text-xs leading-relaxed" style={{ color: C.body }}>{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Resume CTA ── */}
+      <section className="py-16 sm:py-20" style={{ background: C.lightAmber, borderTop: `1px solid ${C.amberBorder}` }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.text }}>Download My Resume</h2>
+              <p className="text-sm mb-3" style={{ color: C.body }}>A concise overview of my experience, skills, education and contact information — ready to share.</p>
+              <p className="urdu text-base font-bold" style={{ color: C.amber }}>میرا ریزومے ڈاؤن لوڈ کریں</p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <BtnPrimary href={RESUME_URL} target="_blank">Download PDF Resume</BtnPrimary>
+              <a
+                href={LINKEDIN}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-80 text-center"
+                style={{ border: `1.5px solid ${C.amber}`, color: C.amber, background: C.white }}
+              >
+                View LinkedIn ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Portfolio CTA ── */}
+      <section className="py-16 sm:py-20" style={{ background: C.green }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Want to See More?</h2>
+          <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: "#EBF5EE" }}>
+            This website gives you a quick picture of who I am. My portfolio goes deeper into projects, work samples and Urdu voice samples.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <BtnOutlineWhite href={PORTFOLIO_URL} target="_blank">Explore Full Portfolio →</BtnOutlineWhite>
+            <a
+              href={LINKEDIN}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:bg-white/10 text-center"
+              style={{ color: "#FFFFFF", border: "1.5px solid rgba(255,255,255,0.4)" }}
+            >
+              Back to LinkedIn ↗
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Contact ── */}
+      <section id="contact" className="py-16 sm:py-20" style={{ background: C.altBg }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <SectionLabel>Get in Touch</SectionLabel>
+          <SectionHeading>Let's Connect</SectionHeading>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+            <div>
+              <p className="text-sm leading-relaxed mb-6" style={{ color: C.body }}>
+                Whether you're interested in AI Urdu training, customer support work, or discussing any opportunity — feel free to reach out.
+              </p>
+              <div className="space-y-3 mb-6">
+                <a
+                  href={`mailto:${EMAIL}`}
+                  onClick={handleEmailClick}
+                  className="flex items-center gap-3 text-sm font-semibold hover:opacity-70 transition-opacity"
+                  style={{ color: C.text }}
+                >
+                  <span className="text-base">✉️</span> {EMAIL}
+                </a>
+                <a
+                  href={LINKEDIN}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-sm font-semibold hover:opacity-70 transition-opacity"
+                  style={{ color: C.text }}
+                >
+                  <span className="text-base">🔗</span> LinkedIn Profile ↗
+                </a>
+                <p className="flex items-center gap-3 text-sm font-medium" style={{ color: C.body }}>
+                  <span className="text-base">📍</span> Faisalabad, Pakistan 🇵🇰
+                </p>
+              </div>
+              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: C.muted }}>Open To:</p>
+              <div className="flex flex-wrap gap-2">
+                {["AI Urdu Training", "Language Annotation", "Remote Work", "Freelance", "Customer Support Roles", "Software Collaboration"].map((t) => (
+                  <Tag key={t} green>{t}</Tag>
+                ))}
+              </div>
+            </div>
+
+            {/* Form with Theme Protected Inputs */}
+            <div
+              className="rounded-2xl p-6 sm:p-8"
+              style={{ background: C.white, border: `1px solid ${C.border}`, boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}
+            >
+              {formSent ? (
+                <div className="text-center py-8">
+                  <div className="text-4xl mb-3">✅</div>
+                  <h3 className="font-bold text-lg mb-2" style={{ color: C.text }}>Message Sent</h3>
+                  <p className="text-sm" style={{ color: C.muted }}>Thank you for reaching out. I'll get back to you soon.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  {[
+                    { label: "Full Name", key: "name", type: "text", placeholder: "Your name" },
+                    { label: "Email Address", key: "email", type: "email", placeholder: "your@email.com" },
+                  ].map((f) => (
+                    <div key={f.key}>
+                      <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>{f.label}</label>
+                      <input
+                        type={f.type}
+                        required
+                        placeholder={f.placeholder}
+                        value={(formData as Record<string, string>)[f.key]}
+                        onChange={(e) => setFormData((d) => ({ ...d, [f.key]: e.target.value }))}
+                        className="w-full text-sm px-3.5 py-2.5 rounded-lg outline-none transition-all"
+                        style={{
+                          border: `1.5px solid ${C.border}`,
+                          color: C.text,
+                          backgroundColor: C.bg,
+                        }}
+                        onFocus={(e) => (e.target.style.borderColor = C.green)}
+                        onBlur={(e) => (e.target.style.borderColor = C.border)}
+                      />
+                    </div>
+                  ))}
+
+                  <div>
+                    <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>Topic</label>
+                    <select
+                      required
+                      value={formData.topic}
+                      onChange={(e) => setFormData((d) => ({ ...d, topic: e.target.value }))}
+                      className="w-full text-sm px-3.5 py-2.5 rounded-lg outline-none transition-all"
+                      style={{
+                        border: `1.5px solid ${C.border}`,
+                        color: formData.topic ? C.text : C.muted,
+                        backgroundColor: C.bg,
+                      }}
+                    >
+                      <option value="" disabled>Select a topic</option>
+                      <option>AI Urdu Training Opportunity</option>
+                      <option>Language Annotation / Evaluation</option>
+                      <option>Customer Support Role</option>
+                      <option>Freelance Project</option>
+                      <option>Software Collaboration</option>
+                      <option>General Enquiry</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>Message</label>
+                    <textarea
+                      required
+                      rows={4}
+                      placeholder="Tell me about the opportunity or project..."
+                      value={formData.message}
+                      onChange={(e) => setFormData((d) => ({ ...d, message: e.target.value }))}
+                      className="w-full text-sm px-3.5 py-2.5 rounded-lg outline-none transition-all resize-none"
+                      style={{
+                        border: `1.5px solid ${C.border}`,
+                        color: C.text,
+                        backgroundColor: C.bg,
+                      }}
+                      onFocus={(e) => (e.target.style.borderColor = C.green)}
+                      onBlur={(e) => (e.target.style.borderColor = C.border)}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-3 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50"
+                    style={{ background: C.green }}
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer className="py-12" style={{ background: "#0f0f0f" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="mb-6">
+            <h3 className="text-xl font-bold text-white mb-1">Abdul Hanan</h3>
+            <p className="text-sm font-medium" style={{ color: "#A0A0A0" }}>
+              AI Urdu Tutor · Customer Support & Operations · Computer Science · Faisalabad, Pakistan 🇵🇰
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-x-5 gap-y-2 mb-8">
+            {navLinks.map((l) => (
+              <button
+                key={l.id}
+                onClick={() => scrollTo(l.id)}
+                className="text-sm font-medium transition-colors hover:text-white"
+                style={{ color: "#A0A0A0" }}
+              >
+                {l.label}
+              </button>
+            ))}
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-sm font-medium transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>LinkedIn ↗</a>
+            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="text-sm font-medium transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>Download Resume</a>
+          </div>
+          <div style={{ borderTop: "1px solid #2a2a2a" }} className="pt-6">
+            <p className="text-xs" style={{ color: "#808080" }}>© 2026 Abdul Hanan. All rights reserved.</p>
+          </div>
         </div>
       </footer>
+
+      {/* ── Project Modal ── */}
+      {selectedProject && (
+        <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
+      )}
     </div>
   );
 }
