@@ -6,7 +6,7 @@ const PERSONAL_WEBSITE_URL = "https://abdul-hanan-abrar.github.io/abdulhanan/";
 const LINKEDIN = "https://www.linkedin.com/in/abdul-hanan-abrar-8b6a9140b/";
 const EMAIL = "abdulhananabrar941@gmail.com";
 
-// ─── Public Folder Asset References (Zero Rollup Import Errors) ───────────────
+// ─── Public Folder Asset References ──────────────────────────────────────────
 const heroPhoto = `${import.meta.env.BASE_URL}IMG-2024.jpg`;
 const aboutPhoto = `${import.meta.env.BASE_URL}IMG-2025.jpg`;
 const bizLedgerImg = `${import.meta.env.BASE_URL}BizLedger.png`;
@@ -20,49 +20,38 @@ const handleEmailClick = (e: React.MouseEvent) => {
   const isIOS = /iPhone|iPad|iPod/i.test(ua);
 
   if (isAndroid) {
-    // Mobile Android: Launch native Gmail App directly into Compose
     window.location.href = `intent:#Intent;action=android.intent.action.SENDTO;data=mailto:${EMAIL};package=com.google.android.gm;end`;
-    setTimeout(() => {
-      window.location.href = `mailto:${EMAIL}`;
-    }, 500);
+    setTimeout(() => { window.location.href = `mailto:${EMAIL}`; }, 500);
   } else if (isIOS) {
-    // Mobile iOS: Launch native Gmail iOS App Compose screen
     window.location.href = `googlegmail:///co?to=${EMAIL}`;
-    setTimeout(() => {
-      window.location.href = `mailto:${EMAIL}`;
-    }, 500);
+    setTimeout(() => { window.location.href = `mailto:${EMAIL}`; }, 500);
   } else {
-    // Desktop / Laptop: Open Gmail Web Compose in new tab
-    window.open(
-      `https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`, "_blank", "noopener,noreferrer");
   }
 };
 
-// ─── Design Tokens ────────────────────────────────────────────────────────────
+// ─── Premium Design Tokens ────────────────────────────────────────────────────
 const C = {
-  bg: "#F8F7F4",
+  bg: "#FAFAFA",
   white: "#FFFFFF",
-  altBg: "#F1EEE9",
-  text: "#161616",
-  body: "#2D2D2D",
-  muted: "#6B6B6B",
-  green: "#1D5C3A",
-  darkGreen: "#0F3D24",
-  lightGreen: "#EBF5EE",
-  greenBorder: "#B8DCC3",
-  amber: "#B86A1D",
-  lightAmber: "#FBF3E8",
-  amberBorder: "#E8C99A",
-  border: "#E3DED7",
+  altBg: "#F4F4F5",
+  text: "#09090B",
+  body: "#3F3F46",
+  muted: "#71717A",
+  green: "#166534",
+  darkGreen: "#14532D",
+  lightGreen: "#DCFCE7",
+  greenBorder: "#86EFAC",
+  amber: "#D97706",
+  lightAmber: "#FEF3C7",
+  amberBorder: "#FDE68A",
+  border: "#E4E4E7",
 };
 
 // ─── UI Helpers ──────────────────────────────────────────────────────────────
 function SectionLabel({ children }: { children: string }) {
   return (
-    <span className="text-xs font-bold uppercase tracking-widest" style={{ color: C.green }}>
+    <span className="text-xs font-bold uppercase tracking-[0.2em] mb-3 block" style={{ color: C.green }}>
       {children}
     </span>
   );
@@ -70,7 +59,7 @@ function SectionLabel({ children }: { children: string }) {
 
 function SectionHeading({ children, light = false }: { children: string; light?: boolean }) {
   return (
-    <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-6" style={{ color: light ? "#fff" : C.text }}>
+    <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-8" style={{ color: light ? "#fff" : C.text }}>
       {children}
     </h2>
   );
@@ -79,11 +68,11 @@ function SectionHeading({ children, light = false }: { children: string; light?:
 function Tag({ children, green = false }: { children: string; green?: boolean }) {
   return (
     <span
-      className="inline-block text-xs font-semibold px-3 py-1 rounded-full"
+      className="inline-flex items-center text-[11px] uppercase tracking-wider font-bold px-3.5 py-1.5 rounded-full shadow-sm transition-all hover:scale-105"
       style={
         green
           ? { background: C.lightGreen, color: C.darkGreen, border: `1px solid ${C.greenBorder}` }
-          : { background: C.altBg, color: C.body, border: `1px solid ${C.border}` }
+          : { background: C.white, color: C.text, border: `1px solid ${C.border}` }
       }
     >
       {children}
@@ -91,171 +80,20 @@ function Tag({ children, green = false }: { children: string; green?: boolean })
   );
 }
 
-function BtnPrimary({
-  children,
-  onClick,
-  href,
-  download,
-  target,
-}: {
-  children: string;
-  onClick?: () => void;
-  href?: string;
-  download?: string | boolean;
-  target?: string;
-}) {
-  const cls =
-    "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90 active:scale-95 text-center";
-  const style = { background: C.green, color: "#fff" };
-  if (href) {
-    return (
-      <a href={href} download={download} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls} style={style}>
-        {children}
-      </a>
-    );
-  }
-  return <button onClick={onClick} className={cls} style={style}>{children}</button>;
-}
-
-function BtnOutlineAmber({
-  children,
-  onClick,
-  href,
-  download,
-  target,
-}: {
-  children: string;
-  onClick?: () => void;
-  href?: string;
-  download?: string | boolean;
-  target?: string;
-}) {
-  const cls =
-    "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:opacity-90 active:scale-95 text-center";
-  const style = { border: `1.5px solid ${C.amber}`, color: C.amber, background: "transparent" };
-  if (href) {
-    return (
-      <a href={href} download={download} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls} style={style}>
-        {children}
-      </a>
-    );
-  }
-  return <button onClick={onClick} className={cls} style={style}>{children}</button>;
-}
-
-function BtnOutlineWhite({
-  children,
-  onClick,
-  href,
-  target,
-}: {
-  children: string;
-  onClick?: () => void;
-  href?: string;
-  target?: string;
-}) {
-  const cls =
-    "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:bg-white/10 active:scale-95 text-center";
-  const style = { border: "1.5px solid rgba(255,255,255,0.6)", color: "#fff" };
-  if (href) {
-    return (
-      <a href={href} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls} style={style}>
-        {children}
-      </a>
-    );
-  }
-  return <button onClick={onClick} className={cls} style={style}>{children}</button>;
-}
-
-// ─── Project Modal ────────────────────────────────────────────────────────────
-type Project = {
-  title: string;
-  subtitle: string;
-  status: string;
-  description: string;
-  tags: string[];
-  image: string;
-  meta?: string;
-  fullDescription: string;
-};
-
-function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
-  }, []);
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: "rgba(15,61,36,0.75)", backdropFilter: "blur(4px)" }}
-      onClick={onClose}
-    >
-      <div
-        className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl"
-        style={{ background: C.white }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="relative w-full" style={{ background: "#0a0a0a" }}>
-          <img src={project.image} alt={project.title} className="w-full object-contain max-h-[50vh]" />
-          <button
-            onClick={onClose}
-            className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-lg transition-opacity hover:opacity-80"
-            style={{ background: "rgba(0,0,0,0.6)" }}
-          >
-            ×
-          </button>
-          <span
-            className="absolute top-3 left-3 text-xs font-semibold px-3 py-1 rounded-full"
-            style={
-              project.status === "Completed"
-                ? { background: C.lightGreen, color: C.darkGreen }
-                : { background: C.lightAmber, color: C.amber }
-            }
-          >
-            {project.status}
-          </span>
-        </div>
-
-        <div className="p-6 sm:p-8">
-          <h3 className="text-2xl font-bold mb-1" style={{ color: C.text }}>{project.title}</h3>
-          <p className="text-sm font-medium mb-4" style={{ color: C.muted }}>{project.subtitle}</p>
-          <p className="text-sm leading-relaxed mb-4" style={{ color: C.body }}>{project.fullDescription}</p>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {project.tags.map((t) => <Tag key={t}>{t}</Tag>)}
-          </div>
-          {project.meta && <p className="text-xs" style={{ color: C.muted }}>{project.meta}</p>}
-          <div className="mt-6 flex justify-end">
-            <button
-              onClick={onClose}
-              className="px-5 py-2 rounded-lg text-sm font-semibold transition-all hover:opacity-90"
-              style={{ background: C.green, color: "#fff" }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+function BtnPrimary({ children, onClick, href, download, target }: any) {
+  const cls = "group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-95 overflow-hidden";
+  const content = (
+    <>
+      <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-600 to-green-800 transition-all duration-300 group-hover:scale-110"></span>
+      <span className="relative">{children}</span>
+    </>
   );
+  if (href) return <a href={href} download={download} target={target} rel={target === "_blank" ? "noopener noreferrer" : undefined} className={cls}>{content}</a>;
+  return <button onClick={onClick} className={cls}>{content}</button>;
 }
 
-// ─── Native Zero-Latency Audio Card ───────────────────────────────────────────
-function AudioCard({
-  title,
-  titleUrdu,
-  description,
-  audioSrc,
-  isPlaying,
-  onTogglePlay,
-}: {
-  title: string;
-  titleUrdu: string;
-  description: string;
-  audioSrc: string;
-  isPlaying: boolean;
-  onTogglePlay: () => void;
-}) {
+// ─── Native Zero-Latency Audio Card (Modernized) ─────────────────────────────
+function AudioCard({ title, titleUrdu, description, audioSrc, isPlaying, onTogglePlay }: any) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState("0:00");
@@ -270,14 +108,7 @@ function AudioCard({
 
   useEffect(() => {
     if (!audioRef.current) return;
-    if (isPlaying) {
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {});
-      }
-    } else {
-      audioRef.current.pause();
-    }
+    isPlaying ? audioRef.current.play().catch(() => {}) : audioRef.current.pause();
   }, [isPlaying]);
 
   const handleTimeUpdate = () => {
@@ -288,84 +119,40 @@ function AudioCard({
     setCurrentTime(formatTime(curr));
   };
 
-  const handleLoadedMetadata = () => {
-    if (!audioRef.current) return;
-    setDuration(formatTime(audioRef.current.duration));
-  };
-
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!audioRef.current) return;
-    const val = parseFloat(e.target.value);
-    const seekTime = (val / 100) * (audioRef.current.duration || 0);
-    audioRef.current.currentTime = seekTime;
-    setProgress(val);
-  };
-
   return (
-    <div
-      className="rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md"
-      style={{
-        background: C.white,
-        border: isPlaying ? `1.5px solid ${C.green}` : `1px solid ${C.border}`,
-        boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-      }}
-    >
-      <audio
-        ref={audioRef}
-        src={audioSrc}
-        preload="metadata"
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-        onEnded={onTogglePlay}
-      />
+    <div className={`relative p-6 rounded-2xl transition-all duration-500 overflow-hidden ${isPlaying ? 'shadow-2xl scale-[1.02]' : 'shadow-sm hover:shadow-md hover:-translate-y-1'}`}
+         style={{ background: C.white, border: `1px solid ${isPlaying ? C.green : C.border}` }}>
+      
+      {isPlaying && <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 to-green-600 animate-pulse" />}
+      
+      <audio ref={audioRef} src={audioSrc} preload="metadata" onTimeUpdate={handleTimeUpdate} onLoadedMetadata={() => setDuration(formatTime(audioRef.current?.duration || 0))} onEnded={onTogglePlay} />
 
-      <div className="p-5 flex flex-col gap-3">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h4 className="font-semibold text-sm" style={{ color: C.text }}>{title}</h4>
-            <p className="urdu text-base mt-1" style={{ color: C.green }}>{titleUrdu}</p>
-          </div>
-          <button
-            onClick={onTogglePlay}
-            className="flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-sm"
-            style={{ background: isPlaying ? C.darkGreen : C.green }}
-            aria-label={isPlaying ? `Pause ${title}` : `Play ${title}`}
-          >
-            {isPlaying ? (
-              <svg width="12" height="14" viewBox="0 0 12 14" fill="white">
-                <rect x="0" y="0" width="4" height="14" rx="1" />
-                <rect x="8" y="0" width="4" height="14" rx="1" />
-              </svg>
-            ) : (
-              <svg width="12" height="14" viewBox="0 0 12 14" fill="white" className="translate-x-0.5">
-                <path d="M1 0.5L11 7L1 13.5V0.5Z" />
-              </svg>
-            )}
-          </button>
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <h4 className="font-bold text-gray-900 mb-1">{title}</h4>
+          <p className="urdu text-lg text-green-700">{titleUrdu}</p>
         </div>
+        <button onClick={onTogglePlay} className="w-12 h-12 rounded-full flex items-center justify-center transition-transform hover:scale-110 shadow-lg text-white" style={{ background: isPlaying ? C.darkGreen : C.green }}>
+          {isPlaying ? 
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="2" y="2" width="4" height="10" rx="1"/><rect x="8" y="2" width="4" height="10" rx="1"/></svg> : 
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" className="ml-1"><path d="M3 2L12 7L3 12V2Z"/></svg>}
+        </button>
+      </div>
 
-        <p className="text-xs" style={{ color: C.muted }}>{description}</p>
+      <p className="text-xs text-gray-500 mb-4 h-8">{description}</p>
 
-        {/* Visual Scrubber */}
-        <div className="mt-2 flex flex-col gap-1.5">
-          <input
-            type="range"
-            min="0"
-            max="100"
-            step="0.1"
-            value={progress}
-            onChange={handleSeek}
-            className="w-full h-1.5 rounded-lg appearance-none cursor-pointer"
-            style={{
-              accentColor: C.green,
-              background: `linear-gradient(to right, ${C.green} ${progress}%, ${C.border} ${progress}%)`,
-            }}
-          />
-          <div className="flex justify-between text-[11px] font-mono" style={{ color: C.muted }}>
-            <span>{currentTime}</span>
-            <span>{duration}</span>
-          </div>
-        </div>
+      <div className="group relative w-full h-2 bg-gray-100 rounded-full cursor-pointer">
+        <input type="range" min="0" max="100" step="0.1" value={progress}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value);
+            audioRef.current!.currentTime = (val / 100) * (audioRef.current!.duration || 0);
+            setProgress(val);
+          }}
+          className="absolute z-10 w-full h-full opacity-0 cursor-pointer" />
+        <div className="absolute top-0 left-0 h-full bg-green-600 rounded-full transition-all duration-75" style={{ width: `${progress}%` }} />
+      </div>
+      <div className="flex justify-between mt-2 text-[10px] font-bold text-gray-400 tracking-wider font-mono">
+        <span>{currentTime}</span><span>{duration}</span>
       </div>
     </div>
   );
@@ -374,997 +161,198 @@ function AudioCard({
 // ─── Main Application ─────────────────────────────────────────────────────────
 export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeAudioId, setActiveAudioId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ name: "", email: "", topic: "", message: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formSent, setFormSent] = useState(false);
-
-  // Enforces light-theme globally to prevent mobile dark-mode auto-inversion
-  useEffect(() => {
-    let meta = document.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.name = "color-scheme";
-      document.head.appendChild(meta);
-    }
-    meta.content = "light";
-  }, []);
-
-  const navLinks = [
-    { id: "home", label: "Home" },
-    { id: "about", label: "About" },
-    { id: "ai-tutor", label: "AI Tutor" },
-    { id: "experience", label: "Experience" },
-    { id: "skills", label: "Skills" },
-    { id: "projects", label: "Projects" },
-    { id: "voice", label: "Voice" },
-    { id: "contact", label: "Contact" },
-  ];
-
-  useEffect(() => {
-    const handler = () => {
-      const sections = navLinks.map((n) => n.id);
-      for (const id of [...sections].reverse()) {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= 100) {
-          setActiveSection(id);
-          return;
-        }
-      }
-    };
-    window.addEventListener("scroll", handler, { passive: true });
-    return () => window.removeEventListener("scroll", handler);
-  }, []);
-
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    setMobileOpen(false);
-  };
-
-  const projects: Project[] = [
-    {
-      title: "BizLedger",
-      subtitle: "Offline POS & Business Management App for Punjab Retail",
-      status: "In Development",
-      description:
-        "A fully self-contained, offline-first Point-of-Sale and business management application built for small retail shops across Punjab.",
-      fullDescription:
-        "BizLedger is a fully self-contained, offline-first Point-of-Sale and business management application built for small retail shops across Punjab. It requires no internet connection, no external server, and no monthly fees — everything runs directly in the browser using local storage. The application handles sales tracking, inventory management with low-stock alerts, expense recording, and monthly reporting. It targets over 1.3 million shops in Punjab that currently operate without any digital POS software. Built entirely with HTML5 and JavaScript with zero dependencies.",
-      tags: ["HTML5", "JavaScript", "Offline-First", "POS System", "Punjab Retail"],
-      image: bizLedgerImg,
-      meta: "🏬 1.3M+ target shops · 📴 Zero internet needed",
-    },
-    {
-      title: "QR File Transfer Tool",
-      subtitle: "No Internet. No Cable. Just Scan.",
-      status: "Completed",
-      description:
-        "Transfer files from desktop to phone using QR codes — no internet connection and no USB cable required.",
-      fullDescription:
-        "The QR File Transfer Tool solves a genuinely recurring problem: getting files from a desktop computer to a phone without an internet connection or USB cable. The sender side encodes the file into a QR code displayed on screen. The receiver side, opened on the phone's browser, uses the BarcodeDetector API to scan the QR code via the phone's camera and decode the file. The entire system works over a local hotspot or even offline. Built entirely with vanilla HTML5 and JavaScript, with no server, no upload, and no cloud dependency.",
-      tags: ["HTML5", "JavaScript", "BarcodeDetector API", "QR Code", "File Transfer"],
-      image: qrToolImg,
-    },
-  ];
-
-  // ─── ALL 4 Voice Samples from public/ ────────────────────────────────────────
-  const voiceSamples = [
-    {
-      id: "audio-conversational",
-      title: "Natural Conversational Urdu",
-      titleUrdu: "قدرتی اردو گفتگو",
-      description: "A natural, conversational Urdu sample demonstrating authentic everyday speech.",
-      audioSrc: `${import.meta.env.BASE_URL}Natural%20Conversational%20Urdu.m4a`,
-    },
-    {
-      id: "audio-codeswitching",
-      title: "Natural Urdu-English Communication",
-      titleUrdu: "اردو انگریزی — مشترکہ گفتگو",
-      description: "Natural switching between Urdu and English — the way Pakistanis actually communicate.",
-      audioSrc: `${import.meta.env.BASE_URL}Natural%20Urdu-English%20Communication.m4a`,
-    },
-    {
-      id: "audio-reading",
-      title: "Clear Urdu Reading & Explanation",
-      titleUrdu: "صاف اردو پڑھائی اور فطری وضاحت",
-      description: "Articulate pronunciation, rhythmic delivery, and precise phonetics for language modeling.",
-      audioSrc: `${import.meta.env.BASE_URL}Clear%20Urdu%20Reading%20&%20Natural%20Explanation.m4a`,
-    },
-    {
-      id: "audio-listening",
-      title: "Careful Listening & Unclear Speech",
-      titleUrdu: "محتاط سماعت اور غیر واضح گفتگو",
-      description: "Evaluating complex acoustic cues, accents, and colloquial phrasing.",
-      audioSrc: `${import.meta.env.BASE_URL}Careful%20Listening%20&%20Unclear%20Speech.m4a`,
-    },
-  ];
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch("https://formsubmit.co/ajax/4e10f0fcb6df30d7f3c7ddc9e146742d", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          Name: formData.name,
-          Email: formData.email,
-          Topic: formData.topic,
-          Message: formData.message,
-          _subject: `[Portfolio] New message from ${formData.name}: ${formData.topic}`,
-        }),
-      });
-
-      if (response.ok) {
-        setFormSent(true);
-      } else {
-        alert("Failed to send message. Please contact directly via email.");
-      }
-    } catch {
-      alert("Network error. Please reach out directly to abdulhananabrar941@gmail.com");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
-    <div style={{ background: C.bg, color: C.text, fontFamily: "'DM Sans', sans-serif" }}>
-
-      {/* ── Nastaliq Font Import & System Theme Shield ── */}
+    <div className="font-sans antialiased text-gray-900 bg-gray-50 selection:bg-green-200">
+      {/* ── High-Performance Premium Styles ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+        
         .urdu {
-          font-family: 'Noto Nastaliq Urdu', 'Jameel Noori Nastaleeq', 'Urdu Typesetting', serif !important;
-          direction: rtl;
-          text-align: right;
-          line-height: 2.4 !important;
-          word-spacing: 2px;
+          font-family: 'Noto Nastaliq Urdu', serif !important;
+          direction: rtl; text-align: right;
+          line-height: 2.8 !important; /* Critical for Nastaliq baseline */
+          font-size: clamp(1.25rem, 3vw, 1.8rem);
+          word-spacing: 0.15em;
+        }
+        
+        .glass-nav {
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(20px) saturate(180%);
+          border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        :root, html, body {
-          color-scheme: light !important;
-          forced-color-adjust: none !important;
-          -webkit-font-smoothing: antialiased;
+        .fade-up {
+          animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          opacity: 0; transform: translateY(30px);
         }
-        * {
-          forced-color-adjust: none !important;
+        
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        
+        @keyframes fadeUp {
+          to { opacity: 1; transform: translateY(0); }
         }
-        input, select, textarea {
-          color: #161616 !important;
-          -webkit-text-fill-color: #161616 !important;
-          background-color: #F8F7F4 !important;
-        }
-        input::placeholder, textarea::placeholder {
-          color: #787878 !important;
-          -webkit-text-fill-color: #787878 !important;
-        }
-        option {
-          background-color: #FFFFFF !important;
-          color: #161616 !important;
-          -webkit-text-fill-color: #161616 !important;
+
+        .gradient-border-wrap {
+          background: linear-gradient(135deg, #22C55E 0%, #059669 100%);
+          padding: 4px;
+          border-radius: 9999px;
         }
       `}</style>
 
-      {/* ── Navbar ── */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-40"
-        style={{
-          background: "rgba(248,247,244,0.95)",
-          backdropFilter: "blur(12px)",
-          borderBottom: `1px solid ${C.border}`,
-        }}
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-          <button
-            onClick={() => scrollTo("home")}
-            className="text-lg font-bold tracking-tight"
-            style={{ color: C.text }}
-          >
-            Abdul Hanan
-          </button>
-
-          <div className="hidden lg:flex items-center gap-6">
-            {navLinks.map((n) => (
-              <button
-                key={n.id}
-                onClick={() => scrollTo(n.id)}
-                className="text-sm font-medium transition-colors"
-                style={{ color: activeSection === n.id ? C.green : C.muted }}
-              >
-                {n.label}
-              </button>
+      {/* ── Glassmorphic Navbar ── */}
+      <nav className="fixed top-0 w-full z-50 glass-nav transition-all">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <span className="text-xl font-extrabold tracking-tighter">Abdul Hanan.</span>
+          <div className="hidden lg:flex gap-8 font-semibold text-sm text-gray-600">
+            {['Home', 'About', 'AI Tutor', 'Experience', 'Projects'].map(l => (
+              <a key={l} href={`#${l.toLowerCase().replace(' ', '-')}`} className="hover:text-green-600 transition-colors">{l}</a>
             ))}
           </div>
-
-          <div className="hidden lg:flex items-center gap-3">
-            <BtnOutlineAmber href={RESUME_URL} target="_blank">Resume</BtnOutlineAmber>
-            {/* Links out directly to your Personal Website */}
-            <BtnPrimary href={PERSONAL_WEBSITE_URL} target="_blank">Personal Site ↗</BtnPrimary>
-            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-sm font-medium" style={{ color: C.muted }}>LinkedIn ↗</a>
+          <div className="hidden lg:flex gap-4">
+             <BtnPrimary href={RESUME_URL} target="_blank">Download Resume</BtnPrimary>
           </div>
-
-          <button
-            className="lg:hidden flex flex-col gap-1.5 p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle navigation menu"
-          >
-            <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} style={{ background: C.text }} />
-            <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "opacity-0" : ""}`} style={{ background: C.text }} />
-            <span className={`block w-5 h-0.5 transition-all ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`} style={{ background: C.text }} />
-          </button>
         </div>
-
-        {mobileOpen && (
-          <div
-            className="lg:hidden px-4 pb-4 pt-2 flex flex-col gap-1"
-            style={{ borderTop: `1px solid ${C.border}`, background: "rgba(248,247,244,0.98)" }}
-          >
-            {navLinks.map((n) => (
-              <button
-                key={n.id}
-                onClick={() => scrollTo(n.id)}
-                className="text-left text-sm font-medium py-2.5 px-3 rounded-lg transition-colors"
-                style={{
-                  color: activeSection === n.id ? C.green : C.body,
-                  background: activeSection === n.id ? C.lightGreen : "transparent",
-                }}
-              >
-                {n.label}
-              </button>
-            ))}
-            <div className="flex gap-3 mt-3 pt-3" style={{ borderTop: `1px solid ${C.border}` }}>
-              <BtnOutlineAmber href={RESUME_URL} target="_blank">Resume</BtnOutlineAmber>
-              <BtnPrimary href={PERSONAL_WEBSITE_URL} target="_blank">Personal Site ↗</BtnPrimary>
-            </div>
-          </div>
-        )}
       </nav>
 
-      {/* ── Hero (Big Face Icon & Prominent Presentation) ── */}
-      <section id="home" className="pt-24 pb-16 sm:pt-32 sm:pb-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_auto] gap-10 lg:gap-16 items-center">
+      {/* ── Hero Section (Redesigned for Maximum Impact) ── */}
+      <section id="home" className="pt-32 pb-20 sm:pt-48 sm:pb-32 overflow-hidden relative">
+        <div className="absolute top-0 right-0 -mr-32 -mt-32 w-[600px] h-[600px] bg-green-100 rounded-full blur-3xl opacity-50 pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-16 items-center relative z-10">
+          <div className="order-2 lg:order-1 fade-up">
+            <Tag green>🚀 Open to New Opportunities</Tag>
+            <h1 className="text-[clamp(3rem,8vw,5.5rem)] font-extrabold leading-[1.05] tracking-tighter mt-6 mb-6 text-gray-900">
+              Building systems that <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-400">understand context.</span>
+            </h1>
             
-            <div>
-              <span
-                className="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-5"
-                style={{ background: C.lightGreen, color: C.darkGreen, border: `1px solid ${C.greenBorder}` }}
-              >
-                Faisalabad, Pakistan · BSc Computer Science · 2+ Years Experience
-              </span>
-
-              {/* Mobile Big Face Presentation */}
-              <div className="lg:hidden flex justify-center mb-6">
-                <div
-                  className="overflow-hidden rounded-full"
-                  style={{
-                    width: 180,
-                    height: 180,
-                    border: `4px solid ${C.green}`,
-                    boxShadow: `0 0 0 8px ${C.lightGreen}, 0 10px 30px rgba(29,92,58,0.2)`,
-                    background: C.altBg,
-                  }}
-                >
-                  <img src={heroPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
-                </div>
-              </div>
-
-              <h1
-                className="font-bold leading-none tracking-tight mb-4"
-                style={{ color: C.text, fontSize: "clamp(2.8rem, 6.5vw, 5.2rem)", lineHeight: 1.05 }}
-              >
-                ABDUL<br />HANAN
-              </h1>
-
-              <p className="text-base sm:text-lg font-semibold mb-3" style={{ color: C.green }}>
-                AI Urdu Language Tutor · Customer Support & Operations Specialist · Computer Science Student
+            <div className="p-6 rounded-2xl bg-white shadow-xl shadow-green-900/5 border border-green-100 mb-8 transform -rotate-1 hover:rotate-0 transition-transform">
+              <p className="urdu text-green-800 font-bold">
+                اردو زبان میں اے آئی کو سکھانا — میری خاصیت ہے
               </p>
-
-              {/* Nastaliq Urdu Display */}
-              <div className="my-5 p-4 rounded-xl" style={{ background: C.lightGreen, border: `1px solid ${C.greenBorder}` }}>
-                <p className="urdu text-2xl sm:text-3xl font-semibold" style={{ color: C.darkGreen }}>
-                  اردو زبان میں اے آئی کو سکھانا — میری خاصیت ہے
-                </p>
-              </div>
-
-              <p className="text-base leading-relaxed mb-6 max-w-xl" style={{ color: C.body }}>
-                Native Urdu speaker with two years of professional bilingual experience — ready to help AI companies
-                build systems that truly understand how Urdu is spoken, written, and mixed with English in real-life contexts.
-              </p>
-
-              <div className="flex flex-wrap gap-3 mb-4">
-                <BtnPrimary onClick={() => scrollTo("ai-tutor")}>Explore AI Tutor Work</BtnPrimary>
-                <BtnOutlineAmber onClick={() => scrollTo("experience")}>View Experience</BtnOutlineAmber>
-                <a
-                  href={RESUME_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium px-5 py-2.5 rounded-lg transition-colors hover:opacity-80 inline-flex items-center justify-center"
-                  style={{ border: `1.5px solid ${C.border}`, color: C.body, background: C.white }}
-                >
-                  Download Resume
-                </a>
-              </div>
-
-              <button
-                onClick={() => scrollTo("voice")}
-                className="text-sm font-semibold transition-opacity hover:opacity-70 block mb-5 text-left"
-                style={{ color: C.muted }}
-              >
-                ↓ Listen to 4 Urdu Voice Samples
-              </button>
-
-              <div className="flex flex-wrap gap-2">
-                {["Urdu — C2", "Punjabi — Fluent", "English — Professional", "AI Urdu Tutor", "Customer Support", "Operations"].map((t) => (
-                  <Tag key={t} green>{t}</Tag>
-                ))}
-              </div>
             </div>
 
-            {/* Desktop Big Face Portrait (360px) */}
-            <div className="hidden lg:flex items-center justify-center">
-              <div
-                className="overflow-hidden rounded-full transition-transform duration-300 hover:scale-[1.02]"
-                style={{
-                  width: 360,
-                  height: 360,
-                  border: `5px solid ${C.green}`,
-                  boxShadow: `0 0 0 12px ${C.lightGreen}, 0 20px 60px rgba(29,92,58,0.22)`,
-                  background: C.altBg,
-                }}
-              >
-                <img src={heroPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
-              </div>
-            </div>
+            <p className="text-lg text-gray-600 mb-10 max-w-xl leading-relaxed">
+              Native Urdu speaker & CS student bridging the gap between human language nuances and machine learning datasets. Specialist in authentic code-switching and operational workflows.
+            </p>
 
-          </div>
-        </div>
-      </section>
-
-      {/* ── Strengths ── */}
-      <section id="strengths" className="py-12 sm:py-16" style={{ background: C.altBg }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-8 lg:gap-12 items-start">
-            <div className="lg:pt-1">
-              <SectionLabel>Core Strengths</SectionLabel>
-              <SectionHeading>What I Bring</SectionHeading>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { icon: "🧠", title: "AI Urdu Tutor", desc: "Native Urdu speaker able to train, annotate and evaluate AI language models in authentic Urdu." },
-                { icon: "💬", title: "Customer Support", desc: "Clear, respectful bilingual communication with clients via phone, email and WhatsApp." },
-                { icon: "⚙️", title: "Operations", desc: "Inventory tracking, record management and operational problem solving — day to day." },
-                { icon: "🔍", title: "Problem Solving", desc: "Finding the root cause of a problem instead of just working around it." },
-                { icon: "💻", title: "Technology", desc: "BSc CS education with practical skills in Excel, Python and JavaScript." },
-              ].map((c) => (
-                <div
-                  key={c.title}
-                  className="rounded-xl p-5 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-                  style={{ background: C.white, border: `1px solid ${C.border}`, boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}
-                >
-                  <span className="text-2xl mb-3 block">{c.icon}</span>
-                  <h3 className="font-semibold text-sm mb-2" style={{ color: C.text }}>{c.title}</h3>
-                  <p className="text-xs leading-relaxed" style={{ color: C.muted }}>{c.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── About ── */}
-      <section id="about" className="py-16 sm:py-20" style={{ background: C.white }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-            <div>
-              <div className="flex items-center justify-between gap-6 mb-6">
-                <div>
-                  <SectionLabel>About Me</SectionLabel>
-                  <h2 className="text-3xl sm:text-4xl font-bold mt-2 leading-tight" style={{ color: C.text }}>
-                    A Little<br />About Me
-                  </h2>
-                </div>
-                <div
-                  className="flex-shrink-0 lg:hidden overflow-hidden rounded-full"
-                  style={{
-                    width: 110,
-                    height: 110,
-                    border: `3px solid ${C.greenBorder}`,
-                    boxShadow: `0 0 0 5px ${C.lightGreen}`,
-                    background: C.altBg,
-                  }}
-                >
-                  <img src={aboutPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
-                </div>
-              </div>
-
-              <div className="space-y-4 text-sm leading-relaxed" style={{ color: C.body }}>
-                <p>I'm Abdul Hanan, a BSc Computer Science student based in Faisalabad, Pakistan, with professional experience in customer support and operations at Aptly Pharmaceuticals.</p>
-                <p>My experience has taught me that good support is not only about answering questions — it's about understanding the real problem, communicating clearly, keeping accurate records and working with teams to reach a practical solution.</p>
-                <p>Beyond my day job, I build software independently — BizLedger, an offline POS system for small Punjab retailers; a QR file-transfer tool; and Python automation scripts that save real time at work.</p>
-                <p>I'm particularly comfortable in Urdu and English, and I'm actively looking to contribute to AI language projects where authentic Urdu communication matters.</p>
-              </div>
-
-              <blockquote
-                className="my-6 pl-4 py-2 text-sm italic font-semibold"
-                style={{ borderLeft: `3px solid ${C.amber}`, color: C.body, background: C.lightAmber }}
-              >
-                "I'm most comfortable where communication meets problem solving."
-              </blockquote>
-
-              <div className="flex flex-wrap gap-3">
-                <BtnPrimary onClick={() => scrollTo("ai-tutor")}>AI Tutor Work</BtnPrimary>
-                <BtnOutlineAmber href={RESUME_URL} target="_blank">Download Resume</BtnOutlineAmber>
-              </div>
-            </div>
-
-            <div className="hidden lg:flex justify-center items-start pt-4">
-              <div
-                className="overflow-hidden rounded-full"
-                style={{
-                  width: 280,
-                  height: 280,
-                  border: `4px solid ${C.greenBorder}`,
-                  boxShadow: `0 0 0 8px ${C.lightGreen}, 0 8px 32px rgba(29,92,58,0.14)`,
-                  background: C.altBg,
-                }}
-              >
-                <img src={aboutPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── AI Tutor (Dark Section with High-Contrast Text & Nastaliq) ── */}
-      <section id="ai-tutor" className="py-16 sm:py-20 relative overflow-hidden" style={{ background: C.darkGreen }}>
-        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-10" style={{ background: C.green }} />
-        <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full opacity-10" style={{ background: C.green }} />
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#FBBF24" }}>
-                Open to AI & Language Opportunities
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-bold mt-3 mb-2 text-white leading-tight">
-                Training AI in Urdu —<br />The Right Way
-              </h2>
-              <p className="urdu text-2xl mb-5 font-medium" style={{ color: "#86EFAC" }}>
-                اردو میں اے آئی کو سکھانا — صحیح طریقے سے
-              </p>
-              <p className="text-sm leading-relaxed mb-6" style={{ color: "#E2F1E8" }}>
-                Most AI systems still struggle with authentic, natural Urdu — the kind spoken in homes, offices, and on the street in Pakistan. As a native Urdu speaker with professional bilingual experience, I want to help AI companies build systems that truly understand how Urdu is spoken, written, and mixed with English in real-life contexts.
-              </p>
-
-              <ul className="space-y-2.5 mb-8">
-                {[
-                  "Native Urdu speaker — natural, idiomatic, regionally authentic",
-                  "Professional English fluency for bilingual code-switching training data",
-                  "Customer support background — real conversational scenarios, not just text",
-                  "Computer Science education — understands AI/ML workflow and requirements",
-                  "Voice clarity and tone control — usable for speech and text datasets",
-                  "Available for structured, ongoing training collaboration",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm font-medium" style={{ color: "#E2F1E8" }}>
-                    <span className="mt-2 flex-shrink-0 w-1.5 h-1.5 rounded-full" style={{ background: "#FBBF24" }} />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="flex flex-wrap gap-3">
-                <BtnPrimary onClick={() => scrollTo("contact")}>Discuss an Opportunity</BtnPrimary>
-                <BtnOutlineWhite onClick={() => scrollTo("voice")}>▶ Hear Voice Samples</BtnOutlineWhite>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[
-                { icon: "🗣️", title: "Conversation Data", desc: "Natural Urdu dialogues, Q&A pairs and support scenarios for training datasets." },
-                { icon: "📝", title: "Text Annotation", desc: "Labelling, correcting and evaluating AI-generated Urdu text for accuracy and naturalness." },
-                { icon: "🔤", title: "Code-Switching", desc: "Urdu–English mixed speech — the way Pakistanis actually communicate daily." },
-                { icon: "🎙️", title: "Voice Samples", desc: "Recorded Urdu speech in natural, professional and instructional tones for ASR training." },
-                { icon: "✅", title: "AI Response Eval", desc: "Reviewing and rating AI-generated Urdu responses for fluency and cultural accuracy." },
-                { icon: "📚", title: "Tutoring Scenarios", desc: "Structured Urdu explanations ideal for AI tutor and education products." },
-              ].map((c) => (
-                <div
-                  key={c.title}
-                  className="rounded-xl p-4 transition-all duration-200 hover:bg-white/10"
-                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}
-                >
-                  <span className="text-xl mb-2 block">{c.icon}</span>
-                  <h4 className="font-semibold text-sm text-white mb-1">{c.title}</h4>
-                  <p className="text-xs leading-relaxed" style={{ color: "#C8DFD2" }}>{c.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Experience ── */}
-      <section id="experience" className="py-16 sm:py-20" style={{ background: C.white }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <SectionLabel>Professional History</SectionLabel>
-          <SectionHeading>Professional Experience</SectionHeading>
-
-          <div className="relative pl-6" style={{ borderLeft: `2px solid ${C.greenBorder}` }}>
-            <div className="absolute -left-2 top-0 w-4 h-4 rounded-full" style={{ background: C.green }} />
-            <div className="mb-6">
-              <div className="flex flex-wrap items-center gap-3 mb-1">
-                <h3 className="text-xl font-bold" style={{ color: C.text }}>Aptly Pharmaceuticals</h3>
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: C.lightGreen, color: C.darkGreen }}>
-                  Currently Here
-                </span>
-              </div>
-              <p className="font-semibold text-sm mb-1" style={{ color: C.green }}>Customer Support & Operations Specialist</p>
-              <div className="flex flex-wrap gap-3 text-xs mb-3" style={{ color: C.muted }}>
-                <span>Faisalabad, Pakistan</span>
-                <span>·</span>
-                <span>June 2024 – Present</span>
-              </div>
-              <p className="text-sm leading-relaxed max-w-2xl mb-5" style={{ color: C.body }}>
-                Working across customer support and operational tasks — helping clients with product-related questions,
-                coordinating with internal teams and maintaining accurate operational information.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {[
-                  { icon: "💬", title: "Customer Support", desc: "Answered product-related questions from clients and coordinated with internal teams to resolve issues efficiently." },
-                  { icon: "📂", title: "Client Records", desc: "Maintained written records of customer cases and interactions to keep information organized and accessible." },
-                  { icon: "📦", title: "Inventory Tracking", desc: "Maintained live Excel-based inventory tracking across major pharmaceutical product lines." },
-                  { icon: "✅", title: "Data Validation", desc: "Added validation rules to reduce stock discrepancies and improve data accuracy site-wide." },
-                  { icon: "📊", title: "Reporting Fix", desc: "Identified and fixed a DD/MM vs MM/DD date-format issue that was silently breaking monthly reports." },
-                  { icon: "⚙️", title: "Process Improvement", desc: "Built Excel tools that reduced manual work and improved efficiency in monthly reporting workflows." },
-                ].map((c) => (
-                  <div
-                    key={c.title}
-                    className="rounded-xl p-4 transition-all hover:shadow-md hover:-translate-y-0.5 duration-200"
-                    style={{ background: C.bg, border: `1px solid ${C.border}` }}
-                  >
-                    <span className="text-lg mb-2 block">{c.icon}</span>
-                    <h4 className="font-semibold text-xs mb-1" style={{ color: C.text }}>{c.title}</h4>
-                    <p className="text-xs leading-relaxed" style={{ color: C.muted }}>{c.desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div
-                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full"
-                style={{ background: C.lightGreen, color: C.darkGreen }}
-              >
-                📅 2+ years of customer support & operations experience
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Education ── */}
-      <section id="education" className="py-16 sm:py-20" style={{ background: C.altBg }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
-          <SectionLabel>Academic Background</SectionLabel>
-          <SectionHeading>Education</SectionHeading>
-
-          <div
-            className="max-w-xl mx-auto rounded-2xl overflow-hidden"
-            style={{
-              background: C.white,
-              border: `1px solid ${C.border}`,
-              boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
-            }}
-          >
-            <div className="h-1" style={{ background: `linear-gradient(90deg, ${C.green}, ${C.amber})` }} />
-            <div className="p-8">
-              <h3 className="text-xl font-bold mb-1" style={{ color: C.text }}>Bachelor of Science in Computer Science</h3>
-              <p className="font-semibold text-sm mb-1" style={{ color: C.green }}>University of Agriculture, Faisalabad (UAF)</p>
-              <p className="text-xs mb-4" style={{ color: C.muted }}>Currently Pursuing · Semester 5 · Expected Graduation 2028</p>
-              <p className="text-sm leading-relaxed mb-5" style={{ color: C.body }}>
-                Studying Computer Science while building practical professional experience in customer support, operations, technology and digital tools.
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {["HTML5", "JavaScript", "Python", "Data Structures", "OOP", "Databases"].map((t) => (
-                  <Tag key={t} green>{t}</Tag>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Skills ── */}
-      <section id="skills" className="py-16 sm:py-20" style={{ background: C.white }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <SectionLabel>Capabilities</SectionLabel>
-          <SectionHeading>Skills</SectionHeading>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                title: "Communication",
-                items: ["Urdu — Native", "Punjabi — Fluent", "English — Professional", "AI Language Training", "Urdu Text Annotation"],
-              },
-              {
-                title: "Customer Support",
-                items: ["Query Handling", "Issue Resolution", "Case Documentation", "WhatsApp / Email / Phone"],
-              },
-              {
-                title: "Operations",
-                items: ["Inventory Tracking", "Record Management", "Process Improvement", "Reporting"],
-              },
-              {
-                title: "Technical",
-                items: ["Microsoft Excel", "Python", "HTML5", "JavaScript", "Problem Solving"],
-              },
-            ].map((col) => (
-              <div key={col.title}>
-                <h3 className="font-bold text-sm mb-3" style={{ color: C.text }}>{col.title}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {col.items.map((item) => <Tag key={item}>{item}</Tag>)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Selected Work ── */}
-      <section id="projects" className="py-16 sm:py-20" style={{ background: C.altBg }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <SectionLabel>Built by Me</SectionLabel>
-          <SectionHeading>Selected Work</SectionHeading>
-          <p className="text-sm max-w-xl mb-10" style={{ color: C.muted }}>
-            Practical problems I've worked on and solutions I've built — from offline retail software to AI-ready tools and operational Excel systems.
-          </p>
-
-          <h3 className="font-semibold text-sm mb-4" style={{ color: C.muted }}>Software Projects</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-10">
-            {projects.map((p) => (
-              <div
-                key={p.title}
-                className="rounded-2xl overflow-hidden flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
-                style={{ background: C.white, border: `1px solid ${C.border}`, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
-              >
-                <div className="w-full overflow-hidden relative" style={{ background: "#0a0a0a", maxHeight: "200px" }}>
-                  <img
-                    src={p.image}
-                    alt={p.title + " screenshot"}
-                    className="w-full object-cover object-top"
-                    style={{ maxHeight: "200px" }}
-                  />
-                  <span
-                    className="absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={
-                      p.status === "Completed"
-                        ? { background: C.lightGreen, color: C.darkGreen }
-                        : { background: C.lightAmber, color: C.amber }
-                    }
-                  >
-                    {p.status}
-                  </span>
-                </div>
-
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="text-lg font-bold mb-0.5" style={{ color: C.text }}>{p.title}</h3>
-                  <p className="text-xs font-medium mb-3" style={{ color: C.muted }}>{p.subtitle}</p>
-                  <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: C.body }}>{p.description}</p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {p.tags.map((t) => <Tag key={t}>{t}</Tag>)}
-                  </div>
-                  {p.meta && <p className="text-xs mb-3" style={{ color: C.muted }}>{p.meta}</p>}
-                  <button
-                    onClick={() => setSelectedProject(p)}
-                    className="text-sm font-semibold transition-colors hover:opacity-70 text-left"
-                    style={{ color: C.green }}
-                  >
-                    View Details →
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <h3 className="font-semibold text-sm mb-4" style={{ color: C.muted }}>Operations & Excel Projects</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            {[
-              { status: "Active Use", title: "Inventory Tracking System", desc: "Excel workflow maintaining up-to-date pharmaceutical stock across multiple SKUs and reducing discrepancies." },
-              { status: "Completed", title: "Reporting Workflow", desc: "Spreadsheet workflow reducing repetitive monthly reporting work and improving team efficiency." },
-              { status: "Completed", title: "Data Validation System", desc: "Validation rules across spreadsheets reducing operational data errors and improving consistency." },
-              { status: "Completed", title: "Date Format Error Fix", desc: "Found and fixed a DD/MM vs MM/DD date issue that was silently corrupting monthly reporting data." },
-            ].map((c) => (
-              <div
-                key={c.title}
-                className="rounded-xl p-5 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
-                style={{ background: C.white, border: `1px solid ${C.border}` }}
-              >
-                <span
-                  className="text-xs font-semibold px-2.5 py-0.5 rounded-full mb-3 inline-block"
-                  style={
-                    c.status === "Active Use"
-                      ? { background: C.lightGreen, color: C.darkGreen }
-                      : { background: C.altBg, color: C.muted }
-                  }
-                >
-                  {c.status}
-                </span>
-                <h4 className="font-semibold text-sm mb-2" style={{ color: C.text }}>{c.title}</h4>
-                <p className="text-xs leading-relaxed" style={{ color: C.muted }}>{c.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm mb-3" style={{ color: C.muted }}>Looking for my primary personal profile?</p>
-            <BtnPrimary href={PERSONAL_WEBSITE_URL} target="_blank">Visit Personal Website →</BtnPrimary>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Complete Voice Samples Section (All 4 Samples) ── */}
-      <section id="voice" className="py-16 sm:py-20" style={{ background: C.white }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <SectionLabel>Audio Portfolio</SectionLabel>
-          <SectionHeading>Hear How I Communicate</SectionHeading>
-          <p className="text-sm max-w-xl mb-8" style={{ color: C.body }}>
-            Four comprehensive samples showcasing conversational nuance, code-switching, articulate reading, and speech perception in authentic Urdu.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-            {voiceSamples.map((sample) => (
-              <AudioCard
-                key={sample.id}
-                title={sample.title}
-                titleUrdu={sample.titleUrdu}
-                description={sample.description}
-                audioSrc={sample.audioSrc}
-                isPlaying={activeAudioId === sample.id}
-                onTogglePlay={() =>
-                  setActiveAudioId((current) => (current === sample.id ? null : sample.id))
-                }
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Why Work With Me ── */}
-      <section className="py-16 sm:py-20" style={{ background: C.altBg }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <SectionLabel>Why Me</SectionLabel>
-          <SectionHeading>Why Work With Me</SectionHeading>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[
-              { title: "I Communicate Clearly", desc: "I focus on understanding what someone actually needs before trying to solve the problem — in Urdu, in English, or in both at once." },
-              { title: "I Notice the Details", desc: "Small errors in data or processes can create large downstream problems. I genuinely enjoy finding and fixing those issues." },
-              { title: "I Keep Learning", desc: "Studying Computer Science while building real practical skills through professional work and independent software projects." },
-            ].map((c) => (
-              <div key={c.title} className="pt-5">
-                <div className="w-8 h-0.5 mb-4" style={{ background: C.amber }} />
-                <h3 className="font-bold text-base mb-2" style={{ color: C.text }}>{c.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: C.body }}>{c.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Resume CTA ── */}
-      <section className="py-16 sm:py-20" style={{ background: C.lightAmber, borderTop: `1px solid ${C.amberBorder}` }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.text }}>Download My Resume</h2>
-              <p className="text-sm mb-3" style={{ color: C.body }}>A concise overview of my experience, skills, education and contact information — ready to share.</p>
-              <p className="urdu text-lg font-semibold" style={{ color: C.amber }}>میرا ریزومے ڈاؤن لوڈ کریں</p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <BtnPrimary href={RESUME_URL} target="_blank">Download PDF Resume</BtnPrimary>
-              <a
-                href={LINKEDIN}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:opacity-80 text-center"
-                style={{ border: `1.5px solid ${C.amber}`, color: C.amber, background: C.white }}
-              >
-                View LinkedIn ↗
+            <div className="flex flex-wrap gap-4 items-center">
+              <BtnPrimary href="#contact">Discuss an Opportunity →</BtnPrimary>
+              <a href={PERSONAL_WEBSITE_URL} className="text-sm font-bold text-gray-500 hover:text-green-600 transition-colors px-4">
+                View Full Portfolio
               </a>
             </div>
           </div>
+
+          <div className="order-1 lg:order-2 flex justify-center lg:justify-end fade-up delay-200">
+            <div className="gradient-border-wrap relative shadow-2xl shadow-green-600/20">
+              <img src={heroPhoto} alt="Abdul Hanan Abrar" className="w-64 h-64 sm:w-96 sm:h-96 object-cover rounded-full border-4 border-white" />
+              <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border border-gray-100">
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Location</p>
+                <p className="text-sm font-bold flex items-center gap-2">🇵🇰 Faisalabad</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── Personal Website CTA ── */}
-      <section className="py-16 sm:py-20" style={{ background: C.green }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">Visit My Personal Website</h2>
-          <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: "#EBF5EE" }}>
-            Explore my main personal portal, background highlights, and overall profile.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <BtnOutlineWhite href={PERSONAL_WEBSITE_URL} target="_blank">Open Personal Website ↗</BtnOutlineWhite>
-            <a
-              href={LINKEDIN}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all hover:bg-white/10 text-center"
-              style={{ color: "#EBF5EE", border: "1.5px solid rgba(255,255,255,0.4)" }}
-            >
+      {/* ── AI Language Tutor Section (Deep Contrast) ── */}
+      <section id="ai-tutor" className="py-24 bg-gray-900 text-white relative">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div className="fade-up">
+            <SectionLabel>Domain Expertise</SectionLabel>
+            <SectionHeading light>Training AI in Urdu, <br/>The Right Way.</SectionHeading>
+            <p className="text-gray-400 text-lg leading-relaxed mb-8">
+              Most LLMs struggle with actual, street-level code-switching. I construct datasets that reflect how Pakistanis *actually* communicate—merging technical CS knowledge with native linguistic intuition.
+            </p>
+            <div className="space-y-4">
+              {["Native Urdu & Fluent Punjabi Nuances", "Bilingual Code-Switching (Urdu-English)", "Data Annotation & Response Evaluation"].map(item => (
+                <div key={item} className="flex items-center gap-4 bg-gray-800/50 p-4 rounded-xl border border-gray-700">
+                  <div className="w-2 h-2 rounded-full bg-green-400" />
+                  <span className="font-semibold">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="fade-up delay-100 bg-gray-800 rounded-3xl p-8 border border-gray-700 shadow-2xl">
+            <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
+              <span className="text-2xl">🎙️</span> Acoustic Evaluation Samples
+            </h3>
+            <div className="space-y-4">
+              <AudioCard title="Natural Code-Switching" titleUrdu="اردو انگریزی — مشترکہ گفتگو" description="Authentic context switching." audioSrc={`${import.meta.env.BASE_URL}Natural%20Urdu-English%20Communication.m4a`} isPlaying={activeAudioId === '1'} onTogglePlay={() => setActiveAudioId(a => a === '1' ? null : '1')} />
+              <AudioCard title="Dialect & Prosody Assessment" titleUrdu="محتاط سماعت اور غیر واضح گفتگو" description="Evaluating complex acoustic cues." audioSrc={`${import.meta.env.BASE_URL}Careful%20Listening%20&%20Unclear%20Speech.m4a`} isPlaying={activeAudioId === '2'} onTogglePlay={() => setActiveAudioId(a => a === '2' ? null : '2')} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Engineering & Operations (Grid Layout) ── */}
+      <section id="projects" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <SectionLabel>Engineering Portfolio</SectionLabel>
+          <SectionHeading>Technical Builds</SectionHeading>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Project 1 */}
+            <div className="group rounded-3xl overflow-hidden border border-gray-200 bg-gray-50 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="h-64 overflow-hidden relative bg-gray-200">
+                <img src={bizLedgerImg} alt="BizLedger" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+              </div>
+              <div className="p-8">
+                <Tag green>Offline-First Retail POS</Tag>
+                <h3 className="text-2xl font-bold mt-4 mb-2">BizLedger</h3>
+                <p className="text-gray-600 mb-6 line-clamp-3">A zero-dependency, local-storage powered POS system designed for 1.3M+ unbanked retail shops in Punjab to manage inventory offline.</p>
+                <div className="flex gap-2 font-mono text-xs text-gray-400">
+                  <span>HTML5</span> • <span>JS</span> • <span>IndexedDB</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Project 2 */}
+            <div className="group rounded-3xl overflow-hidden border border-gray-200 bg-gray-50 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="h-64 overflow-hidden relative bg-gray-200">
+                <img src={qrToolImg} alt="QR Tool" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+              </div>
+              <div className="p-8">
+                <Tag>Hardware Interfacing</Tag>
+                <h3 className="text-2xl font-bold mt-4 mb-2">Offline QR Transfer</h3>
+                <p className="text-gray-600 mb-6 line-clamp-3">Peer-to-peer file transfer leveraging the native BarcodeDetector API. Bypasses the need for cloud uploads or USB cables entirely.</p>
+                <div className="flex gap-2 font-mono text-xs text-gray-400">
+                  <span>Web APIs</span> • <span>Canvas</span> • <span>Network-Free</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── High-Converting Footer CTA ── */}
+      <footer id="contact" className="bg-gray-900 pt-24 pb-12 border-t-8 border-green-500">
+        <div className="max-w-4xl mx-auto px-6 text-center fade-up">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">Let's build something exceptional.</h2>
+          <p className="text-xl text-gray-400 mb-10">Currently accepting roles in AI Dataset Annotation, Support Operations, and Front-End Engineering.</p>
+          
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-24">
+            <a href={`mailto:${EMAIL}`} onClick={handleEmailClick} className="bg-green-500 text-gray-900 font-bold px-8 py-4 rounded-xl text-lg hover:bg-green-400 transition-colors shadow-lg shadow-green-500/20 hover:scale-105 active:scale-95 flex items-center gap-2">
+              ✉️ Initiate Contact
+            </a>
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-white border border-gray-700 font-bold px-8 py-4 rounded-xl text-lg hover:bg-gray-800 transition-colors">
               Connect on LinkedIn ↗
             </a>
           </div>
-        </div>
-      </section>
 
-      {/* ── Contact ── */}
-      <section id="contact" className="py-16 sm:py-20" style={{ background: C.altBg }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <SectionLabel>Get in Touch</SectionLabel>
-          <SectionHeading>Let's Connect</SectionHeading>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-            <div>
-              <p className="text-sm leading-relaxed mb-6" style={{ color: C.body }}>
-                Whether you're interested in AI Urdu training, customer support work, or discussing any opportunity — feel free to reach out.
-              </p>
-              <div className="space-y-3 mb-6">
-                <a
-                  href={`mailto:${EMAIL}`}
-                  onClick={handleEmailClick}
-                  className="flex items-center gap-3 text-sm font-semibold hover:opacity-70 transition-opacity"
-                  style={{ color: C.text }}
-                >
-                  <span className="text-base">✉️</span> {EMAIL}
-                </a>
-                <a
-                  href={LINKEDIN}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-sm font-semibold hover:opacity-70 transition-opacity"
-                  style={{ color: C.text }}
-                >
-                  <span className="text-base">🔗</span> LinkedIn Profile ↗
-                </a>
-                <p className="flex items-center gap-3 text-sm font-medium" style={{ color: C.body }}>
-                  <span className="text-base">📍</span> Faisalabad, Pakistan 🇵🇰
-                </p>
-              </div>
-              <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: C.muted }}>Open To:</p>
-              <div className="flex flex-wrap gap-2">
-                {["AI Urdu Training", "Language Annotation", "Remote Work", "Freelance", "Customer Support Roles", "Software Collaboration"].map((t) => (
-                  <Tag key={t} green>{t}</Tag>
-                ))}
-              </div>
+          <div className="border-t border-gray-800 pt-8 text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center">
+            <p>© 2026 Abdul Hanan Abrar. Faisalabad, Pakistan.</p>
+            <div className="flex gap-6 mt-4 md:mt-0">
+              <a href={PERSONAL_WEBSITE_URL} className="hover:text-white transition-colors">Full Portfolio</a>
+              <a href={RESUME_URL} className="hover:text-white transition-colors">Curriculum Vitae</a>
             </div>
-
-            {/* Form */}
-            <div
-              className="rounded-2xl p-6 sm:p-8"
-              style={{ background: C.white, border: `1px solid ${C.border}`, boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}
-            >
-              {formSent ? (
-                <div className="text-center py-8">
-                  <div className="text-4xl mb-3">✅</div>
-                  <h3 className="font-bold text-lg mb-2" style={{ color: C.text }}>Message Sent</h3>
-                  <p className="text-sm" style={{ color: C.muted }}>Thank you for reaching out. I'll get back to you soon.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleFormSubmit} className="space-y-4">
-                  {[
-                    { label: "Full Name", key: "name", type: "text", placeholder: "Your name" },
-                    { label: "Email Address", key: "email", type: "email", placeholder: "your@email.com" },
-                  ].map((f) => (
-                    <div key={f.key}>
-                      <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>{f.label}</label>
-                      <input
-                        type={f.type}
-                        required
-                        placeholder={f.placeholder}
-                        value={(formData as Record<string, string>)[f.key]}
-                        onChange={(e) => setFormData((d) => ({ ...d, [f.key]: e.target.value }))}
-                        className="w-full text-sm px-3.5 py-2.5 rounded-lg outline-none transition-all"
-                        style={{
-                          border: `1.5px solid ${C.border}`,
-                          color: C.text,
-                          background: C.bg,
-                        }}
-                        onFocus={(e) => (e.target.style.borderColor = C.green)}
-                        onBlur={(e) => (e.target.style.borderColor = C.border)}
-                      />
-                    </div>
-                  ))}
-
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>Topic</label>
-                    <select
-                      required
-                      value={formData.topic}
-                      onChange={(e) => setFormData((d) => ({ ...d, topic: e.target.value }))}
-                      className="w-full text-sm px-3.5 py-2.5 rounded-lg outline-none transition-all"
-                      style={{ border: `1.5px solid ${C.border}`, color: formData.topic ? C.text : C.muted, background: C.bg }}
-                    >
-                      <option value="" disabled>Select a topic</option>
-                      <option>AI Urdu Training Opportunity</option>
-                      <option>Language Annotation / Evaluation</option>
-                      <option>Customer Support Role</option>
-                      <option>Freelance Project</option>
-                      <option>Software Collaboration</option>
-                      <option>General Enquiry</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: C.text }}>Message</label>
-                    <textarea
-                      required
-                      rows={4}
-                      placeholder="Tell me about the opportunity or project..."
-                      value={formData.message}
-                      onChange={(e) => setFormData((d) => ({ ...d, message: e.target.value }))}
-                      className="w-full text-sm px-3.5 py-2.5 rounded-lg outline-none transition-all resize-none"
-                      style={{ border: `1.5px solid ${C.border}`, color: C.text, background: C.bg }}
-                      onFocus={(e) => (e.target.style.borderColor = C.green)}
-                      onBlur={(e) => (e.target.style.borderColor = C.border)}
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-3 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-50"
-                    style={{ background: C.green }}
-                  >
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer className="py-12" style={{ background: "#0f0f0f" }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="mb-6">
-            <h3 className="text-xl font-bold text-white mb-1">Abdul Hanan</h3>
-            <p className="text-sm" style={{ color: "#A0A0A0" }}>
-              AI Urdu Tutor · Customer Support & Operations · Computer Science · Faisalabad, Pakistan 🇵🇰
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-x-5 gap-y-2 mb-8">
-            {navLinks.map((l) => (
-              <button
-                key={l.id}
-                onClick={() => scrollTo(l.id)}
-                className="text-sm transition-colors hover:text-white"
-                style={{ color: "#A0A0A0" }}
-              >
-                {l.label}
-              </button>
-            ))}
-            <a href={PERSONAL_WEBSITE_URL} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>Personal Website ↗</a>
-            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>LinkedIn ↗</a>
-            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="text-sm transition-colors hover:text-white" style={{ color: "#A0A0A0" }}>Download Resume</a>
-          </div>
-          <div style={{ borderTop: "1px solid #2a2a2a" }} className="pt-6">
-            <p className="text-xs" style={{ color: "#666" }}>© 2026 Abdul Hanan. All rights reserved.</p>
           </div>
         </div>
       </footer>
-
-      {/* ── Project Modal ── */}
-      {selectedProject && (
-        <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
-      )}
     </div>
   );
-}
+              }
