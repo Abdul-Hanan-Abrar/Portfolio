@@ -30,7 +30,7 @@ const handleEmailClick = (e: React.MouseEvent) => {
   }
 };
 
-// ─── Clean Vector Icons ───────────────────────────────────────────────────────
+// ─── Precision Vector Icons ───────────────────────────────────────────────────
 function IconMail({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -98,17 +98,17 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300" onClick={onClose}>
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0d1713] border border-emerald-500/30 text-neutral-100 shadow-[0_20px_70px_rgba(0,0,0,0.8)]" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0c1410] border border-emerald-500/30 text-neutral-100 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="relative w-full bg-black/60 border-b border-emerald-950/60 overflow-hidden">
-          <img src={project.image} alt={project.title} className="w-full object-contain max-h-[45vh]" />
+          <img src={project.image} alt={project.title} loading="lazy" className="w-full object-contain max-h-[45vh]" />
           <button
             onClick={onClose}
             className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md transition-all active:scale-95"
           >
             ✕
           </button>
-          <span className="absolute top-4 left-4 text-[11px] font-mono tracking-wider px-3 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-600/40 backdrop-blur-md">
+          <span className="absolute top-4 left-4 text-[11px] font-mono tracking-wider px-3 py-1 rounded-full bg-emerald-950/90 text-emerald-400 border border-emerald-600/40">
             {project.status}
           </span>
         </div>
@@ -123,7 +123,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           </p>
           <div className="flex flex-wrap gap-2 pt-2">
             {project.tags.map((t) => (
-              <span key={t} className="text-xs font-mono px-3 py-1 rounded-lg bg-emerald-950/50 text-emerald-300 border border-emerald-800/40">
+              <span key={t} className="text-xs font-mono px-3 py-1 rounded-lg bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">
                 #{t}
               </span>
             ))}
@@ -135,7 +135,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   );
 }
 
-// ─── Living Audio Card With Waveform Simulation ───────────────────────────────
+// ─── Audio Card Component ─────────────────────────────────────────────────────
 function AudioCard({
   title,
   titleUrdu,
@@ -175,15 +175,15 @@ function AudioCard({
   }, [isPlaying]);
 
   return (
-    <div className={`relative p-5 rounded-2xl transition-all duration-300 border ${
+    <div className={`relative p-5 rounded-2xl transition-all duration-200 border ${
       isPlaying
-        ? "bg-gradient-to-br from-emerald-950/70 to-black/90 border-emerald-400/60 shadow-[0_10px_35px_rgba(16,185,129,0.18)]"
-        : "bg-white/[0.03] hover:bg-white/[0.06] border-white/10 hover:border-emerald-500/40"
+        ? "bg-gradient-to-br from-emerald-950/70 to-black/90 border-emerald-400/60 shadow-lg"
+        : "bg-white/[0.02] hover:bg-white/[0.05] border-white/10 hover:border-emerald-500/40"
     }`}>
       <audio
         ref={audioRef}
         src={audioSrc}
-        preload="metadata"
+        preload="none"
         onTimeUpdate={() => {
           if (!audioRef.current) return;
           const curr = audioRef.current.currentTime;
@@ -206,7 +206,6 @@ function AudioCard({
                 <span className="w-1 bg-emerald-300 rounded-full animate-wave-1" />
                 <span className="w-1 bg-emerald-300 rounded-full animate-wave-2" />
                 <span className="w-1 bg-emerald-300 rounded-full animate-wave-3" />
-                <span className="w-1 bg-emerald-300 rounded-full animate-wave-2" />
               </span>
             )}
           </div>
@@ -216,9 +215,9 @@ function AudioCard({
 
         <button
           onClick={onTogglePlay}
-          className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 shadow-md ${
+          className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 ${
             isPlaying
-              ? "bg-emerald-400 text-neutral-950 shadow-emerald-400/30"
+              ? "bg-emerald-400 text-neutral-950 shadow-md shadow-emerald-400/30"
               : "bg-white/10 hover:bg-emerald-500 text-white hover:text-neutral-950 border border-white/15"
           }`}
           aria-label={isPlaying ? "Pause sample" : "Play sample"}
@@ -250,11 +249,11 @@ function AudioCard({
           }}
         >
           <div
-            className="h-full bg-gradient-to-r from-emerald-500 to-teal-300 rounded-full transition-all duration-100"
+            className="h-full bg-gradient-to-r from-emerald-500 to-teal-300 rounded-full transition-all duration-75"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="flex justify-between text-[10px] font-mono text-neutral-400">
+        <div className="flex justify-between text-[10px] font-mono text-neutral-500">
           <span>{currentTime}</span>
           <span>{duration}</span>
         </div>
@@ -273,7 +272,7 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
 
-  // Section definitions for Navigation and Dynamic Themes
+  // Section targets for Navigation
   const navSections = [
     { id: "hero", label: "Overview" },
     { id: "ai-expertise", label: "AI Urdu Training" },
@@ -284,25 +283,41 @@ export default function App() {
     { id: "contact", label: "Contact" },
   ];
 
-  // Dynamic subtle theme colors per section (Smooth background shifting)
-  const sectionThemes: Record<string, { bg: string; ambient: string; border: string }> = {
-    hero: { bg: "#060a08", ambient: "rgba(16, 185, 129, 0.12)", border: "rgba(16, 185, 129, 0.2)" },
-    "ai-expertise": { bg: "#070e0b", ambient: "rgba(20, 184, 166, 0.14)", border: "rgba(20, 184, 166, 0.25)" },
-    "audio-samples": { bg: "#080c12", ambient: "rgba(56, 189, 248, 0.10)", border: "rgba(56, 189, 248, 0.2)" },
-    software: { bg: "#0a0a0f", ambient: "rgba(99, 102, 241, 0.10)", border: "rgba(99, 102, 241, 0.2)" },
-    operations: { bg: "#0c0b08", ambient: "rgba(245, 158, 11, 0.11)", border: "rgba(245, 158, 11, 0.22)" },
-    education: { bg: "#070c0a", ambient: "rgba(16, 185, 129, 0.10)", border: "rgba(16, 185, 129, 0.2)" },
-    contact: { bg: "#050b07", ambient: "rgba(52, 211, 153, 0.15)", border: "rgba(52, 211, 153, 0.3)" },
+  // Subtle tonal background shifts per section
+  const sectionThemes: Record<string, string> = {
+    hero: "#060a08",
+    "ai-expertise": "#060e0a",
+    "audio-samples": "#070b10",
+    software: "#080911",
+    operations: "#0b0a07",
+    education: "#060b09",
+    contact: "#050a07",
   };
 
-  // Scroll spy & Smooth section reveal observer
+  // Fixed scroll calculator guaranteeing accurate landing beneath the sticky header
+  const scrollTo = (id: string) => {
+    const target = document.getElementById(id);
+    if (target) {
+      const navOffset = 76; // Exact header compensation
+      const elementPos = target.getBoundingClientRect().top;
+      const targetPos = elementPos + window.pageYOffset - navOffset;
+
+      window.scrollTo({
+        top: targetPos,
+        behavior: "smooth",
+      });
+      setMobileMenuOpen(false);
+    }
+  };
+
+  // Scroll Spy Observer
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 200;
+      const scrollPos = window.scrollY + 100;
       for (const sec of navSections) {
         const el = document.getElementById(sec.id);
         if (el) {
-          const top = el.offsetTop;
+          const top = el.offsetTop - 85;
           const height = el.offsetHeight;
           if (scrollPos >= top && scrollPos < top + height) {
             setActiveSection(sec.id);
@@ -316,7 +331,7 @@ export default function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // IntersectionObserver for gentle, fluid scroll reveals
+  // Smooth Intersection Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -326,22 +341,14 @@ export default function App() {
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
     );
 
-    const revealElements = document.querySelectorAll(".scroll-reveal");
-    revealElements.forEach((el) => observer.observe(el));
+    const elements = document.querySelectorAll(".scroll-reveal");
+    elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
   }, []);
-
-  const scrollTo = (id: string) => {
-    const target = document.getElementById(id);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-      setMobileMenuOpen(false);
-    }
-  };
 
   const projects: Project[] = [
     {
@@ -426,15 +433,15 @@ export default function App() {
     }
   };
 
-  const currentTheme = sectionThemes[activeSection] || sectionThemes.hero;
+  const activeBgColor = sectionThemes[activeSection] || "#060a08";
 
   return (
     <div
-      className="min-h-screen text-neutral-200 font-sans antialiased selection:bg-emerald-400 selection:text-black transition-colors duration-1000 ease-out"
-      style={{ backgroundColor: currentTheme.bg }}
+      className="min-h-screen text-neutral-200 font-sans antialiased selection:bg-emerald-400 selection:text-black transition-colors duration-700 ease-out overflow-x-hidden"
+      style={{ backgroundColor: activeBgColor }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap');
 
         * {
           font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -447,59 +454,50 @@ export default function App() {
           line-height: 2.7 !important;
         }
 
-        /* ── Fluid, Gentle Scroll Reveals ── */
+        /* ── Zero-Lag GPU-Accelerated Scroll Reveals ── */
         .scroll-reveal {
           opacity: 0;
-          transform: translateY(22px);
-          transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translate3d(0, 16px, 0);
+          transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
           will-change: opacity, transform;
         }
         .scroll-reveal.visible {
           opacity: 1;
-          transform: translateY(0);
+          transform: translate3d(0, 0, 0);
         }
 
-        /* ── Subtle Living Micro-animations ── */
+        /* ── Micro Animations ── */
         @keyframes subtle-breath {
           0%, 100% { transform: scale(1); opacity: 0.85; }
           50% { transform: scale(1.02); opacity: 1; }
         }
         .animate-breath {
-          animation: subtle-breath 7s ease-in-out infinite;
+          animation: subtle-breath 6s ease-in-out infinite;
         }
 
         @keyframes wave-bounce {
           0%, 100% { height: 4px; }
-          50% { height: 14px; }
+          50% { height: 13px; }
         }
-        .animate-wave-1 { animation: wave-bounce 0.8s ease-in-out infinite; }
-        .animate-wave-2 { animation: wave-bounce 0.8s ease-in-out infinite 0.2s; }
-        .animate-wave-3 { animation: wave-bounce 0.8s ease-in-out infinite 0.4s; }
+        .animate-wave-1 { animation: wave-bounce 0.75s ease-in-out infinite; }
+        .animate-wave-2 { animation: wave-bounce 0.75s ease-in-out infinite 0.15s; }
+        .animate-wave-3 { animation: wave-bounce 0.75s ease-in-out infinite 0.3s; }
 
         .glass-surface {
-          background: rgba(14, 23, 19, 0.65);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
+          background: rgba(14, 23, 19, 0.6);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .glass-surface:hover {
-          background: rgba(20, 32, 27, 0.8);
-          border-color: rgba(52, 211, 153, 0.35);
-          box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15);
+          background: rgba(18, 30, 25, 0.75);
+          border-color: rgba(52, 211, 153, 0.3);
         }
       `}</style>
 
-      {/* ── Dynamic Ambient Atmosphere Glow ── */}
-      <div
-        className="fixed inset-0 pointer-events-none transition-all duration-1000 ease-out z-0"
-        style={{
-          background: `radial-gradient(circle at 50% 25%, ${currentTheme.ambient} 0%, transparent 65%)`,
-        }}
-      />
-
-      {/* ── Precision Navigation Bar with Section Anchors ── */}
-      <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#060a08]/85 backdrop-blur-xl transition-all duration-300">
+      {/* ── Precision Navigation Bar ── */}
+      <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#060a08]/90 backdrop-blur-md transition-all duration-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           
           {/* Logo brand */}
@@ -514,7 +512,7 @@ export default function App() {
             </div>
             <div>
               <span className="font-extrabold text-sm tracking-tight text-white block group-hover:text-emerald-300 transition-colors">
-                Abdul Hanan Abrar
+                Abdul Hanan
               </span>
               <span className="text-[10px] font-mono text-neutral-400 block">
                 AI Urdu Language Trainer
@@ -530,7 +528,7 @@ export default function App() {
                 <button
                   key={sec.id}
                   onClick={() => scrollTo(sec.id)}
-                  className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
+                  className={`px-3 py-1.5 rounded-full transition-colors duration-150 ${
                     isActive
                       ? "text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 font-semibold"
                       : "text-neutral-400 hover:text-white hover:bg-white/[0.04]"
@@ -548,7 +546,7 @@ export default function App() {
               href={PERSONAL_WEBSITE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-neutral-300 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 transition-all"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-neutral-300 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 transition-colors"
             >
               <IconGlobe className="w-3.5 h-3.5 text-emerald-400" />
               <span>Personal Website</span>
@@ -615,21 +613,20 @@ export default function App() {
       {/* ── Main Content Container ── */}
       <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-28">
 
-        {/* ── Hero Section (Photo Integrated Alongside Title) ── */}
-        <section id="hero" className="scroll-reveal pt-4 sm:pt-6">
+        {/* ── Section: Hero ── */}
+        <section id="hero" className="scroll-reveal scroll-mt-20 pt-4 sm:pt-6">
           
-          {/* Header Card: Medium Photo Alongside Name & Professional Title */}
           <div className="p-6 sm:p-8 rounded-3xl glass-surface border border-emerald-500/25 mb-8 relative overflow-hidden">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               
-              {/* Medium-sized Photo with Gentle Living Ambient Glow */}
+              {/* Photo Box */}
               <div className="relative flex-shrink-0">
                 <div className="absolute -inset-1.5 bg-gradient-to-tr from-emerald-500 via-teal-400 to-amber-400 rounded-2xl blur-md opacity-40 animate-breath"></div>
                 <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border-2 border-emerald-400/40 bg-black/60 shadow-xl">
                   <img
                     src={heroPhoto}
-                    alt="Abdul Hanan Abrar"
-                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                    alt="Abdul Hanan"
+                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                   <span className="absolute bottom-1.5 left-2 text-[9px] font-mono text-emerald-300 uppercase tracking-widest">
@@ -638,7 +635,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Title & Core Identity */}
+              {/* Title & Identity */}
               <div className="space-y-2 text-center sm:text-left flex-1">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -646,7 +643,7 @@ export default function App() {
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                  Abdul Hanan Abrar
+                  Abdul Hanan
                 </h1>
 
                 <p className="text-sm sm:text-base font-medium text-emerald-300">
@@ -657,7 +654,7 @@ export default function App() {
                   Empowering frontier artificial intelligence with authentic Pakistani Urdu. Transforming unrefined language datasets into nuanced, dialect-aware, and culturally safe model responses.
                 </p>
 
-                {/* Direct Platform Links with Exact Clean Labels */}
+                {/* Direct Action Links */}
                 <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-3">
                   <a
                     href={`mailto:${EMAIL}`}
@@ -720,8 +717,8 @@ export default function App() {
 
         </section>
 
-        {/* ── AI Urdu Language Training (Core Feature) ── */}
-        <section id="ai-expertise" className="scroll-reveal space-y-6">
+        {/* ── Section: AI Urdu Training ── */}
+        <section id="ai-expertise" className="scroll-reveal scroll-mt-20 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">01 / Model Specialization</span>
@@ -763,8 +760,8 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── 4 Full Voice Samples (Zero Latency) ── */}
-        <section id="audio-samples" className="scroll-reveal space-y-6">
+        {/* ── Section: Voice Data ── */}
+        <section id="audio-samples" className="scroll-reveal scroll-mt-20 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-sky-400 block mb-1">02 / Verified Audio Datasets</span>
@@ -789,8 +786,8 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── Software Projects ── */}
-        <section id="software" className="scroll-reveal space-y-6">
+        {/* ── Section: Projects ── */}
+        <section id="software" className="scroll-reveal scroll-mt-20 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-indigo-400 block mb-1">03 / Software Projects</span>
@@ -804,7 +801,7 @@ export default function App() {
               <div key={p.title} className="glass-surface rounded-3xl overflow-hidden flex flex-col justify-between group">
                 <div>
                   <div className="h-48 bg-black/60 overflow-hidden relative border-b border-white/10">
-                    <img src={p.image} alt={p.title} className="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-all duration-500 group-hover:scale-105" />
+                    <img src={p.image} alt={p.title} loading="lazy" className="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-all duration-300" />
                     <span className="absolute top-4 left-4 text-[10px] font-mono px-3 py-1 rounded-full bg-black/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md">
                       {p.status}
                     </span>
@@ -827,7 +824,7 @@ export default function App() {
                   </div>
                   <button
                     onClick={() => setSelectedProject(p)}
-                    className="text-xs font-bold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+                    className="text-xs font-bold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 transition-colors"
                   >
                     View System Specs →
                   </button>
@@ -837,8 +834,8 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── Professional Operations Background ── */}
-        <section id="operations" className="scroll-reveal space-y-6">
+        {/* ── Section: Operations ── */}
+        <section id="operations" className="scroll-reveal scroll-mt-20 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-amber-400 block mb-1">04 / Operational History</span>
@@ -883,8 +880,8 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── Education & Philosophy ── */}
-        <section id="education" className="scroll-reveal grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        {/* ── Section: Education ── */}
+        <section id="education" className="scroll-reveal scroll-mt-20 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           <div className="glass-surface p-6 sm:p-8 rounded-3xl space-y-3">
             <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">Academic Foundation</span>
             <h3 className="text-2xl font-bold text-white">BS Computer Science</h3>
@@ -903,7 +900,7 @@ export default function App() {
           </div>
 
           <div className="relative group overflow-hidden rounded-3xl border border-white/10 h-full min-h-[260px]">
-            <img src={aboutPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top opacity-70 group-hover:scale-105 transition-transform duration-700" />
+            <img src={aboutPhoto} alt="Abdul Hanan" loading="lazy" className="w-full h-full object-cover object-top opacity-70 group-hover:scale-105 transition-transform duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#070b09] via-black/50 to-transparent"></div>
             <div className="absolute bottom-6 left-6 right-6 space-y-2">
               <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">Core Philosophy</span>
@@ -914,8 +911,8 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── Contact Section ── */}
-        <section id="contact" className="scroll-reveal relative p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-emerald-950/40 via-[#0a120e] to-black border border-emerald-500/30 overflow-hidden shadow-2xl">
+        {/* ── Section: Contact ── */}
+        <section id="contact" className="scroll-reveal scroll-mt-20 relative p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-emerald-950/40 via-[#0a120e] to-black border border-emerald-500/30 overflow-hidden shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-start relative z-10">
             <div className="space-y-6">
               <div>
@@ -977,7 +974,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Functional Contact Form */}
+            {/* Contact Form */}
             <div className="glass-surface p-6 sm:p-8 rounded-2xl border border-white/10">
               {formSent ? (
                 <div className="py-12 text-center space-y-3">
@@ -1058,7 +1055,7 @@ export default function App() {
       <footer className="border-t border-white/[0.06] bg-[#040705] py-10 text-neutral-400 text-xs mt-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-6">
           <div className="text-center sm:text-left">
-            <p className="text-white font-bold text-sm tracking-tight">Abdul Hanan Abrar</p>
+            <p className="text-white font-bold text-sm tracking-tight">Abdul Hanan</p>
             <p className="text-neutral-400 text-[11px] mt-0.5">AI Urdu Language Specialist & Technical Operations · Faisalabad, Pakistan</p>
           </div>
 
@@ -1079,7 +1076,7 @@ export default function App() {
         </div>
       </footer>
 
-      {/* ── Interactive Modal ── */}
+      {/* Modal */}
       {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
     </div>
   );
