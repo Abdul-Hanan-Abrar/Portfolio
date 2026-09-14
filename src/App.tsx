@@ -30,7 +30,7 @@ const handleEmailClick = (e: React.MouseEvent) => {
   }
 };
 
-// ─── Precision Vector Icons ───────────────────────────────────────────────────
+// ─── Crisp Vector Icons ───────────────────────────────────────────────────────
 function IconMail({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -98,44 +98,44 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0c1410] border border-emerald-500/30 text-neutral-100 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="relative w-full bg-black/60 border-b border-emerald-950/60 overflow-hidden">
-          <img src={project.image} alt={project.title} loading="lazy" className="w-full object-contain max-h-[45vh]" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm" onClick={onClose}>
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white border border-neutral-200 text-neutral-900 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="relative w-full bg-neutral-900 border-b border-neutral-200 overflow-hidden">
+          <img src={project.image} alt={project.title} loading="lazy" className="w-full object-contain max-h-[42vh]" />
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md transition-all active:scale-95"
+            className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center bg-white/90 hover:bg-white text-neutral-900 shadow-md font-bold transition-all active:scale-95 text-xs"
           >
             ✕
           </button>
-          <span className="absolute top-4 left-4 text-[11px] font-mono tracking-wider px-3 py-1 rounded-full bg-emerald-950/90 text-emerald-400 border border-emerald-600/40">
+          <span className="absolute top-4 left-4 text-[10px] font-mono tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300">
             {project.status}
           </span>
         </div>
-        <div className="p-6 sm:p-8 space-y-4">
+        <div className="p-6 sm:p-8 space-y-3">
           <div>
-            <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">{project.category}</span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">{project.title}</h3>
-            <p className="text-sm font-medium text-emerald-300/80 mt-1">{project.subtitle}</p>
+            <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-700 font-semibold">{project.category}</span>
+            <h3 className="text-2xl font-bold text-neutral-950 mt-1">{project.title}</h3>
+            <p className="text-xs font-semibold text-neutral-500 mt-0.5">{project.subtitle}</p>
           </div>
-          <p className="text-sm leading-relaxed text-neutral-300 pt-2 font-normal border-t border-emerald-900/40">
+          <p className="text-sm leading-relaxed text-neutral-700 pt-2 border-t border-neutral-100">
             {project.fullDescription}
           </p>
-          <div className="flex flex-wrap gap-2 pt-2">
+          <div className="flex flex-wrap gap-1.5 pt-2">
             {project.tags.map((t) => (
-              <span key={t} className="text-xs font-mono px-3 py-1 rounded-lg bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">
+              <span key={t} className="text-xs font-mono px-2.5 py-1 rounded bg-neutral-100 text-neutral-700 border border-neutral-200">
                 #{t}
               </span>
             ))}
           </div>
-          {project.meta && <p className="text-xs text-neutral-400 font-mono pt-2">{project.meta}</p>}
+          {project.meta && <p className="text-xs text-neutral-500 font-mono pt-2">{project.meta}</p>}
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Audio Card Component ─────────────────────────────────────────────────────
+// ─── Audio Card with Lazy Loading ─────────────────────────────────────────────
 function AudioCard({
   title,
   titleUrdu,
@@ -144,6 +144,7 @@ function AudioCard({
   audioSrc,
   isPlaying,
   onTogglePlay,
+  isLightMode,
 }: {
   title: string;
   titleUrdu: string;
@@ -152,8 +153,10 @@ function AudioCard({
   audioSrc: string;
   isPlaying: boolean;
   onTogglePlay: () => void;
+  isLightMode: boolean;
 }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [hasRequestedAudio, setHasRequestedAudio] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState("0:00");
   const [duration, setDuration] = useState("0:00");
@@ -165,24 +168,37 @@ function AudioCard({
     return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
+  const handlePlayToggle = () => {
+    if (!hasRequestedAudio) {
+      setHasRequestedAudio(true);
+    }
+    onTogglePlay();
+  };
+
   useEffect(() => {
-    if (!audioRef.current) return;
+    if (!audioRef.current || !hasRequestedAudio) return;
     if (isPlaying) {
       audioRef.current.play().catch(() => {});
     } else {
       audioRef.current.pause();
     }
-  }, [isPlaying]);
+  }, [isPlaying, hasRequestedAudio]);
 
   return (
-    <div className={`relative p-5 rounded-2xl transition-all duration-200 border ${
-      isPlaying
-        ? "bg-gradient-to-br from-emerald-950/70 to-black/90 border-emerald-400/60 shadow-lg"
-        : "bg-white/[0.02] hover:bg-white/[0.05] border-white/10 hover:border-emerald-500/40"
-    }`}>
+    <div
+      className={`relative p-5 rounded-2xl transition-all duration-300 border ${
+        isLightMode
+          ? isPlaying
+            ? "bg-white border-emerald-500 shadow-md ring-1 ring-emerald-400/40"
+            : "bg-white hover:bg-emerald-50/40 border-neutral-200/90 shadow-sm"
+          : isPlaying
+          ? "bg-gradient-to-br from-emerald-950/70 to-black/90 border-emerald-400/60 shadow-lg"
+          : "bg-white/[0.03] hover:bg-white/[0.06] border-white/10"
+      }`}
+    >
       <audio
         ref={audioRef}
-        src={audioSrc}
+        src={hasRequestedAudio ? audioSrc : undefined}
         preload="none"
         onTimeUpdate={() => {
           if (!audioRef.current) return;
@@ -198,26 +214,38 @@ function AudioCard({
       <div className="flex items-start justify-between gap-4 mb-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono tracking-wider px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">
+            <span
+              className={`text-[10px] font-mono tracking-wider px-2 py-0.5 rounded ${
+                isLightMode
+                  ? "bg-emerald-100 text-emerald-900 font-semibold"
+                  : "bg-emerald-500/15 text-emerald-300 border border-emerald-500/25"
+              }`}
+            >
               {tag}
             </span>
             {isPlaying && (
-              <span className="flex items-end gap-[3px] h-3.5 px-1.5 py-0.5 bg-emerald-500/20 rounded border border-emerald-400/30">
-                <span className="w-1 bg-emerald-300 rounded-full animate-wave-1" />
-                <span className="w-1 bg-emerald-300 rounded-full animate-wave-2" />
-                <span className="w-1 bg-emerald-300 rounded-full animate-wave-3" />
+              <span className="flex items-end gap-[3px] h-3.5 px-1.5 py-0.5 bg-emerald-500/20 rounded">
+                <span className="w-1 bg-emerald-500 rounded-full animate-wave-1" />
+                <span className="w-1 bg-emerald-500 rounded-full animate-wave-2" />
+                <span className="w-1 bg-emerald-500 rounded-full animate-wave-3" />
               </span>
             )}
           </div>
-          <h4 className="text-sm font-bold text-white tracking-tight">{title}</h4>
-          <p className="urdu text-lg text-emerald-400 font-semibold">{titleUrdu}</p>
+          <h4 className={`text-sm font-bold tracking-tight ${isLightMode ? "text-neutral-900" : "text-white"}`}>
+            {title}
+          </h4>
+          <p className={`urdu text-lg font-bold mt-0.5 ${isLightMode ? "text-emerald-800" : "text-emerald-400"}`}>
+            {titleUrdu}
+          </p>
         </div>
 
         <button
-          onClick={onTogglePlay}
+          onClick={handlePlayToggle}
           className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 ${
             isPlaying
-              ? "bg-emerald-400 text-neutral-950 shadow-md shadow-emerald-400/30"
+              ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/30"
+              : isLightMode
+              ? "bg-neutral-100 hover:bg-emerald-600 hover:text-white text-neutral-800 border border-neutral-200"
               : "bg-white/10 hover:bg-emerald-500 text-white hover:text-neutral-950 border border-white/15"
           }`}
           aria-label={isPlaying ? "Pause sample" : "Play sample"}
@@ -235,12 +263,16 @@ function AudioCard({
         </button>
       </div>
 
-      <p className="text-xs text-neutral-400 leading-relaxed mb-4">{description}</p>
+      <p className={`text-xs leading-relaxed mb-4 ${isLightMode ? "text-neutral-600" : "text-neutral-400"}`}>
+        {description}
+      </p>
 
       {/* Scrub Track */}
       <div className="space-y-1.5">
         <div
-          className="relative w-full h-1.5 bg-white/10 rounded-full cursor-pointer overflow-hidden group"
+          className={`relative w-full h-1.5 rounded-full cursor-pointer overflow-hidden ${
+            isLightMode ? "bg-neutral-200" : "bg-white/10"
+          }`}
           onClick={(e) => {
             if (!audioRef.current) return;
             const rect = e.currentTarget.getBoundingClientRect();
@@ -249,11 +281,11 @@ function AudioCard({
           }}
         >
           <div
-            className="h-full bg-gradient-to-r from-emerald-500 to-teal-300 rounded-full transition-all duration-75"
+            className="h-full bg-emerald-600 rounded-full transition-all duration-75"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="flex justify-between text-[10px] font-mono text-neutral-500">
+        <div className={`flex justify-between text-[10px] font-mono ${isLightMode ? "text-neutral-500" : "text-neutral-400"}`}>
           <span>{currentTime}</span>
           <span>{duration}</span>
         </div>
@@ -265,6 +297,7 @@ function AudioCard({
 // ─── Main Application ─────────────────────────────────────────────────────────
 export default function App() {
   const [activeSection, setActiveSection] = useState("hero");
+  const [isLightMode, setIsLightMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeAudioId, setActiveAudioId] = useState<string | null>(null);
@@ -272,7 +305,6 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
 
-  // Section targets for Navigation
   const navSections = [
     { id: "hero", label: "Overview" },
     { id: "ai-expertise", label: "AI Urdu Training" },
@@ -283,41 +315,41 @@ export default function App() {
     { id: "contact", label: "Contact" },
   ];
 
-  // Subtle tonal background shifts per section
-  const sectionThemes: Record<string, string> = {
-    hero: "#060a08",
-    "ai-expertise": "#060e0a",
-    "audio-samples": "#070b10",
-    software: "#080911",
-    operations: "#0b0a07",
-    education: "#060b09",
-    contact: "#050a07",
-  };
-
-  // Fixed scroll calculator guaranteeing accurate landing beneath the sticky header
+  // Precise navigation scroll handler
   const scrollTo = (id: string) => {
-    const target = document.getElementById(id);
-    if (target) {
-      const navOffset = 76; // Exact header compensation
-      const elementPos = target.getBoundingClientRect().top;
-      const targetPos = elementPos + window.pageYOffset - navOffset;
+    setMobileMenuOpen(false);
 
-      window.scrollTo({
-        top: targetPos,
-        behavior: "smooth",
-      });
-      setMobileMenuOpen(false);
-    }
+    requestAnimationFrame(() => {
+      const target = document.getElementById(id);
+      if (target) {
+        const headerHeight = 68;
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({
+          top: Math.max(0, targetPosition),
+          behavior: "smooth",
+        });
+      }
+    });
   };
 
-  // Scroll Spy Observer
+  // Scroll listener for Theme Shift & Active Section Spy
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 100;
+      const scrollY = window.scrollY;
+
+      // Transition to Light Mode as user scrolls past the top Hero threshold
+      if (scrollY > 180) {
+        setIsLightMode(true);
+      } else {
+        setIsLightMode(false);
+      }
+
+      // Track active section
+      const scrollPos = scrollY + 120;
       for (const sec of navSections) {
         const el = document.getElementById(sec.id);
         if (el) {
-          const top = el.offsetTop - 85;
+          const top = el.offsetTop - 75;
           const height = el.offsetHeight;
           if (scrollPos >= top && scrollPos < top + height) {
             setActiveSection(sec.id);
@@ -331,7 +363,7 @@ export default function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Smooth Intersection Observer
+  // Smooth Reveal Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -341,12 +373,10 @@ export default function App() {
           }
         });
       },
-      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.05, rootMargin: "0px 0px -40px 0px" }
     );
 
-    const elements = document.querySelectorAll(".scroll-reveal");
-    elements.forEach((el) => observer.observe(el));
-
+    document.querySelectorAll(".scroll-reveal").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -433,12 +463,11 @@ export default function App() {
     }
   };
 
-  const activeBgColor = sectionThemes[activeSection] || "#060a08";
-
   return (
     <div
-      className="min-h-screen text-neutral-200 font-sans antialiased selection:bg-emerald-400 selection:text-black transition-colors duration-700 ease-out overflow-x-hidden"
-      style={{ backgroundColor: activeBgColor }}
+      className={`min-h-screen font-sans antialiased transition-colors duration-700 ease-out overflow-x-hidden ${
+        isLightMode ? "bg-[#F2F7F4] text-neutral-800" : "bg-[#060A08] text-neutral-200"
+      }`}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap');
@@ -454,25 +483,15 @@ export default function App() {
           line-height: 2.7 !important;
         }
 
-        /* ── Zero-Lag GPU-Accelerated Scroll Reveals ── */
         .scroll-reveal {
           opacity: 0;
           transform: translate3d(0, 16px, 0);
-          transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
           will-change: opacity, transform;
         }
         .scroll-reveal.visible {
           opacity: 1;
           transform: translate3d(0, 0, 0);
-        }
-
-        /* ── Micro Animations ── */
-        @keyframes subtle-breath {
-          0%, 100% { transform: scale(1); opacity: 0.85; }
-          50% { transform: scale(1.02); opacity: 1; }
-        }
-        .animate-breath {
-          animation: subtle-breath 6s ease-in-out infinite;
         }
 
         @keyframes wave-bounce {
@@ -482,45 +501,36 @@ export default function App() {
         .animate-wave-1 { animation: wave-bounce 0.75s ease-in-out infinite; }
         .animate-wave-2 { animation: wave-bounce 0.75s ease-in-out infinite 0.15s; }
         .animate-wave-3 { animation: wave-bounce 0.75s ease-in-out infinite 0.3s; }
-
-        .glass-surface {
-          background: rgba(14, 23, 19, 0.6);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .glass-surface:hover {
-          background: rgba(18, 30, 25, 0.75);
-          border-color: rgba(52, 211, 153, 0.3);
-        }
       `}</style>
 
-      {/* ── Precision Navigation Bar ── */}
-      <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#060a08]/90 backdrop-blur-md transition-all duration-200">
+      {/* ── Dynamic Navbar ── */}
+      <header
+        className={`sticky top-0 z-40 border-b transition-colors duration-500 ${
+          isLightMode
+            ? "bg-white/90 border-neutral-200/90 text-neutral-900 shadow-sm backdrop-blur-md"
+            : "bg-[#060A08]/90 border-white/[0.08] text-white backdrop-blur-md"
+        }`}
+      >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           
-          {/* Logo brand */}
-          <button
-            onClick={() => scrollTo("hero")}
-            className="flex items-center gap-2.5 text-left group"
-          >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-300 p-0.5 transition-transform group-hover:scale-105">
-              <div className="w-full h-full bg-[#060a08] rounded-[6px] flex items-center justify-center text-emerald-400 font-extrabold text-xs">
+          {/* Logo */}
+          <button onClick={() => scrollTo("hero")} className="flex items-center gap-2.5 text-left group">
+            <div className="w-8 h-8 rounded-lg bg-emerald-600 p-0.5 transition-transform group-hover:scale-105">
+              <div className="w-full h-full bg-[#060A08] rounded-[6px] flex items-center justify-center text-emerald-400 font-extrabold text-xs">
                 AH
               </div>
             </div>
             <div>
-              <span className="font-extrabold text-sm tracking-tight text-white block group-hover:text-emerald-300 transition-colors">
+              <span className={`font-extrabold text-sm tracking-tight block ${isLightMode ? "text-neutral-900" : "text-white"}`}>
                 Abdul Hanan
               </span>
-              <span className="text-[10px] font-mono text-neutral-400 block">
+              <span className={`text-[10px] font-mono block ${isLightMode ? "text-emerald-700 font-semibold" : "text-neutral-400"}`}>
                 AI Urdu Language Trainer
               </span>
             </div>
           </button>
 
-          {/* Desktop Section Links */}
+          {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1 font-medium text-xs">
             {navSections.map((sec) => {
               const isActive = activeSection === sec.id;
@@ -530,8 +540,12 @@ export default function App() {
                   onClick={() => scrollTo(sec.id)}
                   className={`px-3 py-1.5 rounded-full transition-colors duration-150 ${
                     isActive
-                      ? "text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 font-semibold"
-                      : "text-neutral-400 hover:text-white hover:bg-white/[0.04]"
+                      ? isLightMode
+                        ? "text-emerald-900 bg-emerald-100 border border-emerald-300 font-bold"
+                        : "text-emerald-300 bg-emerald-500/20 border border-emerald-500/30 font-semibold"
+                      : isLightMode
+                      ? "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                      : "text-neutral-400 hover:text-white hover:bg-white/[0.05]"
                   }`}
                 >
                   {sec.label}
@@ -540,33 +554,37 @@ export default function App() {
             })}
           </nav>
 
-          {/* Action Hub */}
+          {/* Actions */}
           <div className="flex items-center gap-2.5">
             <a
               href={PERSONAL_WEBSITE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-neutral-300 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 transition-colors"
+              className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                isLightMode
+                  ? "bg-white text-neutral-800 border-neutral-300 hover:bg-neutral-50 shadow-xs"
+                  : "bg-white/[0.05] text-neutral-300 hover:text-white border-white/10"
+              }`}
             >
-              <IconGlobe className="w-3.5 h-3.5 text-emerald-400" />
+              <IconGlobe className="w-3.5 h-3.5 text-emerald-600" />
               <span>Personal Website</span>
-              <IconArrowExternal className="w-3 h-3 text-neutral-500" />
+              <IconArrowExternal className="w-3 h-3 text-neutral-400" />
             </a>
 
             <a
               href={RESUME_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neutral-950 bg-gradient-to-r from-emerald-400 to-teal-300 hover:brightness-110 shadow-sm shadow-emerald-500/30 transition-all active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-800 shadow-sm transition-all active:scale-95"
             >
               <IconFileDoc className="w-3.5 h-3.5" />
               <span>CV Download</span>
             </a>
 
-            {/* Mobile Hamburger */}
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-neutral-400 hover:text-white hover:bg-white/10"
+              className={`lg:hidden p-2 rounded-lg ${isLightMode ? "text-neutral-800 hover:bg-neutral-100" : "text-neutral-300 hover:bg-white/10"}`}
               aria-label="Toggle navigation menu"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -580,28 +598,34 @@ export default function App() {
           </div>
         </div>
 
-        {/* Mobile Dropdown Panel */}
+        {/* ── Absolute Mobile Overlay (Never shifts page offset) ── */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#060a08]/95 border-b border-white/10 px-4 py-3 space-y-1">
+          <div
+            className={`lg:hidden absolute top-16 left-0 right-0 z-50 border-b shadow-2xl px-4 py-3 space-y-1 ${
+              isLightMode ? "bg-white/98 border-neutral-200 text-neutral-900" : "bg-[#0A120E]/98 border-white/10 text-white"
+            }`}
+          >
             {navSections.map((sec) => (
               <button
                 key={sec.id}
                 onClick={() => scrollTo(sec.id)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-semibold transition-colors ${
                   activeSection === sec.id
-                    ? "text-emerald-300 bg-emerald-500/20 font-semibold"
+                    ? "text-emerald-800 bg-emerald-100 font-bold"
+                    : isLightMode
+                    ? "text-neutral-700 hover:bg-neutral-100"
                     : "text-neutral-300 hover:bg-white/5"
                 }`}
               >
                 {sec.label}
               </button>
             ))}
-            <div className="pt-2 border-t border-white/10 flex gap-2">
+            <div className="pt-2 border-t border-neutral-200/40 flex gap-2">
               <a
                 href={PERSONAL_WEBSITE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 text-center py-2 text-xs font-semibold bg-white/5 rounded-lg text-neutral-200 border border-white/10"
+                className="flex-1 text-center py-2 text-xs font-semibold bg-emerald-50 rounded-lg text-emerald-900 border border-emerald-200"
               >
                 Personal Website ↗
               </a>
@@ -610,32 +634,28 @@ export default function App() {
         )}
       </header>
 
-      {/* ── Main Content Container ── */}
-      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-28">
+      {/* ── Main Container ── */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-24">
 
         {/* ── Section: Hero ── */}
-        <section id="hero" className="scroll-reveal scroll-mt-20 pt-4 sm:pt-6">
+        <section id="hero" className="scroll-reveal scroll-mt-20 pt-2">
           
-          <div className="p-6 sm:p-8 rounded-3xl glass-surface border border-emerald-500/25 mb-8 relative overflow-hidden">
+          <div className="p-6 sm:p-8 rounded-3xl bg-[#0B1510] text-white border border-emerald-500/25 mb-6 relative overflow-hidden shadow-xl">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               
-              {/* Photo Box */}
+              {/* Photo */}
               <div className="relative flex-shrink-0">
-                <div className="absolute -inset-1.5 bg-gradient-to-tr from-emerald-500 via-teal-400 to-amber-400 rounded-2xl blur-md opacity-40 animate-breath"></div>
-                <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border-2 border-emerald-400/40 bg-black/60 shadow-xl">
+                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border-2 border-emerald-400/40 bg-black/60 shadow-lg">
                   <img
                     src={heroPhoto}
                     alt="Abdul Hanan"
+                    fetchPriority="high"
                     className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  <span className="absolute bottom-1.5 left-2 text-[9px] font-mono text-emerald-300 uppercase tracking-widest">
-                    PK Verified
-                  </span>
                 </div>
               </div>
 
-              {/* Title & Identity */}
+              {/* Header Details */}
               <div className="space-y-2 text-center sm:text-left flex-1">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -646,7 +666,7 @@ export default function App() {
                   Abdul Hanan
                 </h1>
 
-                <p className="text-sm sm:text-base font-medium text-emerald-300">
+                <p className="text-sm sm:text-base font-semibold text-emerald-300">
                   AI Urdu Language Trainer · LLM Evaluator · CS Student & Operations
                 </p>
 
@@ -659,7 +679,7 @@ export default function App() {
                   <a
                     href={`mailto:${EMAIL}`}
                     onClick={handleEmailClick}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/15 text-xs font-semibold transition-all"
                   >
                     <IconMail className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Email Abdul</span>
@@ -669,33 +689,33 @@ export default function App() {
                     href={LINKEDIN}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/15 text-xs font-semibold transition-all"
                   >
                     <IconLinkedIn className="w-3.5 h-3.5 text-[#0077B5]" />
                     <span>LinkedIn Profile</span>
-                    <IconArrowExternal className="w-3 h-3 text-neutral-500" />
+                    <IconArrowExternal className="w-3 h-3 text-neutral-400" />
                   </a>
 
                   <a
                     href={PERSONAL_WEBSITE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/15 text-xs font-semibold transition-all"
                   >
                     <IconGlobe className="w-3.5 h-3.5 text-teal-400" />
                     <span>Personal Website</span>
-                    <IconArrowExternal className="w-3 h-3 text-neutral-500" />
+                    <IconArrowExternal className="w-3 h-3 text-neutral-400" />
                   </a>
 
                   <a
                     href={RESUME_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/15 text-xs font-semibold transition-all"
                   >
                     <IconFileDoc className="w-3.5 h-3.5 text-amber-400" />
                     <span>CV Download</span>
-                    <IconArrowExternal className="w-3 h-3 text-neutral-500" />
+                    <IconArrowExternal className="w-3 h-3 text-neutral-400" />
                   </a>
                 </div>
 
@@ -704,12 +724,12 @@ export default function App() {
             </div>
           </div>
 
-          {/* Nastaliq Statement Card */}
-          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-white/[0.02] to-transparent border border-emerald-500/25 shadow-lg relative overflow-hidden">
-            <p className="urdu text-xl sm:text-2xl text-emerald-300 font-semibold text-center sm:text-right">
+          {/* Nastaliq Statement */}
+          <div className="p-5 rounded-2xl bg-white border border-neutral-200 text-neutral-900 shadow-sm">
+            <p className="urdu text-xl sm:text-2xl text-emerald-900 font-bold text-center sm:text-right">
               اردو زبان میں مصنوعی ذہانت (AI) کی درستی، تربیت اور لسانی ماڈلنگ — معیاری اور جدید انداز میں
             </p>
-            <div className="flex flex-wrap items-center justify-between gap-2 mt-3 pt-3 border-t border-white/[0.06] text-xs font-mono text-neutral-400">
+            <div className="flex flex-wrap items-center justify-between gap-2 mt-2 pt-2 border-t border-neutral-100 text-xs font-mono text-neutral-500">
               <span>Native C2 Urdu · Fluent Punjabi · Technical English</span>
               <span>BSc Computer Science · University of Agriculture Faisalabad</span>
             </div>
@@ -719,55 +739,55 @@ export default function App() {
 
         {/* ── Section: AI Urdu Training ── */}
         <section id="ai-expertise" className="scroll-reveal scroll-mt-20 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-neutral-200/80 pb-3">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">01 / Model Specialization</span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Why Train Urdu Models With Me?</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">01 / Model Specialization</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900">Why Train Urdu Models With Me?</h2>
             </div>
-            <p className="text-xs font-mono text-neutral-400">RLHF · Prompt Auditing · SFT Datasets</p>
+            <p className="text-xs font-mono text-neutral-500">RLHF · Prompt Auditing · SFT Datasets</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div className="glass-surface p-6 rounded-2xl space-y-3 border-t-2 border-t-emerald-400">
-              <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold font-mono text-xs">
+            <div className="p-6 rounded-2xl bg-white border border-neutral-200/80 shadow-sm space-y-2.5">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-900 flex items-center justify-center font-bold text-xs font-mono">
                 01
               </div>
-              <h3 className="text-base font-bold text-white">Authentic Code-Switching</h3>
-              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+              <h3 className="text-base font-bold text-neutral-900">Authentic Code-Switching</h3>
+              <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
                 Pakistanis communicate through dynamic code-switching between Urdu grammar and English loan words. I construct genuine bilingual pairs that avoid mechanical translation errors.
               </p>
             </div>
 
-            <div className="glass-surface p-6 rounded-2xl space-y-3 border-t-2 border-t-teal-400">
-              <div className="w-9 h-9 rounded-lg bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 font-bold font-mono text-xs">
+            <div className="p-6 rounded-2xl bg-white border border-neutral-200/80 shadow-sm space-y-2.5">
+              <div className="w-8 h-8 rounded-lg bg-teal-100 text-teal-900 flex items-center justify-center font-bold text-xs font-mono">
                 02
               </div>
-              <h3 className="text-base font-bold text-white">RLHF & Safety Red-Teaming</h3>
-              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+              <h3 className="text-base font-bold text-neutral-900">RLHF & Safety Red-Teaming</h3>
+              <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
                 Evaluating model outputs for factual accuracy, subtle hallucination detection, contextual appropriateness, cultural safety norms, and Nastaliq orthography.
               </p>
             </div>
 
-            <div className="glass-surface p-6 rounded-2xl space-y-3 border-t-2 border-t-amber-400">
-              <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold font-mono text-xs">
+            <div className="p-6 rounded-2xl bg-white border border-neutral-200/80 shadow-sm space-y-2.5">
+              <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-900 flex items-center justify-center font-bold text-xs font-mono">
                 03
               </div>
-              <h3 className="text-base font-bold text-white">CS Technical Foundation</h3>
-              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+              <h3 className="text-base font-bold text-neutral-900">CS Technical Foundation</h3>
+              <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
                 As a Computer Science student, I understand tokenization constraints with Perso-Arabic scripts, JSON schema labeling, Python automation, and API pipelines.
               </p>
             </div>
           </div>
         </section>
 
-        {/* ── Section: Voice Data ── */}
+        {/* ── Section: Voice Data (Lazy Audio) ── */}
         <section id="audio-samples" className="scroll-reveal scroll-mt-20 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-neutral-200/80 pb-3">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-sky-400 block mb-1">02 / Verified Audio Datasets</span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Acoustic Samples for AI Speech Modeling</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">02 / Verified Audio Datasets</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900">Acoustic Samples for AI Speech Modeling</h2>
             </div>
-            <p className="text-xs font-mono text-neutral-400">4 Master Records · Zero Latency</p>
+            <p className="text-xs font-mono text-neutral-500">4 Master Records · Lazy Streaming</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -781,6 +801,7 @@ export default function App() {
                 audioSrc={sample.audioSrc}
                 isPlaying={activeAudioId === sample.id}
                 onTogglePlay={() => setActiveAudioId((curr) => (curr === sample.id ? null : sample.id))}
+                isLightMode={isLightMode}
               />
             ))}
           </div>
@@ -788,43 +809,43 @@ export default function App() {
 
         {/* ── Section: Projects ── */}
         <section id="software" className="scroll-reveal scroll-mt-20 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-neutral-200/80 pb-3">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-indigo-400 block mb-1">03 / Software Projects</span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Engineering Practical Systems</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">03 / Software Projects</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900">Engineering Practical Systems</h2>
             </div>
-            <p className="text-xs font-mono text-neutral-400">Offline-First · Hardware APIs</p>
+            <p className="text-xs font-mono text-neutral-500">Offline-First · Hardware APIs</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {projects.map((p) => (
-              <div key={p.title} className="glass-surface rounded-3xl overflow-hidden flex flex-col justify-between group">
+              <div key={p.title} className="bg-white rounded-2xl border border-neutral-200 shadow-sm overflow-hidden flex flex-col justify-between">
                 <div>
-                  <div className="h-48 bg-black/60 overflow-hidden relative border-b border-white/10">
-                    <img src={p.image} alt={p.title} loading="lazy" className="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-all duration-300" />
-                    <span className="absolute top-4 left-4 text-[10px] font-mono px-3 py-1 rounded-full bg-black/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md">
+                  <div className="h-48 bg-neutral-950 overflow-hidden relative border-b border-neutral-100">
+                    <img src={p.image} alt={p.title} loading="lazy" decoding="async" className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300" />
+                    <span className="absolute top-3 left-3 text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-black/80 text-emerald-300 border border-emerald-500/30">
                       {p.status}
                     </span>
                   </div>
-                  <div className="p-6 space-y-2">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400">{p.category}</span>
-                    <h3 className="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">{p.title}</h3>
-                    <p className="text-xs font-medium text-neutral-400">{p.subtitle}</p>
-                    <p className="text-xs text-neutral-300 leading-relaxed pt-2">{p.description}</p>
+                  <div className="p-5 space-y-2">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-800 font-bold">{p.category}</span>
+                    <h3 className="text-lg font-bold text-neutral-900">{p.title}</h3>
+                    <p className="text-xs text-neutral-500">{p.subtitle}</p>
+                    <p className="text-xs text-neutral-600 leading-relaxed pt-1">{p.description}</p>
                   </div>
                 </div>
 
-                <div className="p-6 pt-0 flex items-center justify-between border-t border-white/[0.06] mt-4">
+                <div className="p-5 pt-0 flex items-center justify-between border-t border-neutral-100 mt-3">
                   <div className="flex gap-1.5">
                     {p.tags.slice(0, 2).map((t) => (
-                      <span key={t} className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.05] text-neutral-400">
+                      <span key={t} className="text-[10px] font-mono px-2 py-0.5 rounded bg-neutral-100 text-neutral-600 border border-neutral-200">
                         {t}
                       </span>
                     ))}
                   </div>
                   <button
                     onClick={() => setSelectedProject(p)}
-                    className="text-xs font-bold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 transition-colors"
+                    className="text-xs font-bold text-emerald-700 hover:text-emerald-900 inline-flex items-center gap-1 transition-colors"
                   >
                     View System Specs →
                   </button>
@@ -836,45 +857,45 @@ export default function App() {
 
         {/* ── Section: Operations ── */}
         <section id="operations" className="scroll-reveal scroll-mt-20 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-neutral-200/80 pb-3">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-amber-400 block mb-1">04 / Operational History</span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Operations & Problem Solving</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">04 / Operational History</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900">Operations & Problem Solving</h2>
             </div>
-            <p className="text-xs font-mono text-neutral-400">2+ Years Active Operations</p>
+            <p className="text-xs font-mono text-neutral-500">2+ Years Active Operations</p>
           </div>
 
-          <div className="glass-surface p-6 sm:p-8 rounded-3xl space-y-6">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200 shadow-sm space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <span className="text-xs font-mono text-amber-400 uppercase tracking-widest">Aptly Pharmaceuticals · Faisalabad</span>
-                <h3 className="text-xl font-bold text-white mt-0.5">Customer Support & Operations Specialist</h3>
+                <span className="text-xs font-mono text-emerald-700 font-bold uppercase tracking-widest">Aptly Pharmaceuticals · Faisalabad</span>
+                <h3 className="text-xl font-bold text-neutral-950 mt-0.5">Customer Support & Operations Specialist</h3>
               </div>
-              <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-300 self-start sm:self-auto">
+              <span className="text-xs font-mono px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 self-start sm:self-auto font-semibold">
                 June 2024 — Present
               </span>
             </div>
 
-            <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
-              Managing complex client support workflows across WhatsApp, phone, and email in bilingual settings. Built customized Excel data models to preserve inventory integrity and resolve logging discrepancies.
+            <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+              Managing client support workflows across WhatsApp, phone, and email in bilingual settings. Built customized Excel data models to preserve inventory integrity and resolve logging discrepancies.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-white/10">
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-                <span className="text-xs font-mono font-bold text-emerald-400 block mb-1">Live Stock Tracking</span>
-                <p className="text-xs text-neutral-400">Engineered multi-SKU Excel models to maintain real-time inventory counts and prevent stockouts.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-neutral-100">
+              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/60">
+                <span className="text-xs font-mono font-bold text-emerald-800 block mb-1">Live Stock Tracking</span>
+                <p className="text-xs text-neutral-600">Engineered multi-SKU Excel models to maintain real-time inventory counts and prevent stockouts.</p>
               </div>
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-                <span className="text-xs font-mono font-bold text-teal-400 block mb-1">Date Bug Remediation</span>
-                <p className="text-xs text-neutral-400">Identified and fixed a silent DD/MM vs MM/DD date format corruption breaking executive monthly reports.</p>
+              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/60">
+                <span className="text-xs font-mono font-bold text-teal-800 block mb-1">Date Bug Remediation</span>
+                <p className="text-xs text-neutral-600">Identified and fixed a silent DD/MM vs MM/DD date format corruption breaking executive monthly reports.</p>
               </div>
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-                <span className="text-xs font-mono font-bold text-amber-400 block mb-1">Bilingual Support</span>
-                <p className="text-xs text-neutral-400">Delivering communication in native Urdu, fluent Punjabi, and professional English.</p>
+              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/60">
+                <span className="text-xs font-mono font-bold text-amber-800 block mb-1">Bilingual Support</span>
+                <p className="text-xs text-neutral-600">Delivering communication in native Urdu, fluent Punjabi, and professional English.</p>
               </div>
-              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-                <span className="text-xs font-mono font-bold text-indigo-400 block mb-1">Data Validation</span>
-                <p className="text-xs text-neutral-400">Enforced strict cell validation rules preventing human input errors across logistics records.</p>
+              <div className="p-4 rounded-xl bg-neutral-50 border border-neutral-200/60">
+                <span className="text-xs font-mono font-bold text-neutral-800 block mb-1">Data Validation</span>
+                <p className="text-xs text-neutral-600">Enforced strict cell validation rules preventing human input errors across logistics records.</p>
               </div>
             </div>
           </div>
@@ -882,29 +903,29 @@ export default function App() {
 
         {/* ── Section: Education ── */}
         <section id="education" className="scroll-reveal scroll-mt-20 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-          <div className="glass-surface p-6 sm:p-8 rounded-3xl space-y-3">
-            <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">Academic Foundation</span>
-            <h3 className="text-2xl font-bold text-white">BS Computer Science</h3>
-            <p className="text-sm font-semibold text-emerald-300">University of Agriculture, Faisalabad (UAF)</p>
-            <p className="text-xs font-mono text-neutral-400">Semester 5 · Expected Graduation 2028</p>
-            <p className="text-xs text-neutral-300 leading-relaxed pt-2">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200 shadow-sm space-y-3">
+            <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold">Academic Foundation</span>
+            <h3 className="text-2xl font-bold text-neutral-900">BS Computer Science</h3>
+            <p className="text-sm font-semibold text-emerald-800">University of Agriculture, Faisalabad (UAF)</p>
+            <p className="text-xs font-mono text-neutral-500">Semester 5 · Expected Graduation 2028</p>
+            <p className="text-xs text-neutral-600 leading-relaxed pt-1">
               Deep training in Data Structures, Object-Oriented Programming, Relational Databases, and Python algorithm design. Provides the technical literacy needed to interface directly with AI research teams.
             </p>
-            <div className="flex flex-wrap gap-1.5 pt-3">
+            <div className="flex flex-wrap gap-1.5 pt-2">
               {["Python", "JavaScript", "HTML5/CSS3", "Data Structures", "OOP"].map((sk) => (
-                <span key={sk} className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-700/40">
+                <span key={sk} className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-neutral-100 text-neutral-700 border border-neutral-200">
                   {sk}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="relative group overflow-hidden rounded-3xl border border-white/10 h-full min-h-[260px]">
-            <img src={aboutPhoto} alt="Abdul Hanan" loading="lazy" className="w-full h-full object-cover object-top opacity-70 group-hover:scale-105 transition-transform duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#070b09] via-black/50 to-transparent"></div>
-            <div className="absolute bottom-6 left-6 right-6 space-y-2">
+          <div className="relative overflow-hidden rounded-2xl border border-neutral-200 h-full min-h-[240px] bg-neutral-900">
+            <img src={aboutPhoto} alt="Abdul Hanan" loading="lazy" decoding="async" className="w-full h-full object-cover object-top opacity-80" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            <div className="absolute bottom-6 left-6 right-6 space-y-1">
               <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">Core Philosophy</span>
-              <p className="text-sm italic font-medium text-neutral-200">
+              <p className="text-sm italic font-medium text-white">
                 "Where linguistic nuance meets technical precision — that is where artificial intelligence becomes genuinely human."
               </p>
             </div>
@@ -912,25 +933,25 @@ export default function App() {
         </section>
 
         {/* ── Section: Contact ── */}
-        <section id="contact" className="scroll-reveal scroll-mt-20 relative p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-emerald-950/40 via-[#0a120e] to-black border border-emerald-500/30 overflow-hidden shadow-2xl">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-start relative z-10">
-            <div className="space-y-6">
+        <section id="contact" className="scroll-reveal scroll-mt-20 relative p-8 sm:p-10 rounded-3xl bg-neutral-900 text-white border border-neutral-800 shadow-xl overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 items-start relative z-10">
+            <div className="space-y-5">
               <div>
-                <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">05 / Immediate Dispatch</span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Let's Build Exceptional AI in Urdu.</h2>
+                <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">05 / Direct Dispatch</span>
+                <h2 className="text-3xl font-extrabold text-white">Let's Build Exceptional AI in Urdu.</h2>
               </div>
 
               <p className="text-sm text-neutral-300 leading-relaxed max-w-md font-normal">
                 Available for contract evaluations, bilingual language engineering tasks, or operational roles. Connect directly across my verified platforms:
               </p>
 
-              <div className="space-y-3 pt-2">
+              <div className="space-y-2.5 pt-1">
                 <a
                   href={`mailto:${EMAIL}`}
                   onClick={handleEmailClick}
-                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-300 transition-colors group"
+                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-400 transition-colors"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
                     <IconMail className="w-4 h-4 text-emerald-400" />
                   </div>
                   <span>Email Abdul</span>
@@ -940,9 +961,9 @@ export default function App() {
                   href={LINKEDIN}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-300 transition-colors group"
+                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-400 transition-colors"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
                     <IconLinkedIn className="w-4 h-4 text-[#0077B5]" />
                   </div>
                   <span>LinkedIn Profile ↗</span>
@@ -952,9 +973,9 @@ export default function App() {
                   href={PERSONAL_WEBSITE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-300 transition-colors group"
+                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-400 transition-colors"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
                     <IconGlobe className="w-4 h-4 text-teal-400" />
                   </div>
                   <span>Personal Website ↗</span>
@@ -964,9 +985,9 @@ export default function App() {
                   href={RESUME_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-300 transition-colors group"
+                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-400 transition-colors"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                  <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
                     <IconFileDoc className="w-4 h-4 text-amber-400" />
                   </div>
                   <span>CV Download ↗</span>
@@ -975,47 +996,47 @@ export default function App() {
             </div>
 
             {/* Contact Form */}
-            <div className="glass-surface p-6 sm:p-8 rounded-2xl border border-white/10">
+            <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
               {formSent ? (
-                <div className="py-12 text-center space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 mx-auto text-xl">
+                <div className="py-8 text-center space-y-2">
+                  <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 mx-auto text-lg">
                     ✓
                   </div>
-                  <h3 className="text-lg font-bold text-white">Transmission Received</h3>
+                  <h3 className="text-base font-bold text-white">Transmission Received</h3>
                   <p className="text-xs text-neutral-400 max-w-xs mx-auto">Thank you for reaching out. I review all inquiries promptly and will be in touch shortly.</p>
                 </div>
               ) : (
-                <form onSubmit={handleFormSubmit} className="space-y-4">
+                <form onSubmit={handleFormSubmit} className="space-y-3.5">
                   <div>
-                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">Your Name</label>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1">Your Name</label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g., Alex Mercer"
+                      placeholder="Your name"
                       value={formData.name}
                       onChange={(e) => setFormData((d) => ({ ...d, name: e.target.value }))}
-                      className="w-full text-xs px-3.5 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors"
+                      className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">Direct Email</label>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1">Direct Email</label>
                     <input
                       type="email"
                       required
-                      placeholder="alex@company.com"
+                      placeholder="your@email.com"
                       value={formData.email}
                       onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
-                      className="w-full text-xs px-3.5 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors"
+                      className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">Topic</label>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1">Topic</label>
                     <select
                       value={formData.role}
                       onChange={(e) => setFormData((d) => ({ ...d, role: e.target.value }))}
-                      className="w-full text-xs px-3.5 py-3 rounded-xl bg-[#0c1410] border border-white/10 text-neutral-200 focus:outline-none focus:border-emerald-400 cursor-pointer"
+                      className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-white/10 text-neutral-200 focus:outline-none focus:border-emerald-400 cursor-pointer"
                     >
                       <option>AI Urdu Training / RLHF</option>
                       <option>Dataset Annotation & Evaluation</option>
@@ -1025,21 +1046,21 @@ export default function App() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">Brief Message</label>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1">Message</label>
                     <textarea
                       required
                       rows={3}
-                      placeholder="Details regarding your model or project..."
+                      placeholder="Your project or position requirements..."
                       value={formData.message}
                       onChange={(e) => setFormData((d) => ({ ...d, message: e.target.value }))}
-                      className="w-full text-xs px-3.5 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors resize-none"
+                      className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-300 text-neutral-950 font-bold text-xs hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 shadow-lg shadow-emerald-500/20"
+                    className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs active:scale-[0.98] transition-all disabled:opacity-50 shadow-md"
                   >
                     {isSubmitting ? "Dispatching..." : "Transmit Message"}
                   </button>
@@ -1052,24 +1073,24 @@ export default function App() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-white/[0.06] bg-[#040705] py-10 text-neutral-400 text-xs mt-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-6">
+      <footer className="border-t border-neutral-200 bg-white py-8 text-neutral-500 text-xs mt-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="text-center sm:text-left">
-            <p className="text-white font-bold text-sm tracking-tight">Abdul Hanan</p>
-            <p className="text-neutral-400 text-[11px] mt-0.5">AI Urdu Language Specialist & Technical Operations · Faisalabad, Pakistan</p>
+            <p className="text-neutral-900 font-bold text-sm tracking-tight">Abdul Hanan</p>
+            <p className="text-neutral-500 text-[11px] mt-0.5">AI Urdu Language Specialist & Technical Operations · Faisalabad, Pakistan</p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-5 font-mono text-[11px]">
-            <a href={`mailto:${EMAIL}`} onClick={handleEmailClick} className="hover:text-emerald-400 transition-colors">
+          <div className="flex flex-wrap items-center justify-center gap-4 font-mono text-[11px]">
+            <a href={`mailto:${EMAIL}`} onClick={handleEmailClick} className="hover:text-emerald-700 transition-colors">
               Email Abdul
             </a>
-            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-700 transition-colors">
               LinkedIn Profile
             </a>
-            <a href={PERSONAL_WEBSITE_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">
+            <a href={PERSONAL_WEBSITE_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-700 transition-colors">
               Personal Website
             </a>
-            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">
+            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-700 transition-colors">
               CV Download
             </a>
           </div>
