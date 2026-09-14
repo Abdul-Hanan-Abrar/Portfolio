@@ -30,7 +30,7 @@ const handleEmailClick = (e: React.MouseEvent) => {
   }
 };
 
-// ─── Crisp Vector Icons ───────────────────────────────────────────────────────
+// ─── Vector Icons ─────────────────────────────────────────────────────────────
 function IconMail({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -135,7 +135,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   );
 }
 
-// ─── Audio Card with Lazy Loading ─────────────────────────────────────────────
+// ─── Direct High-Performance Audio Card With Visible Timeline ─────────────────
 function AudioCard({
   title,
   titleUrdu,
@@ -156,33 +156,62 @@ function AudioCard({
   isLightMode: boolean;
 }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [hasRequestedAudio, setHasRequestedAudio] = useState(false);
+  const progressBarRef = useRef<HTMLDivElement | null>(null);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState("0:00");
-  const [duration, setDuration] = useState("0:00");
+  const [duration, setDuration] = useState("--:--");
+  const [rawDuration, setRawDuration] = useState(0);
 
   const formatTime = (secs: number) => {
-    if (isNaN(secs) || secs === Infinity) return "0:00";
+    if (isNaN(secs) || secs === Infinity || secs <= 0) return "0:00";
     const m = Math.floor(secs / 60);
     const s = Math.floor(secs % 60);
     return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
-  const handlePlayToggle = () => {
-    if (!hasRequestedAudio) {
-      setHasRequestedAudio(true);
-    }
-    onTogglePlay();
-  };
-
+  // Immediate Play/Pause sync
   useEffect(() => {
-    if (!audioRef.current || !hasRequestedAudio) return;
+    if (!audioRef.current) return;
     if (isPlaying) {
-      audioRef.current.play().catch(() => {});
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
     } else {
       audioRef.current.pause();
     }
-  }, [isPlaying, hasRequestedAudio]);
+  }, [isPlaying]);
+
+  const handleTimeUpdate = () => {
+    if (!audioRef.current) return;
+    const curr = audioRef.current.currentTime;
+    const dur = audioRef.current.duration || rawDuration;
+    if (dur > 0) {
+      setProgress((curr / dur) * 100);
+    }
+    setCurrentTime(formatTime(curr));
+  };
+
+  const handleLoadedMetadata = () => {
+    if (!audioRef.current) return;
+    const dur = audioRef.current.duration;
+    if (!isNaN(dur) && dur > 0) {
+      setRawDuration(dur);
+      setDuration(formatTime(dur));
+    }
+  };
+
+  // Immediate Timeline Seek
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!audioRef.current || !progressBarRef.current) return;
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const clickRatio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const targetTime = clickRatio * (audioRef.current.duration || rawDuration || 0);
+    
+    audioRef.current.currentTime = targetTime;
+    setProgress(clickRatio * 100);
+    setCurrentTime(formatTime(targetTime));
+  };
 
   return (
     <div
@@ -190,24 +219,20 @@ function AudioCard({
         isLightMode
           ? isPlaying
             ? "bg-white border-emerald-500 shadow-md ring-1 ring-emerald-400/40"
-            : "bg-white hover:bg-emerald-50/40 border-neutral-200/90 shadow-sm"
+            : "bg-white hover:bg-emerald-50/40 border-neutral-200 shadow-sm"
           : isPlaying
           ? "bg-gradient-to-br from-emerald-950/70 to-black/90 border-emerald-400/60 shadow-lg"
           : "bg-white/[0.03] hover:bg-white/[0.06] border-white/10"
       }`}
     >
+      {/* Preload metadata caches track duration immediately with zero audio latency */}
       <audio
         ref={audioRef}
-        src={hasRequestedAudio ? audioSrc : undefined}
-        preload="none"
-        onTimeUpdate={() => {
-          if (!audioRef.current) return;
-          const curr = audioRef.current.currentTime;
-          const dur = audioRef.current.duration || 0;
-          setProgress(dur > 0 ? (curr / dur) * 100 : 0);
-          setCurrentTime(formatTime(curr));
-        }}
-        onLoadedMetadata={() => setDuration(formatTime(audioRef.current?.duration || 0))}
+        src={audioSrc}
+        preload="metadata"
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+        onDurationChange={handleLoadedMetadata}
         onEnded={onTogglePlay}
       />
 
@@ -223,6 +248,16 @@ function AudioCard({
             >
               {tag}
             </span>
+
+            {/* Total Duration Indicator Tag */}
+            <span
+              className={`text-[10px] font-mono px-2 py-0.5 rounded ${
+                isLightMode ? "bg-neutral-100 text-neutral-600" : "bg-white/5 text-neutral-400 border border-white/5"
+              }`}
+            >
+              Length: {duration}
+            </span>
+
             {isPlaying && (
               <span className="flex items-end gap-[3px] h-3.5 px-1.5 py-0.5 bg-emerald-500/20 rounded">
                 <span className="w-1 bg-emerald-500 rounded-full animate-wave-1" />
@@ -231,6 +266,7 @@ function AudioCard({
               </span>
             )}
           </div>
+
           <h4 className={`text-sm font-bold tracking-tight ${isLightMode ? "text-neutral-900" : "text-white"}`}>
             {title}
           </h4>
@@ -239,9 +275,10 @@ function AudioCard({
           </p>
         </div>
 
+        {/* Direct Play Button */}
         <button
-          onClick={handlePlayToggle}
-          className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 ${
+          onClick={onTogglePlay}
+          className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 ${
             isPlaying
               ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/30"
               : isLightMode
@@ -251,12 +288,12 @@ function AudioCard({
           aria-label={isPlaying ? "Pause sample" : "Play sample"}
         >
           {isPlaying ? (
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
               <rect x="5" y="4" width="4" height="16" rx="1" />
               <rect x="15" y="4" width="4" height="16" rx="1" />
             </svg>
           ) : (
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="translate-x-0.5">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" className="translate-x-0.5">
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
           )}
@@ -267,27 +304,34 @@ function AudioCard({
         {description}
       </p>
 
-      {/* Scrub Track */}
-      <div className="space-y-1.5">
+      {/* ── Visual Audio Timeline & Interactive Scrub Bar ── */}
+      <div className="space-y-2 pt-1">
         <div
-          className={`relative w-full h-1.5 rounded-full cursor-pointer overflow-hidden ${
-            isLightMode ? "bg-neutral-200" : "bg-white/10"
+          ref={progressBarRef}
+          onClick={handleSeek}
+          className={`relative w-full h-3 rounded-full cursor-pointer overflow-hidden flex items-center transition-all ${
+            isLightMode ? "bg-neutral-200/90 hover:bg-neutral-300" : "bg-white/10 hover:bg-white/20"
           }`}
-          onClick={(e) => {
-            if (!audioRef.current) return;
-            const rect = e.currentTarget.getBoundingClientRect();
-            const clickPos = (e.clientX - rect.left) / rect.width;
-            audioRef.current.currentTime = clickPos * (audioRef.current.duration || 0);
-          }}
         >
+          {/* Active progress fill */}
           <div
-            className="h-full bg-emerald-600 rounded-full transition-all duration-75"
+            className="h-full bg-emerald-500 rounded-full transition-all duration-75 relative"
             style={{ width: `${progress}%` }}
-          />
+          >
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-xs" />
+          </div>
         </div>
-        <div className={`flex justify-between text-[10px] font-mono ${isLightMode ? "text-neutral-500" : "text-neutral-400"}`}>
-          <span>{currentTime}</span>
-          <span>{duration}</span>
+
+        <div className="flex justify-between items-center text-[11px] font-mono">
+          <span className={`font-semibold ${isLightMode ? "text-emerald-800" : "text-emerald-400"}`}>
+            {currentTime}
+          </span>
+          <span className="text-[10px] text-neutral-400 tracking-wider">
+            TIMELINE
+          </span>
+          <span className={`font-semibold ${isLightMode ? "text-neutral-700" : "text-neutral-300"}`}>
+            {duration}
+          </span>
         </div>
       </div>
     </div>
@@ -315,7 +359,7 @@ export default function App() {
     { id: "contact", label: "Contact" },
   ];
 
-  // Precise navigation scroll handler
+  // Exact mobile-proof scroll calculation
   const scrollTo = (id: string) => {
     setMobileMenuOpen(false);
 
@@ -332,13 +376,13 @@ export default function App() {
     });
   };
 
-  // Scroll listener for Theme Shift & Active Section Spy
+  // Theme Shift & Scroll Tracking
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
-      // Transition to Light Mode as user scrolls past the top Hero threshold
-      if (scrollY > 180) {
+      // Smooth transition to light mode as user scrolls down
+      if (scrollY > 160) {
         setIsLightMode(true);
       } else {
         setIsLightMode(false);
@@ -598,7 +642,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* ── Absolute Mobile Overlay (Never shifts page offset) ── */}
+        {/* Mobile Dropdown */}
         {mobileMenuOpen && (
           <div
             className={`lg:hidden absolute top-16 left-0 right-0 z-50 border-b shadow-2xl px-4 py-3 space-y-1 ${
@@ -780,14 +824,14 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── Section: Voice Data (Lazy Audio) ── */}
+        {/* ── Section: Voice Data (Instant Audio + Visible Timeline) ── */}
         <section id="audio-samples" className="scroll-reveal scroll-mt-20 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-neutral-200/80 pb-3">
             <div>
               <span className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-bold block mb-1">02 / Verified Audio Datasets</span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900">Acoustic Samples for AI Speech Modeling</h2>
             </div>
-            <p className="text-xs font-mono text-neutral-500">4 Master Records · Lazy Streaming</p>
+            <p className="text-xs font-mono text-neutral-500">4 Master Records · Zero Delay</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
