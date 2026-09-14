@@ -30,25 +30,17 @@ const handleEmailClick = (e: React.MouseEvent) => {
   }
 };
 
-// ─── Sharp Precision Icons (14–16px) ──────────────────────────────────────────
-function ArrowUpRight({ className = "w-3.5 h-3.5" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" />
-    </svg>
-  );
-}
-
-function MailIcon({ className = "w-4 h-4" }: { className?: string }) {
+// ─── Clean Vector Icons ───────────────────────────────────────────────────────
+function IconMail({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <rect x="2" y="4" width="20" height="16" rx="2.5" />
       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
     </svg>
   );
 }
 
-function LinkedInIcon({ className = "w-4 h-4" }: { className?: string }) {
+function IconLinkedIn({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76c-.95 0-1.72-.78-1.72-1.73s.77-1.73 1.72-1.73c.95 0 1.72.78 1.72 1.73s-.77 1.73-1.72 1.73m1.4 9.74v-8.37H5.06v8.37h2.8Z" />
@@ -56,37 +48,54 @@ function LinkedInIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-function MapPinIcon({ className = "w-4 h-4" }: { className?: string }) {
+function IconGlobe({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" />
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+      <path d="M2 12h20" />
     </svg>
   );
 }
 
-// ─── Editorial Micro-Tags ────────────────────────────────────────────────────
-function Badge({ children, active = false }: { children: string; active?: boolean }) {
+function IconFileDoc({ className = "w-4 h-4" }: { className?: string }) {
   return (
-    <span
-      className={`inline-flex items-center px-2.5 py-1 rounded text-[11px] font-medium tracking-wide uppercase ${
-        active
-          ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-          : "bg-neutral-100 text-neutral-700 border border-neutral-200"
-      }`}
-    >
-      {children}
-    </span>
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
+    </svg>
   );
 }
 
-// ─── Modal ────────────────────────────────────────────────────────────────────
+function IconSparkle({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
+    </svg>
+  );
+}
+
+function IconArrowExternal({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="7" y1="17" x2="17" y2="7" />
+      <polyline points="7 7 17 7 17 17" />
+    </svg>
+  );
+}
+
+// ─── Modal Architecture ───────────────────────────────────────────────────────
 type Project = {
   title: string;
   subtitle: string;
   status: string;
+  category: string;
   description: string;
   tags: string[];
   image: string;
+  meta?: string;
   fullDescription: string;
 };
 
@@ -97,44 +106,48 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
-      <div
-        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-xl bg-white border border-neutral-200 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="relative w-full bg-neutral-900 border-b border-neutral-200">
-          <img src={project.image} alt={project.title} className="w-full object-contain max-h-[40vh]" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300" onClick={onClose}>
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0e1612] border border-emerald-500/30 text-neutral-100 shadow-[0_20px_70px_rgba(0,0,0,0.8)]" onClick={(e) => e.stopPropagation()}>
+        <div className="relative w-full bg-black/60 border-b border-emerald-950/60 overflow-hidden">
+          <img src={project.image} alt={project.title} className="w-full object-contain max-h-[45vh] transition-transform duration-500 hover:scale-105" />
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center bg-white/90 hover:bg-white text-neutral-900 text-sm font-bold shadow-md transition-colors"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md transition-all active:scale-95"
           >
             ✕
           </button>
+          <span className="absolute top-4 left-4 text-[11px] font-mono tracking-wider px-3 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-600/40 backdrop-blur-md">
+            {project.status}
+          </span>
         </div>
-        <div className="p-6 sm:p-8">
-          <div className="flex items-center gap-2 mb-2">
-            <Badge active={project.status === "Completed"}>{project.status}</Badge>
-            <span className="text-xs text-neutral-500 font-mono tracking-tight">{project.subtitle}</span>
+        <div className="p-6 sm:p-8 space-y-4">
+          <div>
+            <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">{project.category}</span>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">{project.title}</h3>
+            <p className="text-sm font-medium text-emerald-300/80 mt-1">{project.subtitle}</p>
           </div>
-          <h3 className="text-xl font-bold text-neutral-900 mb-4">{project.title}</h3>
-          <p className="text-sm leading-relaxed text-neutral-600 mb-6 font-normal">{project.fullDescription}</p>
-          <div className="flex flex-wrap gap-1.5 pt-4 border-t border-neutral-100">
+          <p className="text-sm leading-relaxed text-neutral-300 pt-2 font-normal border-t border-emerald-900/40">
+            {project.fullDescription}
+          </p>
+          <div className="flex flex-wrap gap-2 pt-2">
             {project.tags.map((t) => (
-              <span key={t} className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-100 text-neutral-600 border border-neutral-200">
-                {t}
+              <span key={t} className="text-xs font-mono px-3 py-1 rounded-lg bg-emerald-950/50 text-emerald-300 border border-emerald-800/40">
+                #{t}
               </span>
             ))}
           </div>
+          {project.meta && <p className="text-xs text-neutral-400 font-mono pt-2">{project.meta}</p>}
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Compact, Sharp Audio Card ────────────────────────────────────────────────
+// ─── Dynamic Audio Player with Live Wave Visualizer ───────────────────────────
 function AudioCard({
   title,
   titleUrdu,
+  tag,
   description,
   audioSrc,
   isPlaying,
@@ -142,6 +155,7 @@ function AudioCard({
 }: {
   title: string;
   titleUrdu: string;
+  tag: string;
   description: string;
   audioSrc: string;
   isPlaying: boolean;
@@ -169,11 +183,11 @@ function AudioCard({
   }, [isPlaying]);
 
   return (
-    <div
-      className={`p-4 rounded-lg border transition-all duration-200 ${
-        isPlaying ? "bg-white border-neutral-900 shadow-sm" : "bg-white border-neutral-200 hover:border-neutral-300"
-      }`}
-    >
+    <div className={`relative p-5 rounded-2xl transition-all duration-300 border ${
+      isPlaying
+        ? "bg-gradient-to-br from-emerald-950/60 to-black/80 border-emerald-500/70 shadow-[0_10px_35px_rgba(16,185,129,0.15)] ring-1 ring-emerald-400/40"
+        : "bg-white/[0.03] hover:bg-white/[0.06] border-white/10 hover:border-emerald-500/40"
+    }`}>
       <audio
         ref={audioRef}
         src={audioSrc}
@@ -191,38 +205,63 @@ function AudioCard({
 
       <div className="flex items-start justify-between gap-4 mb-3">
         <div>
-          <h4 className="text-sm font-semibold text-neutral-900 tracking-tight">{title}</h4>
-          <p className="urdu text-base text-emerald-800 font-normal mt-0.5">{titleUrdu}</p>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-mono tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+              {tag}
+            </span>
+            {isPlaying && (
+              <span className="flex items-center gap-0.5 h-3">
+                <span className="w-0.5 h-3 bg-emerald-400 rounded animate-pulse" style={{ animationDuration: "0.5s" }}></span>
+                <span className="w-0.5 h-4 bg-emerald-400 rounded animate-pulse" style={{ animationDuration: "0.7s" }}></span>
+                <span className="w-0.5 h-2 bg-emerald-400 rounded animate-pulse" style={{ animationDuration: "0.4s" }}></span>
+              </span>
+            )}
+          </div>
+          <h4 className="text-sm font-bold text-white tracking-tight">{title}</h4>
+          <p className="urdu text-lg text-emerald-400 font-semibold">{titleUrdu}</p>
         </div>
 
         <button
           onClick={onTogglePlay}
-          className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-            isPlaying ? "bg-neutral-900 text-white" : "bg-neutral-100 hover:bg-neutral-200 text-neutral-800"
+          className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 shadow-lg ${
+            isPlaying
+              ? "bg-emerald-400 text-neutral-950 ring-4 ring-emerald-400/20"
+              : "bg-white/10 hover:bg-emerald-500 text-white hover:text-neutral-950 border border-white/15 hover:border-emerald-400"
           }`}
           aria-label={isPlaying ? "Pause" : "Play"}
         >
           {isPlaying ? (
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-              <rect x="5" y="4" width="4" height="16" />
-              <rect x="15" y="4" width="4" height="16" />
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="5" y="4" width="4" height="16" rx="1" />
+              <rect x="15" y="4" width="4" height="16" rx="1" />
             </svg>
           ) : (
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="translate-x-0.5">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="translate-x-0.5">
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
           )}
         </button>
       </div>
 
-      <p className="text-xs text-neutral-500 mb-3 leading-normal">{description}</p>
+      <p className="text-xs text-neutral-400 leading-relaxed mb-4">{description}</p>
 
-      {/* Scrub Bar */}
-      <div className="space-y-1">
-        <div className="relative w-full h-1 bg-neutral-100 rounded-full overflow-hidden">
-          <div className="h-full bg-neutral-900 transition-all duration-100" style={{ width: `${progress}%` }} />
+      {/* Modern Wave Track Scrubber */}
+      <div className="space-y-1.5">
+        <div
+          className="relative w-full h-1.5 bg-neutral-800 rounded-full cursor-pointer overflow-hidden group"
+          onClick={(e) => {
+            if (!audioRef.current) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const clickPos = (e.clientX - rect.left) / rect.width;
+            audioRef.current.currentTime = clickPos * (audioRef.current.duration || 0);
+          }}
+        >
+          <div
+            className="h-full bg-gradient-to-r from-emerald-500 to-teal-300 rounded-full transition-all duration-100"
+            style={{ width: `${progress}%` }}
+          />
         </div>
-        <div className="flex justify-between text-[10px] font-mono text-neutral-400">
+        <div className="flex justify-between text-[10px] font-mono text-neutral-500">
           <span>{currentTime}</span>
           <span>{duration}</span>
         </div>
@@ -235,58 +274,65 @@ function AudioCard({
 export default function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeAudioId, setActiveAudioId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", role: "AI Urdu Training / RLHF", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
 
   const projects: Project[] = [
     {
       title: "BizLedger",
-      subtitle: "Offline Retail POS Architecture",
-      status: "In Development",
-      description: "A self-contained, offline-first point-of-sale tool built for small retail establishments across Punjab requiring zero recurring fees.",
-      fullDescription: "BizLedger is designed for retail shops operating in regional areas with unreliable network access. Built entirely with client-side JavaScript, HTML5, and IndexedDB local caching with zero runtime dependencies. Handles inventory reconciliation, transactional logs, and automated low-stock calculations without an external server.",
-      tags: ["JavaScript", "HTML5", "Offline-First", "Storage API"],
+      subtitle: "Offline Retail Business Management & POS",
+      status: "Active Engineering",
+      category: "Full-Stack Web Architecture",
+      description: "A self-contained, offline-first Point-of-Sale tool built for small retail establishments across Punjab requiring zero internet connectivity.",
+      fullDescription: "BizLedger is engineered for unbanked micro-retailers in high-density Punjab markets. Built completely with vanilla JavaScript, HTML5, and IndexedDB for local data persistence with zero network dependencies. It delivers inventory reconciliation, low-stock notifications, monthly operational profit-and-loss generation, and transaction logs without recurring server fees.",
+      tags: ["JavaScript", "HTML5", "IndexedDB", "Offline-First", "Retail POS"],
       image: bizLedgerImg,
+      meta: "Targeted to 1.3M+ retail shops operating without digital POS software.",
     },
     {
       title: "QR Direct Transfer",
-      subtitle: "Optical Peer-to-Peer Relay",
-      status: "Completed",
-      description: "Air-gapped file delivery pipeline encoding local binaries into optical matrices decoded via mobile hardware camera APIs.",
-      fullDescription: "Solves ad-hoc file transfers across non-networked machines. Uses the native BarcodeDetector API to parse camera stream data without intermediary cloud relays, third-party libraries, or cabling requirements.",
-      tags: ["BarcodeDetector API", "Canvas", "Vanilla JS"],
+      subtitle: "Optical Hardware Peer-to-Peer Data Pipeline",
+      status: "Production Ready",
+      category: "Air-Gapped Tooling",
+      description: "A cable-free, network-free direct bridge encoding files into real-time optical frames decoded through native device cameras.",
+      fullDescription: "Solves immediate air-gapped data transfers between computers and phones without Bluetooth pairing or cloud uploads. Leveraging the native browser BarcodeDetector API and high-density Canvas matrices, files stream securely over camera feeds even in airplane mode.",
+      tags: ["BarcodeDetector API", "Canvas 2D", "Vanilla JS", "Zero-Dependency"],
       image: qrToolImg,
     },
   ];
 
   const voiceSamples = [
     {
-      id: "voice-1",
-      title: "Natural Conversational Urdu",
-      titleUrdu: "قدرتی اردو گفتگو",
-      description: "Unscripted regional cadence, pauses, and everyday vocabulary.",
+      id: "sample-1",
+      title: "Conversational Regional Urdu",
+      titleUrdu: "قدرتی اردو گفتگو اور تاثرات",
+      tag: "Unscripted Dialogue",
+      description: "Authentic spontaneous pacing, informal transitions, and natural conversational cadence.",
       audioSrc: `${import.meta.env.BASE_URL}Natural%20Conversational%20Urdu.m4a`,
     },
     {
-      id: "voice-2",
+      id: "sample-2",
       title: "Urdu-English Code-Switching",
-      titleUrdu: "اردو انگریزی — مشترکہ گفتگو",
-      description: "Authentic bilingual loan-word integration common across professional environments.",
+      titleUrdu: "اردو انگریزی — مشترکہ فطری گفتگو",
+      tag: "Bilingual Code-Switching",
+      description: "Natural syntactic switching between Urdu & English used by urban Pakistani professionals.",
       audioSrc: `${import.meta.env.BASE_URL}Natural%20Urdu-English%20Communication.m4a`,
     },
     {
-      id: "voice-3",
-      title: "Articulate Reading & Exposition",
-      titleUrdu: "صاف اردو پڑھائی اور فطری وضاحت",
-      description: "Clean phonetics and controlled pacing suited for acoustic model calibration.",
+      id: "sample-3",
+      title: "Articulate Reading & Explanation",
+      titleUrdu: "صاف اردو پڑھائی اور تدریسی انداز",
+      tag: "TTS / Acoustic Model",
+      description: "Articulate phonetic pronunciation, rhythmic precision, and controlled didactic delivery.",
       audioSrc: `${import.meta.env.BASE_URL}Clear%20Urdu%20Reading%20&%20Natural%20Explanation.m4a`,
     },
     {
-      id: "voice-4",
-      title: "Prosody & Accent Perception",
-      titleUrdu: "محتاط سماعت اور غیر واضح گفتگو",
-      description: "Nuanced pronunciation handling colloquial phrasing and dialectal inflections.",
+      id: "sample-4",
+      title: "Acoustic Dialect & Stress Testing",
+      titleUrdu: "محتاط سماعت اور غیر واضح کلام",
+      tag: "ASR Speech Perception",
+      description: "Handling noisy acoustics, colloquial phrases, and subtle dialectal inflections.",
       audioSrc: `${import.meta.env.BASE_URL}Careful%20Listening%20&%20Unclear%20Speech.m4a`,
     },
   ];
@@ -301,294 +347,154 @@ export default function App() {
         body: JSON.stringify({
           Name: formData.name,
           Email: formData.email,
+          Opportunity: formData.role,
           Message: formData.message,
-          _subject: `[Portfolio Inquiry] From ${formData.name}`,
+          _subject: `[Portfolio] High-Priority Opportunity from ${formData.name}`,
         }),
       });
       if (res.ok) setFormSent(true);
-      else alert("Transmission failed. Please reach out directly via email.");
+      else alert("Message delivery failed. Please click 'Email Abdul' directly.");
     } catch {
-      alert("Network error. Please use the direct email link.");
+      alert("Network error. Please click 'Email Abdul' to connect via your mail client.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F7] text-neutral-900 font-sans antialiased selection:bg-neutral-200">
+    <div className="min-h-screen bg-[#070b09] text-neutral-200 font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
+      
+      {/* ── Artistic Typography & Glow Styles ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap');
+
+        * {
+          font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
         .urdu {
           font-family: 'Noto Nastaliq Urdu', serif !important;
           direction: rtl;
           text-align: right;
-          line-height: 2.6 !important;
+          line-height: 2.7 !important;
+        }
+
+        .radial-mesh {
+          background-image: 
+            radial-gradient(at 15% 15%, rgba(16, 185, 129, 0.12) 0px, transparent 55%),
+            radial-gradient(at 85% 85%, rgba(5, 150, 105, 0.08) 0px, transparent 60%),
+            radial-gradient(at 50% 50%, rgba(217, 119, 6, 0.04) 0px, transparent 50%);
+        }
+
+        .glass-panel {
+          background: rgba(14, 23, 19, 0.7);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-hover {
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel-hover:hover {
+          transform: translateY(-2px);
+          background: rgba(20, 32, 27, 0.85);
+          border-color: rgba(52, 211, 153, 0.3);
+          box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.2);
+        }
+
+        .glow-text {
+          text-shadow: 0 0 35px rgba(52, 211, 153, 0.3);
         }
       `}</style>
 
-      {/* ── Minimal Navigation ── */}
-      <header className="sticky top-0 z-40 bg-[#FAF9F7]/90 backdrop-blur-md border-b border-neutral-200/80">
-        <div className="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
-          <a href="#top" className="font-semibold text-sm tracking-tight text-neutral-900 hover:text-neutral-600 transition-colors">
-            Abdul Hanan Abrar
+      {/* ── Fixed Artistic Header ── */}
+      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#070b09]/80 backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          
+          <a href="#hero" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-300 p-0.5 flex items-center justify-center transition-transform group-hover:scale-105">
+              <div className="w-full h-full bg-[#070b09] rounded-[6px] flex items-center justify-center text-emerald-400 font-bold text-xs">
+                AH
+              </div>
+            </div>
+            <div className="leading-tight">
+              <span className="font-bold text-sm tracking-tight text-white block group-hover:text-emerald-400 transition-colors">Abdul Hanan</span>
+              <span className="text-[10px] font-mono text-neutral-400 block">AI Urdu Specialist</span>
+            </div>
           </a>
 
-          <div className="flex items-center gap-4 text-xs">
+          {/* Quick Platform Action Strip */}
+          <div className="flex items-center gap-2 sm:gap-3">
             <a
               href={PERSONAL_WEBSITE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-neutral-600 hover:text-neutral-900 font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-neutral-300 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 transition-all"
             >
-              Personal Site <ArrowUpRight />
+              <IconGlobe className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="hidden sm:inline">Personal Website</span>
+              <IconArrowExternal className="w-3 h-3 text-neutral-500" />
             </a>
+
             <a
               href={RESUME_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-1.5 rounded bg-neutral-900 text-white font-medium hover:bg-neutral-800 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neutral-950 bg-gradient-to-r from-emerald-400 to-teal-300 hover:brightness-110 shadow-md shadow-emerald-500/20 transition-all active:scale-95"
             >
-              Resume
+              <IconFileDoc className="w-3.5 h-3.5" />
+              <span>CV Download</span>
             </a>
           </div>
         </div>
       </header>
 
-      <main id="top" className="max-w-5xl mx-auto px-5 py-12 sm:py-20 space-y-20 sm:space-y-28">
+      <main id="hero" className="radial-mesh relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-24">
 
-        {/* ── Executive Profile / Hero ── */}
-        <section className="grid grid-cols-1 md:grid-cols-[1fr_240px] gap-8 md:gap-12 items-start">
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-              <span className="text-xs font-mono tracking-tight text-neutral-500 uppercase">
-                Available for AI Language Training & RLHF
-              </span>
+        {/* ── Hero Showcase Section ── */}
+        <section className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.9fr] gap-12 items-center pt-4">
+          
+          <div className="space-y-6">
+            
+            {/* Live Status Pill */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>Available for Model RLHF, Curation & Training</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-950 mb-3">
-              AI Urdu Language Specialist & Technical Operations
+            {/* Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08] glow-text">
+              Teaching AI to speak, reason, and code-switch in <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300">authentic Urdu.</span>
             </h1>
 
-            <p className="text-sm sm:text-base text-neutral-600 leading-relaxed max-w-2xl mb-6">
-              Native Urdu and fluent Punjabi speaker with a background in Computer Science and two years of operations at Aptly Pharmaceuticals. Specializing in RLHF evaluation, idiomatic dataset verification, and synthetic bilingual dialogue curation for frontier models.
+            <p className="text-base sm:text-lg text-neutral-300 leading-relaxed max-w-xl font-normal">
+              Most LLMs stumble with Pakistani cultural context, colloquial idioms, and natural code-switching. I combine a <span className="text-white font-semibold">Computer Science degree</span> with native linguistic mastery to help AI developers build models that truly connect.
             </p>
 
-            {/* Disciplined Nastaliq Callout */}
-            <div className="p-4 rounded-lg bg-white border border-neutral-200/80 mb-6 max-w-xl">
-              <p className="urdu text-lg sm:text-xl text-neutral-900">
-                اردو زبان میں مصنوعی ذہانت (AI) کی درستی، تربیت اور لسانی جانچ — معیاری انداز میں
+            {/* Artistic Nastaliq Ingot */}
+            <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-white/[0.02] to-transparent border border-emerald-500/30 shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+              <p className="urdu text-xl sm:text-2xl font-bold text-emerald-300 relative z-10">
+                اردو زبان میں مصنوعی ذہانت (AI) کی درستی، تربیت اور لسانی ماڈلنگ — معیاری اور جدید انداز میں
               </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-neutral-600">
-              <span className="px-2 py-1 rounded bg-white border border-neutral-200">Urdu (Native C2)</span>
-              <span className="px-2 py-1 rounded bg-white border border-neutral-200">Punjabi (Fluent)</span>
-              <span className="px-2 py-1 rounded bg-white border border-neutral-200">English (Professional)</span>
-              <span className="px-2 py-1 rounded bg-white border border-neutral-200">BSc Computer Science '28</span>
-            </div>
-          </div>
-
-          <div className="flex justify-start md:justify-end">
-            <div className="w-36 h-36 sm:w-48 sm:h-48 rounded-xl overflow-hidden border border-neutral-300 bg-neutral-100 shadow-sm flex-shrink-0">
-              <img src={heroPhoto} alt="Abdul Hanan Abrar" className="w-full h-full object-cover object-top" />
-            </div>
-          </div>
-        </section>
-
-        {/* ── AI Language Evaluation & RLHF Competency ── */}
-        <section className="space-y-6">
-          <div className="border-b border-neutral-200 pb-3 flex items-baseline justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono">01 / AI Language Competency</h2>
-            <span className="text-xs text-neutral-400 font-mono">Domain Overview</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              {
-                title: "RLHF & Model Grading",
-                desc: "Evaluating response coherence, tone fidelity, hallucination rates, and dialectal nuance in complex Urdu prompts.",
-              },
-              {
-                title: "Code-Switching Contexts",
-                desc: "Validating authentic mixed English-Urdu dialogues as naturally written and spoken across Pakistan.",
-              },
-              {
-                title: "Acoustic Annotation",
-                desc: "Assessing TTS prosody, cadence artifacts, regional accent intonations, and phonetic accuracy for ASR pipelines.",
-              },
-              {
-                title: "Dataset Localization",
-                desc: "Translating technical logic into culturally accurate Urdu without awkward literal translation artifacts.",
-              },
-              {
-                title: "Prompt Engineering & Red-Teaming",
-                desc: "Formulating adversarial edge cases in localized scripts to test safety filters and guardrail compliance.",
-              },
-              {
-                title: "Technical Alignment",
-                desc: "Computer Science foundation ensures clear understanding of tokenization issues, UTF-8 constraints, and labeling pipelines.",
-              },
-            ].map((c) => (
-              <div key={c.title} className="p-4 rounded-lg bg-white border border-neutral-200/90 space-y-2">
-                <h3 className="text-xs font-bold text-neutral-900 uppercase tracking-tight">{c.title}</h3>
-                <p className="text-xs text-neutral-600 leading-relaxed">{c.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── Audio Proof / 4 Voice Samples ── */}
-        <section className="space-y-6">
-          <div className="border-b border-neutral-200 pb-3 flex items-baseline justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono">02 / Verified Voice Samples</h2>
-            <span className="text-xs text-neutral-400 font-mono">Uncompressed Audio Assets</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {voiceSamples.map((v) => (
-              <AudioCard
-                key={v.id}
-                title={v.title}
-                titleUrdu={v.titleUrdu}
-                description={v.description}
-                audioSrc={v.audioSrc}
-                isPlaying={activeAudioId === v.id}
-                onTogglePlay={() => setActiveAudioId((curr) => (curr === v.id ? null : v.id))}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* ── Software Projects ── */}
-        <section className="space-y-6">
-          <div className="border-b border-neutral-200 pb-3 flex items-baseline justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono">03 / Software Projects</h2>
-            <span className="text-xs text-neutral-400 font-mono">Systems & Tools</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {projects.map((p) => (
-              <div key={p.title} className="bg-white border border-neutral-200 rounded-lg overflow-hidden flex flex-col justify-between">
-                <div>
-                  <div className="h-44 bg-neutral-900 overflow-hidden border-b border-neutral-200">
-                    <img src={p.image} alt={p.title} className="w-full h-full object-cover object-top opacity-95" />
-                  </div>
-                  <div className="p-5 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-bold text-neutral-900">{p.title}</h3>
-                      <Badge active={p.status === "Completed"}>{p.status}</Badge>
-                    </div>
-                    <p className="text-xs font-mono text-neutral-500">{p.subtitle}</p>
-                    <p className="text-xs text-neutral-600 leading-relaxed pt-1">{p.description}</p>
-                  </div>
-                </div>
-
-                <div className="px-5 pb-5 pt-2 flex items-center justify-between border-t border-neutral-100">
-                  <div className="flex gap-1">
-                    {p.tags.slice(0, 2).map((t) => (
-                      <span key={t} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-neutral-100 text-neutral-600">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setSelectedProject(p)}
-                    className="text-xs font-semibold text-neutral-900 hover:text-emerald-700 transition-colors inline-flex items-center gap-1"
-                  >
-                    Details <ArrowUpRight className="w-3 h-3" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── Operational Experience ── */}
-        <section className="space-y-6">
-          <div className="border-b border-neutral-200 pb-3 flex items-baseline justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-900 font-mono">04 / Experience & Operations</h2>
-            <span className="text-xs text-neutral-400 font-mono">Professional History</span>
-          </div>
-
-          <div className="space-y-4">
-            <div className="p-5 rounded-lg bg-white border border-neutral-200">
-              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-2">
-                <div className="flex items-baseline gap-2">
-                  <h3 className="text-sm font-bold text-neutral-900">Aptly Pharmaceuticals</h3>
-                  <span className="text-xs text-neutral-500">· Faisalabad, Pakistan</span>
-                </div>
-                <span className="text-xs font-mono text-neutral-400">June 2024 — Present</span>
-              </div>
-              <p className="text-xs font-semibold text-emerald-800 mb-3 font-mono uppercase tracking-tight">
-                Customer Support & Operations Specialist
-              </p>
-              <p className="text-xs text-neutral-600 leading-relaxed mb-4">
-                Managing bilingual client communication, issue logging, cross-departmental coordination, and operational stock data.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-neutral-100 text-xs text-neutral-600">
-                <div className="space-y-1">
-                  <span className="font-semibold text-neutral-800 block text-[11px] uppercase tracking-wider font-mono">Inventory Systems</span>
-                  <p className="text-neutral-500 text-xs">Developed live spreadsheet workflows tracking multi-SKU pharmaceutical inventory, minimizing stock discrepancies.</p>
-                </div>
-                <div className="space-y-1">
-                  <span className="font-semibold text-neutral-800 block text-[11px] uppercase tracking-wider font-mono">Data Validation</span>
-                  <p className="text-neutral-500 text-xs">Isolated and corrected persistent date parsing errors (DD/MM vs MM/DD) in monthly reporting sheets, restoring reporting accuracy.</p>
-                </div>
+              <div className="flex items-center gap-2 mt-2 font-mono text-[11px] text-emerald-400/80">
+                <IconSparkle className="w-3.5 h-3.5 text-amber-400" />
+                <span>Native C2 Urdu · Fluent Punjabi · Technical English</span>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* ── Background & Education ── */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          <div className="p-5 rounded-lg bg-white border border-neutral-200 space-y-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-neutral-400">Academic Background</h3>
-            <p className="text-sm font-bold text-neutral-900">BSc in Computer Science</p>
-            <p className="text-xs text-neutral-600">University of Agriculture, Faisalabad (UAF)</p>
-            <p className="text-xs font-mono text-neutral-400">Enrolled · Expected Graduation 2028</p>
-            <p className="text-xs text-neutral-500 pt-2 leading-relaxed">
-              Coursework emphasizes Data Structures, Object-Oriented Programming, Relational Databases, and Python.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-lg bg-white border border-neutral-200 space-y-2">
-            <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-neutral-400">Central Portal</h3>
-            <p className="text-sm font-bold text-neutral-900">Primary Personal Website</p>
-            <p className="text-xs text-neutral-500 leading-relaxed">
-              Review full repositories, supplemental writing samples, and extended background documentation on my primary GitHub Pages site.
-            </p>
+            {/* ── Requested Clean Platform Link Strip ── */}
             <div className="pt-2">
-              <a
-                href={PERSONAL_WEBSITE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-900 hover:text-emerald-700 transition-colors"
-              >
-                Visit Personal Website <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Concise Contact Block (Sharp & Minimal) ── */}
-        <section id="contact" className="border-t border-neutral-200 pt-12">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-8 md:gap-12 items-start">
-            <div>
-              <h2 className="text-base font-bold text-neutral-950 mb-2">Initiate Contact</h2>
-              <p className="text-xs text-neutral-500 leading-relaxed mb-6">
-                Available for contract evaluations, bilingual language engineering tasks, or operational roles.
-              </p>
-
-              <div className="space-y-3">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 block mb-3">Direct Platforms</span>
+              <div className="flex flex-wrap gap-2.5">
+                
                 <a
                   href={`mailto:${EMAIL}`}
                   onClick={handleEmailClick}
-                  className="flex items-center gap-2.5 text-xs font-medium text-neutral-800 hover:text-emerald-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold active:scale-95"
                 >
-                  <MailIcon className="text-neutral-500 w-3.5 h-3.5" />
+                  <IconMail className="w-4 h-4 text-emerald-400" />
                   <span>Email Abdul</span>
                 </a>
 
@@ -596,101 +502,420 @@ export default function App() {
                   href={LINKEDIN}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 text-xs font-medium text-neutral-800 hover:text-emerald-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold active:scale-95"
                 >
-                  <LinkedInIcon className="text-neutral-500 w-3.5 h-3.5" />
+                  <IconLinkedIn className="w-4 h-4 text-[#0077B5]" />
                   <span>LinkedIn Profile</span>
-                  <ArrowUpRight className="w-3 h-3 text-neutral-400" />
+                  <IconArrowExternal className="w-3 h-3 text-neutral-400" />
                 </a>
 
-                <div className="flex items-center gap-2.5 text-xs text-neutral-500 font-mono">
-                  <MapPinIcon className="text-neutral-400 w-3.5 h-3.5" />
-                  <span>Faisalabad, Pakistan</span>
-                </div>
+                <a
+                  href={PERSONAL_WEBSITE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold active:scale-95"
+                >
+                  <IconGlobe className="w-4 h-4 text-teal-400" />
+                  <span>Personal Website</span>
+                  <IconArrowExternal className="w-3 h-3 text-neutral-400" />
+                </a>
+
+                <a
+                  href={RESUME_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold active:scale-95"
+                >
+                  <IconFileDoc className="w-4 h-4 text-amber-400" />
+                  <span>CV Download</span>
+                  <IconArrowExternal className="w-3 h-3 text-neutral-400" />
+                </a>
+
               </div>
             </div>
 
-            {/* Tight, Clean Contact Form */}
-            <div className="bg-white p-5 rounded-lg border border-neutral-200">
+          </div>
+
+          {/* Artistic Portrait Canvas */}
+          <div className="flex justify-center lg:justify-end">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-60 transition duration-700"></div>
+              <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-3xl overflow-hidden border-2 border-white/20 bg-[#0e1612] shadow-2xl">
+                <img src={heroPhoto} alt="Abdul Hanan Abrar" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#070b09] via-transparent to-transparent opacity-80"></div>
+                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-black/60 backdrop-blur-md border border-white/10">
+                  <p className="text-xs font-bold text-white">Abdul Hanan Abrar</p>
+                  <p className="text-[11px] text-emerald-400 font-mono">Faisalabad, Pakistan · BSc CS '28</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        {/* ── Primary AI Training & RLHF Value Hub ── */}
+        <section className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-5">
+            <div>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">01 / Model Architecture Specialization</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Why Train Urdu Models With Me?</h2>
+            </div>
+            <p className="text-xs font-mono text-neutral-400">RLHF · Prompt Auditing · SFT Datasets</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            
+            <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-t-2 border-t-emerald-500">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold font-mono">
+                01
+              </div>
+              <h3 className="text-lg font-bold text-white">Authentic Code-Switching</h3>
+              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                Pakistanis rarely communicate in pure formal Urdu. They blend Urdu grammar with English technical words. I create authentic code-switching training pairs that reflect real-world consumer behavior.
+              </p>
+            </div>
+
+            <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-t-2 border-t-teal-400">
+              <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 font-bold font-mono">
+                02
+              </div>
+              <h3 className="text-lg font-bold text-white">RLHF & Safety Red-Teaming</h3>
+              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                Rigorous evaluation of LLM Urdu outputs for hallucination detection, contextual sensitivity, cultural safety boundaries, and Nastaliq orthographic accuracy.
+              </p>
+            </div>
+
+            <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-t-2 border-t-amber-400">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold font-mono">
+                03
+              </div>
+              <h3 className="text-lg font-bold text-white">CS Technical Foundation</h3>
+              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                As a Computer Science student, I understand tokenization issues with non-Latin scripts, JSON schema validation, Python pipelines, and API integrations. You work with a technical mind, not just a translator.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ── Audio Portfolio: 4 Full Voice Samples ── */}
+        <section className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-5">
+            <div>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">02 / Verified Audio Datasets</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Acoustic Samples for AI Speech Modeling</h2>
+            </div>
+            <p className="text-xs font-mono text-neutral-400">4 Master Records · Zero Latency</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {voiceSamples.map((sample) => (
+              <AudioCard
+                key={sample.id}
+                title={sample.title}
+                titleUrdu={sample.titleUrdu}
+                tag={sample.tag}
+                description={sample.description}
+                audioSrc={sample.audioSrc}
+                isPlaying={activeAudioId === sample.id}
+                onTogglePlay={() => setActiveAudioId((curr) => (curr === sample.id ? null : sample.id))}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* ── Software Engineering & Projects ── */}
+        <section className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-5">
+            <div>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">03 / Software Projects</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Engineering Practical Solutions</h2>
+            </div>
+            <p className="text-xs font-mono text-neutral-400">Offline-First · Modern Web APIs</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {projects.map((p) => (
+              <div key={p.title} className="glass-panel glass-panel-hover rounded-3xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                  <div className="h-48 bg-black/60 overflow-hidden relative border-b border-white/10">
+                    <img src={p.image} alt={p.title} className="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" />
+                    <span className="absolute top-4 left-4 text-[10px] font-mono px-3 py-1 rounded-full bg-black/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md">
+                      {p.status}
+                    </span>
+                  </div>
+                  <div className="p-6 space-y-2">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400">{p.category}</span>
+                    <h3 className="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">{p.title}</h3>
+                    <p className="text-xs font-medium text-neutral-400">{p.subtitle}</p>
+                    <p className="text-xs text-neutral-300 leading-relaxed pt-2">{p.description}</p>
+                  </div>
+                </div>
+
+                <div className="p-6 pt-0 flex items-center justify-between border-t border-white/[0.06] mt-4">
+                  <div className="flex gap-1.5">
+                    {p.tags.slice(0, 2).map((t) => (
+                      <span key={t} className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.05] text-neutral-400">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setSelectedProject(p)}
+                    className="text-xs font-bold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+                  >
+                    View System Specs →
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Operations & Pharmaceutical Experience ── */}
+        <section className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-5">
+            <div>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">04 / Operational Background</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Professional Experience & Problem Solving</h2>
+            </div>
+            <p className="text-xs font-mono text-neutral-400">2+ Years Active Operations</p>
+          </div>
+
+          <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+            
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">Aptly Pharmaceuticals · Faisalabad</span>
+                <h3 className="text-xl font-bold text-white mt-0.5">Customer Support & Operations Specialist</h3>
+              </div>
+              <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-300 self-start sm:self-auto">
+                June 2024 — Present
+              </span>
+            </div>
+
+            <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+              Handling complex customer cases across phone, WhatsApp, and email in bilingual environments. Developing real-time internal spreadsheet validation tools to streamline logistics and inventory.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-white/10">
+              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <span className="text-xs font-mono font-bold text-emerald-400 block mb-1">Inventory Management</span>
+                <p className="text-xs text-neutral-400">Engineered live multi-SKU Excel models to maintain real-time stock levels and eliminate stock discrepancies.</p>
+              </div>
+              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <span className="text-xs font-mono font-bold text-teal-400 block mb-1">Data Bug Remediation</span>
+                <p className="text-xs text-neutral-400">Identified and permanently patched a silent DD/MM vs MM/DD date format corruption breaking executive monthly reports.</p>
+              </div>
+              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <span className="text-xs font-mono font-bold text-amber-400 block mb-1">Bilingual Support</span>
+                <p className="text-xs text-neutral-400">Delivering crystal-clear communication with healthcare clients in native Urdu, fluent Punjabi, and professional English.</p>
+              </div>
+              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <span className="text-xs font-mono font-bold text-emerald-300 block mb-1">Process Validation</span>
+                <p className="text-xs text-neutral-400">Created strict cell validation scripts preventing human input errors across internal pharmaceutical worksheets.</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ── Education & Academic Foundations ── */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          
+          <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-3">
+            <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">Academic Foundation</span>
+            <h3 className="text-2xl font-bold text-white">BS Computer Science</h3>
+            <p className="text-sm font-semibold text-emerald-300">University of Agriculture, Faisalabad (UAF)</p>
+            <p className="text-xs font-mono text-neutral-400">Semester 5 · Expected Graduation 2028</p>
+            <p className="text-xs text-neutral-300 leading-relaxed pt-2">
+              Rigorous education in Object-Oriented Programming, Data Structures, Relational Databases, and Python algorithm design. Gives me the software engineering literacy required to interface directly with AI research teams.
+            </p>
+            <div className="flex flex-wrap gap-1.5 pt-3">
+              {["Python", "JavaScript", "HTML5/CSS3", "Data Structures", "Algorithms"].map((sk) => (
+                <span key={sk} className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-700/40">
+                  {sk}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative group overflow-hidden rounded-3xl border border-white/10 h-full min-h-[260px]">
+            <img src={aboutPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top opacity-70 group-hover:scale-105 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#070b09] via-black/50 to-transparent"></div>
+            <div className="absolute bottom-6 left-6 right-6 space-y-2">
+              <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">Consultant Philosophy</span>
+              <p className="text-sm italic font-medium text-neutral-200">
+                "Where linguistic nuance meets technical precision — that is where AI becomes truly human."
+              </p>
+            </div>
+          </div>
+
+        </section>
+
+        {/* ── High-Converting Artistic Contact Section ── */}
+        <section id="contact" className="relative p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-emerald-950/40 via-[#0e1612] to-black border border-emerald-500/30 overflow-hidden shadow-2xl">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-start relative z-10">
+            
+            <div className="space-y-6">
+              <div>
+                <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">05 / Immediate Dispatch</span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-white glow-text">Let's Build the Next Generation of AI.</h2>
+              </div>
+
+              <p className="text-sm text-neutral-300 leading-relaxed max-w-md font-normal">
+                Whether you have an RLHF project, code-switching dataset need, or operational role — dispatch a message below or connect directly across my verified platforms.
+              </p>
+
+              {/* Direct Link Badges */}
+              <div className="space-y-3 pt-2">
+                <a
+                  href={`mailto:${EMAIL}`}
+                  onClick={handleEmailClick}
+                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-300 transition-colors group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                    <IconMail className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <span>Email Abdul</span>
+                </a>
+
+                <a
+                  href={LINKEDIN}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-300 transition-colors group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                    <IconLinkedIn className="w-4 h-4 text-[#0077B5]" />
+                  </div>
+                  <span>LinkedIn Profile ↗</span>
+                </a>
+
+                <a
+                  href={PERSONAL_WEBSITE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-300 transition-colors group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                    <IconGlobe className="w-4 h-4 text-teal-400" />
+                  </div>
+                  <span>Personal Website ↗</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Functional Clean Contact Form */}
+            <div className="glass-panel p-6 sm:p-8 rounded-2xl border border-white/10">
               {formSent ? (
-                <div className="py-8 text-center space-y-1">
-                  <p className="text-xs font-bold text-emerald-800 uppercase tracking-widest font-mono">Transmission Confirmed</p>
-                  <p className="text-xs text-neutral-500">Your message has been dispatched. I will reply shortly.</p>
+                <div className="py-12 text-center space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 mx-auto text-xl">
+                    ✓
+                  </div>
+                  <h3 className="text-lg font-bold text-white">Transmission Received</h3>
+                  <p className="text-xs text-neutral-400 max-w-xs mx-auto">Thank you for reaching out. I review all inquiries promptly and will be in touch shortly.</p>
                 </div>
               ) : (
-                <form onSubmit={handleFormSubmit} className="space-y-3">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-500 mb-1">Name</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Your name"
-                        value={formData.name}
-                        onChange={(e) => setFormData((d) => ({ ...d, name: e.target.value }))}
-                        className="w-full text-xs px-3 py-2 rounded border border-neutral-200 bg-[#FAF9F7] text-neutral-900 focus:outline-none focus:border-neutral-900"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-500 mb-1">Email</label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="your@email.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
-                        className="w-full text-xs px-3 py-2 rounded border border-neutral-200 bg-[#FAF9F7] text-neutral-900 focus:outline-none focus:border-neutral-900"
-                      />
-                    </div>
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">Your Name</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g., Alex Mercer"
+                      value={formData.name}
+                      onChange={(e) => setFormData((d) => ({ ...d, name: e.target.value }))}
+                      className="w-full text-xs px-3.5 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors"
+                    />
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-mono uppercase tracking-wider text-neutral-500 mb-1">Message</label>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">Direct Email</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="alex@company.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
+                      className="w-full text-xs px-3.5 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">Topic</label>
+                    <select
+                      value={formData.role}
+                      onChange={(e) => setFormData((d) => ({ ...d, role: e.target.value }))}
+                      className="w-full text-xs px-3.5 py-3 rounded-xl bg-[#0c1410] border border-white/10 text-neutral-200 focus:outline-none focus:border-emerald-400 cursor-pointer"
+                    >
+                      <option>AI Urdu Training / RLHF</option>
+                      <option>Dataset Annotation & Evaluation</option>
+                      <option>Software / Operations Collaboration</option>
+                      <option>General Business Inquiry</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1.5">Brief Message</label>
                     <textarea
                       required
                       rows={3}
-                      placeholder="Outline project or position requirements..."
+                      placeholder="Details regarding your model or project..."
                       value={formData.message}
                       onChange={(e) => setFormData((d) => ({ ...d, message: e.target.value }))}
-                      className="w-full text-xs px-3 py-2 rounded border border-neutral-200 bg-[#FAF9F7] text-neutral-900 focus:outline-none focus:border-neutral-900 resize-none"
+                      className="w-full text-xs px-3.5 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-emerald-400 transition-colors resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-2 rounded bg-neutral-900 text-white text-xs font-semibold hover:bg-neutral-800 active:scale-[0.99] transition-all disabled:opacity-50"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-300 text-neutral-950 font-bold text-xs hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 shadow-lg shadow-emerald-500/20"
                   >
-                    {isSubmitting ? "Dispatching..." : "Send Dispatch"}
+                    {isSubmitting ? "Dispatching..." : "Transmit Message"}
                   </button>
                 </form>
               )}
             </div>
+
           </div>
+
         </section>
 
       </main>
 
-      {/* ── Understated Footer ── */}
-      <footer className="border-t border-neutral-200/80 py-8 text-neutral-400 text-xs">
-        <div className="max-w-5xl mx-auto px-5 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p>© 2026 Abdul Hanan Abrar. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <a href={PERSONAL_WEBSITE_URL} target="_blank" rel="noopener noreferrer" className="hover:text-neutral-700 transition-colors">
-              Personal Site
+      {/* ── Architectural Footer ── */}
+      <footer className="border-t border-white/[0.06] bg-[#050806] py-10 text-neutral-400 text-xs mt-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-6">
+          
+          <div className="text-center sm:text-left">
+            <p className="text-white font-bold text-sm tracking-tight">Abdul Hanan Abrar</p>
+            <p className="text-neutral-400 text-[11px] mt-0.5">AI Urdu Language Specialist & Technical Operations · Faisalabad, Pakistan</p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-5 font-mono text-[11px]">
+            <a href={`mailto:${EMAIL}`} onClick={handleEmailClick} className="hover:text-emerald-400 transition-colors">
+              Email Abdul
             </a>
-            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-neutral-700 transition-colors">
-              LinkedIn
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">
+              LinkedIn Profile
             </a>
-            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="hover:text-neutral-700 transition-colors">
-              Resume PDF
+            <a href={PERSONAL_WEBSITE_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">
+              Personal Website
+            </a>
+            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">
+              CV Download
             </a>
           </div>
+
         </div>
       </footer>
 
-      {/* Modal */}
+      {/* ── Interactive Modal ── */}
       {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
+
     </div>
   );
 }
