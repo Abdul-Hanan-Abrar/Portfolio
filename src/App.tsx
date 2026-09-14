@@ -69,14 +69,6 @@ function IconFileDoc({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-function IconSparkle({ className = "w-4 h-4" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
-    </svg>
-  );
-}
-
 function IconArrowExternal({ className = "w-3.5 h-3.5" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -107,9 +99,9 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity duration-300" onClick={onClose}>
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0e1612] border border-emerald-500/30 text-neutral-100 shadow-[0_20px_70px_rgba(0,0,0,0.8)]" onClick={(e) => e.stopPropagation()}>
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0d1713] border border-emerald-500/30 text-neutral-100 shadow-[0_20px_70px_rgba(0,0,0,0.8)]" onClick={(e) => e.stopPropagation()}>
         <div className="relative w-full bg-black/60 border-b border-emerald-950/60 overflow-hidden">
-          <img src={project.image} alt={project.title} className="w-full object-contain max-h-[45vh] transition-transform duration-500 hover:scale-105" />
+          <img src={project.image} alt={project.title} className="w-full object-contain max-h-[45vh]" />
           <button
             onClick={onClose}
             className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md transition-all active:scale-95"
@@ -143,7 +135,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   );
 }
 
-// ─── Dynamic Audio Player with Live Wave Visualizer ───────────────────────────
+// ─── Living Audio Card With Waveform Simulation ───────────────────────────────
 function AudioCard({
   title,
   titleUrdu,
@@ -185,7 +177,7 @@ function AudioCard({
   return (
     <div className={`relative p-5 rounded-2xl transition-all duration-300 border ${
       isPlaying
-        ? "bg-gradient-to-br from-emerald-950/60 to-black/80 border-emerald-500/70 shadow-[0_10px_35px_rgba(16,185,129,0.15)] ring-1 ring-emerald-400/40"
+        ? "bg-gradient-to-br from-emerald-950/70 to-black/90 border-emerald-400/60 shadow-[0_10px_35px_rgba(16,185,129,0.18)]"
         : "bg-white/[0.03] hover:bg-white/[0.06] border-white/10 hover:border-emerald-500/40"
     }`}>
       <audio
@@ -206,14 +198,15 @@ function AudioCard({
       <div className="flex items-start justify-between gap-4 mb-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+            <span className="text-[10px] font-mono tracking-wider px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">
               {tag}
             </span>
             {isPlaying && (
-              <span className="flex items-center gap-0.5 h-3">
-                <span className="w-0.5 h-3 bg-emerald-400 rounded animate-pulse" style={{ animationDuration: "0.5s" }}></span>
-                <span className="w-0.5 h-4 bg-emerald-400 rounded animate-pulse" style={{ animationDuration: "0.7s" }}></span>
-                <span className="w-0.5 h-2 bg-emerald-400 rounded animate-pulse" style={{ animationDuration: "0.4s" }}></span>
+              <span className="flex items-end gap-[3px] h-3.5 px-1.5 py-0.5 bg-emerald-500/20 rounded border border-emerald-400/30">
+                <span className="w-1 bg-emerald-300 rounded-full animate-wave-1" />
+                <span className="w-1 bg-emerald-300 rounded-full animate-wave-2" />
+                <span className="w-1 bg-emerald-300 rounded-full animate-wave-3" />
+                <span className="w-1 bg-emerald-300 rounded-full animate-wave-2" />
               </span>
             )}
           </div>
@@ -223,12 +216,12 @@ function AudioCard({
 
         <button
           onClick={onTogglePlay}
-          className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 shadow-lg ${
+          className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 shadow-md ${
             isPlaying
-              ? "bg-emerald-400 text-neutral-950 ring-4 ring-emerald-400/20"
-              : "bg-white/10 hover:bg-emerald-500 text-white hover:text-neutral-950 border border-white/15 hover:border-emerald-400"
+              ? "bg-emerald-400 text-neutral-950 shadow-emerald-400/30"
+              : "bg-white/10 hover:bg-emerald-500 text-white hover:text-neutral-950 border border-white/15"
           }`}
-          aria-label={isPlaying ? "Pause" : "Play"}
+          aria-label={isPlaying ? "Pause sample" : "Play sample"}
         >
           {isPlaying ? (
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
@@ -245,10 +238,10 @@ function AudioCard({
 
       <p className="text-xs text-neutral-400 leading-relaxed mb-4">{description}</p>
 
-      {/* Modern Wave Track Scrubber */}
+      {/* Scrub Track */}
       <div className="space-y-1.5">
         <div
-          className="relative w-full h-1.5 bg-neutral-800 rounded-full cursor-pointer overflow-hidden group"
+          className="relative w-full h-1.5 bg-white/10 rounded-full cursor-pointer overflow-hidden group"
           onClick={(e) => {
             if (!audioRef.current) return;
             const rect = e.currentTarget.getBoundingClientRect();
@@ -261,7 +254,7 @@ function AudioCard({
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="flex justify-between text-[10px] font-mono text-neutral-500">
+        <div className="flex justify-between text-[10px] font-mono text-neutral-400">
           <span>{currentTime}</span>
           <span>{duration}</span>
         </div>
@@ -272,11 +265,83 @@ function AudioCard({
 
 // ─── Main Application ─────────────────────────────────────────────────────────
 export default function App() {
+  const [activeSection, setActiveSection] = useState("hero");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeAudioId, setActiveAudioId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ name: "", email: "", role: "AI Urdu Training / RLHF", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
+
+  // Section definitions for Navigation and Dynamic Themes
+  const navSections = [
+    { id: "hero", label: "Overview" },
+    { id: "ai-expertise", label: "AI Urdu Training" },
+    { id: "audio-samples", label: "Voice Data" },
+    { id: "software", label: "Projects" },
+    { id: "operations", label: "Operations" },
+    { id: "education", label: "Education" },
+    { id: "contact", label: "Contact" },
+  ];
+
+  // Dynamic subtle theme colors per section (Smooth background shifting)
+  const sectionThemes: Record<string, { bg: string; ambient: string; border: string }> = {
+    hero: { bg: "#060a08", ambient: "rgba(16, 185, 129, 0.12)", border: "rgba(16, 185, 129, 0.2)" },
+    "ai-expertise": { bg: "#070e0b", ambient: "rgba(20, 184, 166, 0.14)", border: "rgba(20, 184, 166, 0.25)" },
+    "audio-samples": { bg: "#080c12", ambient: "rgba(56, 189, 248, 0.10)", border: "rgba(56, 189, 248, 0.2)" },
+    software: { bg: "#0a0a0f", ambient: "rgba(99, 102, 241, 0.10)", border: "rgba(99, 102, 241, 0.2)" },
+    operations: { bg: "#0c0b08", ambient: "rgba(245, 158, 11, 0.11)", border: "rgba(245, 158, 11, 0.22)" },
+    education: { bg: "#070c0a", ambient: "rgba(16, 185, 129, 0.10)", border: "rgba(16, 185, 129, 0.2)" },
+    contact: { bg: "#050b07", ambient: "rgba(52, 211, 153, 0.15)", border: "rgba(52, 211, 153, 0.3)" },
+  };
+
+  // Scroll spy & Smooth section reveal observer
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + 200;
+      for (const sec of navSections) {
+        const el = document.getElementById(sec.id);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            setActiveSection(sec.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // IntersectionObserver for gentle, fluid scroll reveals
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    const revealElements = document.querySelectorAll(".scroll-reveal");
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollTo = (id: string) => {
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      setMobileMenuOpen(false);
+    }
+  };
 
   const projects: Project[] = [
     {
@@ -285,7 +350,7 @@ export default function App() {
       status: "Active Engineering",
       category: "Full-Stack Web Architecture",
       description: "A self-contained, offline-first Point-of-Sale tool built for small retail establishments across Punjab requiring zero internet connectivity.",
-      fullDescription: "BizLedger is engineered for unbanked micro-retailers in high-density Punjab markets. Built completely with vanilla JavaScript, HTML5, and IndexedDB for local data persistence with zero network dependencies. It delivers inventory reconciliation, low-stock notifications, monthly operational profit-and-loss generation, and transaction logs without recurring server fees.",
+      fullDescription: "BizLedger is engineered for micro-retailers in high-density Punjab markets. Built completely with vanilla JavaScript, HTML5, and IndexedDB for local data persistence with zero network dependencies. It delivers inventory reconciliation, low-stock notifications, monthly operational profit-and-loss generation, and transaction logs without recurring server fees.",
       tags: ["JavaScript", "HTML5", "IndexedDB", "Offline-First", "Retail POS"],
       image: bizLedgerImg,
       meta: "Targeted to 1.3M+ retail shops operating without digital POS software.",
@@ -349,7 +414,7 @@ export default function App() {
           Email: formData.email,
           Opportunity: formData.role,
           Message: formData.message,
-          _subject: `[Portfolio] High-Priority Opportunity from ${formData.name}`,
+          _subject: `[Urdu AI Inquiry] From ${formData.name}`,
         }),
       });
       if (res.ok) setFormSent(true);
@@ -361,10 +426,13 @@ export default function App() {
     }
   };
 
+  const currentTheme = sectionThemes[activeSection] || sectionThemes.hero;
+
   return (
-    <div className="min-h-screen bg-[#070b09] text-neutral-200 font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
-      
-      {/* ── Artistic Typography & Glow Styles ── */}
+    <div
+      className="min-h-screen text-neutral-200 font-sans antialiased selection:bg-emerald-400 selection:text-black transition-colors duration-1000 ease-out"
+      style={{ backgroundColor: currentTheme.bg }}
+    >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap');
 
@@ -379,61 +447,111 @@ export default function App() {
           line-height: 2.7 !important;
         }
 
-        .radial-mesh {
-          background-image: 
-            radial-gradient(at 15% 15%, rgba(16, 185, 129, 0.12) 0px, transparent 55%),
-            radial-gradient(at 85% 85%, rgba(5, 150, 105, 0.08) 0px, transparent 60%),
-            radial-gradient(at 50% 50%, rgba(217, 119, 6, 0.04) 0px, transparent 50%);
+        /* ── Fluid, Gentle Scroll Reveals ── */
+        .scroll-reveal {
+          opacity: 0;
+          transform: translateY(22px);
+          transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: opacity, transform;
+        }
+        .scroll-reveal.visible {
+          opacity: 1;
+          transform: translateY(0);
         }
 
-        .glass-panel {
-          background: rgba(14, 23, 19, 0.7);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
+        /* ── Subtle Living Micro-animations ── */
+        @keyframes subtle-breath {
+          0%, 100% { transform: scale(1); opacity: 0.85; }
+          50% { transform: scale(1.02); opacity: 1; }
+        }
+        .animate-breath {
+          animation: subtle-breath 7s ease-in-out infinite;
+        }
+
+        @keyframes wave-bounce {
+          0%, 100% { height: 4px; }
+          50% { height: 14px; }
+        }
+        .animate-wave-1 { animation: wave-bounce 0.8s ease-in-out infinite; }
+        .animate-wave-2 { animation: wave-bounce 0.8s ease-in-out infinite 0.2s; }
+        .animate-wave-3 { animation: wave-bounce 0.8s ease-in-out infinite 0.4s; }
+
+        .glass-surface {
+          background: rgba(14, 23, 19, 0.65);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
           border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .glass-panel-hover {
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .glass-panel-hover:hover {
-          transform: translateY(-2px);
-          background: rgba(20, 32, 27, 0.85);
-          border-color: rgba(52, 211, 153, 0.3);
-          box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.2);
-        }
-
-        .glow-text {
-          text-shadow: 0 0 35px rgba(52, 211, 153, 0.3);
+        .glass-surface:hover {
+          background: rgba(20, 32, 27, 0.8);
+          border-color: rgba(52, 211, 153, 0.35);
+          box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15);
         }
       `}</style>
 
-      {/* ── Fixed Artistic Header ── */}
-      <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#070b09]/80 backdrop-blur-xl">
+      {/* ── Dynamic Ambient Atmosphere Glow ── */}
+      <div
+        className="fixed inset-0 pointer-events-none transition-all duration-1000 ease-out z-0"
+        style={{
+          background: `radial-gradient(circle at 50% 25%, ${currentTheme.ambient} 0%, transparent 65%)`,
+        }}
+      />
+
+      {/* ── Precision Navigation Bar with Section Anchors ── */}
+      <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#060a08]/85 backdrop-blur-xl transition-all duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           
-          <a href="#hero" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-300 p-0.5 flex items-center justify-center transition-transform group-hover:scale-105">
-              <div className="w-full h-full bg-[#070b09] rounded-[6px] flex items-center justify-center text-emerald-400 font-bold text-xs">
+          {/* Logo brand */}
+          <button
+            onClick={() => scrollTo("hero")}
+            className="flex items-center gap-2.5 text-left group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-300 p-0.5 transition-transform group-hover:scale-105">
+              <div className="w-full h-full bg-[#060a08] rounded-[6px] flex items-center justify-center text-emerald-400 font-extrabold text-xs">
                 AH
               </div>
             </div>
-            <div className="leading-tight">
-              <span className="font-bold text-sm tracking-tight text-white block group-hover:text-emerald-400 transition-colors">Abdul Hanan</span>
-              <span className="text-[10px] font-mono text-neutral-400 block">AI Urdu Specialist</span>
+            <div>
+              <span className="font-extrabold text-sm tracking-tight text-white block group-hover:text-emerald-300 transition-colors">
+                Abdul Hanan Abrar
+              </span>
+              <span className="text-[10px] font-mono text-neutral-400 block">
+                AI Urdu Language Trainer
+              </span>
             </div>
-          </a>
+          </button>
 
-          {/* Quick Platform Action Strip */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Desktop Section Links */}
+          <nav className="hidden lg:flex items-center gap-1 font-medium text-xs">
+            {navSections.map((sec) => {
+              const isActive = activeSection === sec.id;
+              return (
+                <button
+                  key={sec.id}
+                  onClick={() => scrollTo(sec.id)}
+                  className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
+                    isActive
+                      ? "text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 font-semibold"
+                      : "text-neutral-400 hover:text-white hover:bg-white/[0.04]"
+                  }`}
+                >
+                  {sec.label}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Action Hub */}
+          <div className="flex items-center gap-2.5">
             <a
               href={PERSONAL_WEBSITE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-neutral-300 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 transition-all"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-neutral-300 hover:text-white bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 transition-all"
             >
               <IconGlobe className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="hidden sm:inline">Personal Website</span>
+              <span>Personal Website</span>
               <IconArrowExternal className="w-3 h-3 text-neutral-500" />
             </a>
 
@@ -441,168 +559,215 @@ export default function App() {
               href={RESUME_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neutral-950 bg-gradient-to-r from-emerald-400 to-teal-300 hover:brightness-110 shadow-md shadow-emerald-500/20 transition-all active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-neutral-950 bg-gradient-to-r from-emerald-400 to-teal-300 hover:brightness-110 shadow-sm shadow-emerald-500/30 transition-all active:scale-95"
             >
               <IconFileDoc className="w-3.5 h-3.5" />
               <span>CV Download</span>
             </a>
+
+            {/* Mobile Hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-lg text-neutral-400 hover:text-white hover:bg-white/10"
+              aria-label="Toggle navigation menu"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
           </div>
         </div>
+
+        {/* Mobile Dropdown Panel */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-[#060a08]/95 border-b border-white/10 px-4 py-3 space-y-1">
+            {navSections.map((sec) => (
+              <button
+                key={sec.id}
+                onClick={() => scrollTo(sec.id)}
+                className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                  activeSection === sec.id
+                    ? "text-emerald-300 bg-emerald-500/20 font-semibold"
+                    : "text-neutral-300 hover:bg-white/5"
+                }`}
+              >
+                {sec.label}
+              </button>
+            ))}
+            <div className="pt-2 border-t border-white/10 flex gap-2">
+              <a
+                href={PERSONAL_WEBSITE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 text-center py-2 text-xs font-semibold bg-white/5 rounded-lg text-neutral-200 border border-white/10"
+              >
+                Personal Website ↗
+              </a>
+            </div>
+          </div>
+        )}
       </header>
 
-      <main id="hero" className="radial-mesh relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-24">
+      {/* ── Main Content Container ── */}
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16 space-y-28">
 
-        {/* ── Hero Showcase Section ── */}
-        <section className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.9fr] gap-12 items-center pt-4">
+        {/* ── Hero Section (Photo Integrated Alongside Title) ── */}
+        <section id="hero" className="scroll-reveal pt-4 sm:pt-6">
           
-          <div className="space-y-6">
-            
-            {/* Live Status Pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span>Available for Model RLHF, Curation & Training</span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08] glow-text">
-              Teaching AI to speak, reason, and code-switch in <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300">authentic Urdu.</span>
-            </h1>
-
-            <p className="text-base sm:text-lg text-neutral-300 leading-relaxed max-w-xl font-normal">
-              Most LLMs stumble with Pakistani cultural context, colloquial idioms, and natural code-switching. I combine a <span className="text-white font-semibold">Computer Science degree</span> with native linguistic mastery to help AI developers build models that truly connect.
-            </p>
-
-            {/* Artistic Nastaliq Ingot */}
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-white/[0.02] to-transparent border border-emerald-500/30 shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
-              <p className="urdu text-xl sm:text-2xl font-bold text-emerald-300 relative z-10">
-                اردو زبان میں مصنوعی ذہانت (AI) کی درستی، تربیت اور لسانی ماڈلنگ — معیاری اور جدید انداز میں
-              </p>
-              <div className="flex items-center gap-2 mt-2 font-mono text-[11px] text-emerald-400/80">
-                <IconSparkle className="w-3.5 h-3.5 text-amber-400" />
-                <span>Native C2 Urdu · Fluent Punjabi · Technical English</span>
-              </div>
-            </div>
-
-            {/* ── Requested Clean Platform Link Strip ── */}
-            <div className="pt-2">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 block mb-3">Direct Platforms</span>
-              <div className="flex flex-wrap gap-2.5">
-                
-                <a
-                  href={`mailto:${EMAIL}`}
-                  onClick={handleEmailClick}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold active:scale-95"
-                >
-                  <IconMail className="w-4 h-4 text-emerald-400" />
-                  <span>Email Abdul</span>
-                </a>
-
-                <a
-                  href={LINKEDIN}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold active:scale-95"
-                >
-                  <IconLinkedIn className="w-4 h-4 text-[#0077B5]" />
-                  <span>LinkedIn Profile</span>
-                  <IconArrowExternal className="w-3 h-3 text-neutral-400" />
-                </a>
-
-                <a
-                  href={PERSONAL_WEBSITE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold active:scale-95"
-                >
-                  <IconGlobe className="w-4 h-4 text-teal-400" />
-                  <span>Personal Website</span>
-                  <IconArrowExternal className="w-3 h-3 text-neutral-400" />
-                </a>
-
-                <a
-                  href={RESUME_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold active:scale-95"
-                >
-                  <IconFileDoc className="w-4 h-4 text-amber-400" />
-                  <span>CV Download</span>
-                  <IconArrowExternal className="w-3 h-3 text-neutral-400" />
-                </a>
-
-              </div>
-            </div>
-
-          </div>
-
-          {/* Artistic Portrait Canvas */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-60 transition duration-700"></div>
-              <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-3xl overflow-hidden border-2 border-white/20 bg-[#0e1612] shadow-2xl">
-                <img src={heroPhoto} alt="Abdul Hanan Abrar" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#070b09] via-transparent to-transparent opacity-80"></div>
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-black/60 backdrop-blur-md border border-white/10">
-                  <p className="text-xs font-bold text-white">Abdul Hanan Abrar</p>
-                  <p className="text-[11px] text-emerald-400 font-mono">Faisalabad, Pakistan · BSc CS '28</p>
+          {/* Header Card: Medium Photo Alongside Name & Professional Title */}
+          <div className="p-6 sm:p-8 rounded-3xl glass-surface border border-emerald-500/25 mb-8 relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+              
+              {/* Medium-sized Photo with Gentle Living Ambient Glow */}
+              <div className="relative flex-shrink-0">
+                <div className="absolute -inset-1.5 bg-gradient-to-tr from-emerald-500 via-teal-400 to-amber-400 rounded-2xl blur-md opacity-40 animate-breath"></div>
+                <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border-2 border-emerald-400/40 bg-black/60 shadow-xl">
+                  <img
+                    src={heroPhoto}
+                    alt="Abdul Hanan Abrar"
+                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  <span className="absolute bottom-1.5 left-2 text-[9px] font-mono text-emerald-300 uppercase tracking-widest">
+                    PK Verified
+                  </span>
                 </div>
               </div>
+
+              {/* Title & Core Identity */}
+              <div className="space-y-2 text-center sm:text-left flex-1">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>Specialized in Model RLHF, Curation & Training</span>
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                  Abdul Hanan Abrar
+                </h1>
+
+                <p className="text-sm sm:text-base font-medium text-emerald-300">
+                  AI Urdu Language Trainer · LLM Evaluator · CS Student & Operations
+                </p>
+
+                <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed max-w-2xl pt-1">
+                  Empowering frontier artificial intelligence with authentic Pakistani Urdu. Transforming unrefined language datasets into nuanced, dialect-aware, and culturally safe model responses.
+                </p>
+
+                {/* Direct Platform Links with Exact Clean Labels */}
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-3">
+                  <a
+                    href={`mailto:${EMAIL}`}
+                    onClick={handleEmailClick}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold"
+                  >
+                    <IconMail className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Email Abdul</span>
+                  </a>
+
+                  <a
+                    href={LINKEDIN}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold"
+                  >
+                    <IconLinkedIn className="w-3.5 h-3.5 text-[#0077B5]" />
+                    <span>LinkedIn Profile</span>
+                    <IconArrowExternal className="w-3 h-3 text-neutral-500" />
+                  </a>
+
+                  <a
+                    href={PERSONAL_WEBSITE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold"
+                  >
+                    <IconGlobe className="w-3.5 h-3.5 text-teal-400" />
+                    <span>Personal Website</span>
+                    <IconArrowExternal className="w-3 h-3 text-neutral-500" />
+                  </a>
+
+                  <a
+                    href={RESUME_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-emerald-500/20 text-white hover:text-emerald-300 border border-white/10 hover:border-emerald-500/40 transition-all text-xs font-semibold"
+                  >
+                    <IconFileDoc className="w-3.5 h-3.5 text-amber-400" />
+                    <span>CV Download</span>
+                    <IconArrowExternal className="w-3 h-3 text-neutral-500" />
+                  </a>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          {/* Nastaliq Statement Card */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-white/[0.02] to-transparent border border-emerald-500/25 shadow-lg relative overflow-hidden">
+            <p className="urdu text-xl sm:text-2xl text-emerald-300 font-semibold text-center sm:text-right">
+              اردو زبان میں مصنوعی ذہانت (AI) کی درستی، تربیت اور لسانی ماڈلنگ — معیاری اور جدید انداز میں
+            </p>
+            <div className="flex flex-wrap items-center justify-between gap-2 mt-3 pt-3 border-t border-white/[0.06] text-xs font-mono text-neutral-400">
+              <span>Native C2 Urdu · Fluent Punjabi · Technical English</span>
+              <span>BSc Computer Science · University of Agriculture Faisalabad</span>
             </div>
           </div>
 
         </section>
 
-        {/* ── Primary AI Training & RLHF Value Hub ── */}
-        <section className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-5">
+        {/* ── AI Urdu Language Training (Core Feature) ── */}
+        <section id="ai-expertise" className="scroll-reveal space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">01 / Model Architecture Specialization</span>
+              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">01 / Model Specialization</span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Why Train Urdu Models With Me?</h2>
             </div>
             <p className="text-xs font-mono text-neutral-400">RLHF · Prompt Auditing · SFT Datasets</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            
-            <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-t-2 border-t-emerald-500">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold font-mono">
+            <div className="glass-surface p-6 rounded-2xl space-y-3 border-t-2 border-t-emerald-400">
+              <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold font-mono text-xs">
                 01
               </div>
-              <h3 className="text-lg font-bold text-white">Authentic Code-Switching</h3>
+              <h3 className="text-base font-bold text-white">Authentic Code-Switching</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                Pakistanis rarely communicate in pure formal Urdu. They blend Urdu grammar with English technical words. I create authentic code-switching training pairs that reflect real-world consumer behavior.
+                Pakistanis communicate through dynamic code-switching between Urdu grammar and English loan words. I construct genuine bilingual pairs that avoid mechanical translation errors.
               </p>
             </div>
 
-            <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-t-2 border-t-teal-400">
-              <div className="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 font-bold font-mono">
+            <div className="glass-surface p-6 rounded-2xl space-y-3 border-t-2 border-t-teal-400">
+              <div className="w-9 h-9 rounded-lg bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 font-bold font-mono text-xs">
                 02
               </div>
-              <h3 className="text-lg font-bold text-white">RLHF & Safety Red-Teaming</h3>
+              <h3 className="text-base font-bold text-white">RLHF & Safety Red-Teaming</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                Rigorous evaluation of LLM Urdu outputs for hallucination detection, contextual sensitivity, cultural safety boundaries, and Nastaliq orthographic accuracy.
+                Evaluating model outputs for factual accuracy, subtle hallucination detection, contextual appropriateness, cultural safety norms, and Nastaliq orthography.
               </p>
             </div>
 
-            <div className="glass-panel glass-panel-hover p-6 rounded-2xl space-y-3 border-t-2 border-t-amber-400">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold font-mono">
+            <div className="glass-surface p-6 rounded-2xl space-y-3 border-t-2 border-t-amber-400">
+              <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold font-mono text-xs">
                 03
               </div>
-              <h3 className="text-lg font-bold text-white">CS Technical Foundation</h3>
+              <h3 className="text-base font-bold text-white">CS Technical Foundation</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                As a Computer Science student, I understand tokenization issues with non-Latin scripts, JSON schema validation, Python pipelines, and API integrations. You work with a technical mind, not just a translator.
+                As a Computer Science student, I understand tokenization constraints with Perso-Arabic scripts, JSON schema labeling, Python automation, and API pipelines.
               </p>
             </div>
-
           </div>
         </section>
 
-        {/* ── Audio Portfolio: 4 Full Voice Samples ── */}
-        <section className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-5">
+        {/* ── 4 Full Voice Samples (Zero Latency) ── */}
+        <section id="audio-samples" className="scroll-reveal space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">02 / Verified Audio Datasets</span>
+              <span className="text-xs font-mono uppercase tracking-widest text-sky-400 block mb-1">02 / Verified Audio Datasets</span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Acoustic Samples for AI Speech Modeling</h2>
             </div>
             <p className="text-xs font-mono text-neutral-400">4 Master Records · Zero Latency</p>
@@ -624,28 +789,28 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── Software Engineering & Projects ── */}
-        <section className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-5">
+        {/* ── Software Projects ── */}
+        <section id="software" className="scroll-reveal space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">03 / Software Projects</span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Engineering Practical Solutions</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-indigo-400 block mb-1">03 / Software Projects</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Engineering Practical Systems</h2>
             </div>
-            <p className="text-xs font-mono text-neutral-400">Offline-First · Modern Web APIs</p>
+            <p className="text-xs font-mono text-neutral-400">Offline-First · Hardware APIs</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {projects.map((p) => (
-              <div key={p.title} className="glass-panel glass-panel-hover rounded-3xl overflow-hidden flex flex-col justify-between group">
+              <div key={p.title} className="glass-surface rounded-3xl overflow-hidden flex flex-col justify-between group">
                 <div>
                   <div className="h-48 bg-black/60 overflow-hidden relative border-b border-white/10">
-                    <img src={p.image} alt={p.title} className="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" />
+                    <img src={p.image} alt={p.title} className="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-all duration-500 group-hover:scale-105" />
                     <span className="absolute top-4 left-4 text-[10px] font-mono px-3 py-1 rounded-full bg-black/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md">
                       {p.status}
                     </span>
                   </div>
                   <div className="p-6 space-y-2">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400">{p.category}</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400">{p.category}</span>
                     <h3 className="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">{p.title}</h3>
                     <p className="text-xs font-medium text-neutral-400">{p.subtitle}</p>
                     <p className="text-xs text-neutral-300 leading-relaxed pt-2">{p.description}</p>
@@ -672,21 +837,20 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── Operations & Pharmaceutical Experience ── */}
-        <section className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-white/10 pb-5">
+        {/* ── Professional Operations Background ── */}
+        <section id="operations" className="scroll-reveal space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-white/10 pb-4">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">04 / Operational Background</span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Professional Experience & Problem Solving</h2>
+              <span className="text-xs font-mono uppercase tracking-widest text-amber-400 block mb-1">04 / Operational History</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Operations & Problem Solving</h2>
             </div>
             <p className="text-xs font-mono text-neutral-400">2+ Years Active Operations</p>
           </div>
 
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
-            
+          <div className="glass-surface p-6 sm:p-8 rounded-3xl space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">Aptly Pharmaceuticals · Faisalabad</span>
+                <span className="text-xs font-mono text-amber-400 uppercase tracking-widest">Aptly Pharmaceuticals · Faisalabad</span>
                 <h3 className="text-xl font-bold text-white mt-0.5">Customer Support & Operations Specialist</h3>
               </div>
               <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-300 self-start sm:self-auto">
@@ -695,44 +859,42 @@ export default function App() {
             </div>
 
             <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
-              Handling complex customer cases across phone, WhatsApp, and email in bilingual environments. Developing real-time internal spreadsheet validation tools to streamline logistics and inventory.
+              Managing complex client support workflows across WhatsApp, phone, and email in bilingual settings. Built customized Excel data models to preserve inventory integrity and resolve logging discrepancies.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-white/10">
               <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-                <span className="text-xs font-mono font-bold text-emerald-400 block mb-1">Inventory Management</span>
-                <p className="text-xs text-neutral-400">Engineered live multi-SKU Excel models to maintain real-time stock levels and eliminate stock discrepancies.</p>
+                <span className="text-xs font-mono font-bold text-emerald-400 block mb-1">Live Stock Tracking</span>
+                <p className="text-xs text-neutral-400">Engineered multi-SKU Excel models to maintain real-time inventory counts and prevent stockouts.</p>
               </div>
               <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-                <span className="text-xs font-mono font-bold text-teal-400 block mb-1">Data Bug Remediation</span>
-                <p className="text-xs text-neutral-400">Identified and permanently patched a silent DD/MM vs MM/DD date format corruption breaking executive monthly reports.</p>
+                <span className="text-xs font-mono font-bold text-teal-400 block mb-1">Date Bug Remediation</span>
+                <p className="text-xs text-neutral-400">Identified and fixed a silent DD/MM vs MM/DD date format corruption breaking executive monthly reports.</p>
               </div>
               <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
                 <span className="text-xs font-mono font-bold text-amber-400 block mb-1">Bilingual Support</span>
-                <p className="text-xs text-neutral-400">Delivering crystal-clear communication with healthcare clients in native Urdu, fluent Punjabi, and professional English.</p>
+                <p className="text-xs text-neutral-400">Delivering communication in native Urdu, fluent Punjabi, and professional English.</p>
               </div>
               <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
-                <span className="text-xs font-mono font-bold text-emerald-300 block mb-1">Process Validation</span>
-                <p className="text-xs text-neutral-400">Created strict cell validation scripts preventing human input errors across internal pharmaceutical worksheets.</p>
+                <span className="text-xs font-mono font-bold text-indigo-400 block mb-1">Data Validation</span>
+                <p className="text-xs text-neutral-400">Enforced strict cell validation rules preventing human input errors across logistics records.</p>
               </div>
             </div>
-
           </div>
         </section>
 
-        {/* ── Education & Academic Foundations ── */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-          
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl space-y-3">
+        {/* ── Education & Philosophy ── */}
+        <section id="education" className="scroll-reveal grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+          <div className="glass-surface p-6 sm:p-8 rounded-3xl space-y-3">
             <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">Academic Foundation</span>
             <h3 className="text-2xl font-bold text-white">BS Computer Science</h3>
             <p className="text-sm font-semibold text-emerald-300">University of Agriculture, Faisalabad (UAF)</p>
             <p className="text-xs font-mono text-neutral-400">Semester 5 · Expected Graduation 2028</p>
             <p className="text-xs text-neutral-300 leading-relaxed pt-2">
-              Rigorous education in Object-Oriented Programming, Data Structures, Relational Databases, and Python algorithm design. Gives me the software engineering literacy required to interface directly with AI research teams.
+              Deep training in Data Structures, Object-Oriented Programming, Relational Databases, and Python algorithm design. Provides the technical literacy needed to interface directly with AI research teams.
             </p>
             <div className="flex flex-wrap gap-1.5 pt-3">
-              {["Python", "JavaScript", "HTML5/CSS3", "Data Structures", "Algorithms"].map((sk) => (
+              {["Python", "JavaScript", "HTML5/CSS3", "Data Structures", "OOP"].map((sk) => (
                 <span key={sk} className="text-[11px] font-mono px-2.5 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-700/40">
                   {sk}
                 </span>
@@ -744,31 +906,27 @@ export default function App() {
             <img src={aboutPhoto} alt="Abdul Hanan" className="w-full h-full object-cover object-top opacity-70 group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#070b09] via-black/50 to-transparent"></div>
             <div className="absolute bottom-6 left-6 right-6 space-y-2">
-              <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">Consultant Philosophy</span>
+              <span className="text-xs font-mono text-emerald-400 uppercase tracking-widest">Core Philosophy</span>
               <p className="text-sm italic font-medium text-neutral-200">
-                "Where linguistic nuance meets technical precision — that is where AI becomes truly human."
+                "Where linguistic nuance meets technical precision — that is where artificial intelligence becomes genuinely human."
               </p>
             </div>
           </div>
-
         </section>
 
-        {/* ── High-Converting Artistic Contact Section ── */}
-        <section id="contact" className="relative p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-emerald-950/40 via-[#0e1612] to-black border border-emerald-500/30 overflow-hidden shadow-2xl">
-          
+        {/* ── Contact Section ── */}
+        <section id="contact" className="scroll-reveal relative p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-emerald-950/40 via-[#0a120e] to-black border border-emerald-500/30 overflow-hidden shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-start relative z-10">
-            
             <div className="space-y-6">
               <div>
                 <span className="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1">05 / Immediate Dispatch</span>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white glow-text">Let's Build the Next Generation of AI.</h2>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Let's Build Exceptional AI in Urdu.</h2>
               </div>
 
               <p className="text-sm text-neutral-300 leading-relaxed max-w-md font-normal">
-                Whether you have an RLHF project, code-switching dataset need, or operational role — dispatch a message below or connect directly across my verified platforms.
+                Available for contract evaluations, bilingual language engineering tasks, or operational roles. Connect directly across my verified platforms:
               </p>
 
-              {/* Direct Link Badges */}
               <div className="space-y-3 pt-2">
                 <a
                   href={`mailto:${EMAIL}`}
@@ -804,11 +962,23 @@ export default function App() {
                   </div>
                   <span>Personal Website ↗</span>
                 </a>
+
+                <a
+                  href={RESUME_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-sm font-semibold text-neutral-200 hover:text-emerald-300 transition-colors group"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                    <IconFileDoc className="w-4 h-4 text-amber-400" />
+                  </div>
+                  <span>CV Download ↗</span>
+                </a>
               </div>
             </div>
 
-            {/* Functional Clean Contact Form */}
-            <div className="glass-panel p-6 sm:p-8 rounded-2xl border border-white/10">
+            {/* Functional Contact Form */}
+            <div className="glass-surface p-6 sm:p-8 rounded-2xl border border-white/10">
               {formSent ? (
                 <div className="py-12 text-center space-y-3">
                   <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 mx-auto text-xl">
@@ -879,17 +1049,14 @@ export default function App() {
                 </form>
               )}
             </div>
-
           </div>
-
         </section>
 
       </main>
 
-      {/* ── Architectural Footer ── */}
-      <footer className="border-t border-white/[0.06] bg-[#050806] py-10 text-neutral-400 text-xs mt-12">
+      {/* ── Footer ── */}
+      <footer className="border-t border-white/[0.06] bg-[#040705] py-10 text-neutral-400 text-xs mt-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-6">
-          
           <div className="text-center sm:text-left">
             <p className="text-white font-bold text-sm tracking-tight">Abdul Hanan Abrar</p>
             <p className="text-neutral-400 text-[11px] mt-0.5">AI Urdu Language Specialist & Technical Operations · Faisalabad, Pakistan</p>
@@ -909,13 +1076,11 @@ export default function App() {
               CV Download
             </a>
           </div>
-
         </div>
       </footer>
 
       {/* ── Interactive Modal ── */}
       {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
-
     </div>
   );
 }
