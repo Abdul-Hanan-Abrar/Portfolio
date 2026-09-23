@@ -169,7 +169,6 @@ function AudioCard({
     return `${m}:${s < 10 ? "0" : ""}${s}`;
   };
 
-  // Immediate Play/Pause sync
   useEffect(() => {
     if (!audioRef.current) return;
     if (isPlaying) {
@@ -201,7 +200,6 @@ function AudioCard({
     }
   };
 
-  // Immediate Timeline Seek
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!audioRef.current || !progressBarRef.current) return;
     const rect = progressBarRef.current.getBoundingClientRect();
@@ -225,7 +223,6 @@ function AudioCard({
           : "bg-white/[0.03] hover:bg-white/[0.06] border-white/10"
       }`}
     >
-      {/* Preload metadata caches track duration immediately with zero audio latency */}
       <audio
         ref={audioRef}
         src={audioSrc}
@@ -249,7 +246,6 @@ function AudioCard({
               {tag}
             </span>
 
-            {/* Total Duration Indicator Tag */}
             <span
               className={`text-[10px] font-mono px-2 py-0.5 rounded ${
                 isLightMode ? "bg-neutral-100 text-neutral-600" : "bg-white/5 text-neutral-400 border border-white/5"
@@ -275,7 +271,6 @@ function AudioCard({
           </p>
         </div>
 
-        {/* Direct Play Button */}
         <button
           onClick={onTogglePlay}
           className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-all active:scale-95 ${
@@ -304,7 +299,6 @@ function AudioCard({
         {description}
       </p>
 
-      {/* ── Visual Audio Timeline & Interactive Scrub Bar ── */}
       <div className="space-y-2 pt-1">
         <div
           ref={progressBarRef}
@@ -313,7 +307,6 @@ function AudioCard({
             isLightMode ? "bg-neutral-200/90 hover:bg-neutral-300" : "bg-white/10 hover:bg-white/20"
           }`}
         >
-          {/* Active progress fill */}
           <div
             className="h-full bg-emerald-500 rounded-full transition-all duration-75 relative"
             style={{ width: `${progress}%` }}
@@ -359,7 +352,6 @@ export default function App() {
     { id: "contact", label: "Contact" },
   ];
 
-  // Exact mobile-proof scroll calculation
   const scrollTo = (id: string) => {
     setMobileMenuOpen(false);
 
@@ -376,19 +368,16 @@ export default function App() {
     });
   };
 
-  // Theme Shift & Scroll Tracking
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
 
-      // Smooth transition to light mode as user scrolls down
       if (scrollY > 160) {
         setIsLightMode(true);
       } else {
         setIsLightMode(false);
       }
 
-      // Track active section
       const scrollPos = scrollY + 120;
       for (const sec of navSections) {
         const el = document.getElementById(sec.id);
@@ -407,7 +396,6 @@ export default function App() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Smooth Reveal Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -557,13 +545,8 @@ export default function App() {
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           
-          {/* Logo */}
+          {/* Logo / Name Header (AH Icon Removed) */}
           <button onClick={() => scrollTo("hero")} className="flex items-center gap-2.5 text-left group">
-            <div className="w-8 h-8 rounded-lg bg-emerald-600 p-0.5 transition-transform group-hover:scale-105">
-              <div className="w-full h-full bg-[#060A08] rounded-[6px] flex items-center justify-center text-emerald-400 font-extrabold text-xs">
-                AH
-              </div>
-            </div>
             <div>
               <span className={`font-extrabold text-sm tracking-tight block ${isLightMode ? "text-neutral-900" : "text-white"}`}>
                 Abdul Hanan
@@ -685,22 +668,10 @@ export default function App() {
         <section id="hero" className="scroll-reveal scroll-mt-20 pt-2">
           
           <div className="p-6 sm:p-8 rounded-3xl bg-[#0B1510] text-white border border-emerald-500/25 mb-6 relative overflow-hidden shadow-xl">
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <div className="flex flex-col-reverse sm:flex-row items-start justify-between gap-6">
               
-              {/* Photo */}
-              <div className="relative flex-shrink-0">
-                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden border-2 border-emerald-400/40 bg-black/60 shadow-lg">
-                  <img
-                    src={heroPhoto}
-                    alt="Abdul Hanan"
-                    fetchPriority="high"
-                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-              </div>
-
-              {/* Header Details */}
-              <div className="space-y-2 text-center sm:text-left flex-1">
+              {/* Left Side: Name & Header Details */}
+              <div className="space-y-2 text-left flex-1">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                   <span>Specialized in Model RLHF, Curation & Training</span>
@@ -719,7 +690,7 @@ export default function App() {
                 </p>
 
                 {/* Direct Action Links */}
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-3">
+                <div className="flex flex-wrap items-center justify-start gap-2 pt-3">
                   <a
                     href={`mailto:${EMAIL}`}
                     onClick={handleEmailClick}
@@ -763,6 +734,18 @@ export default function App() {
                   </a>
                 </div>
 
+              </div>
+
+              {/* Right Corner: Circular & Zoomed Photo */}
+              <div className="relative flex-shrink-0 self-start sm:self-start">
+                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-2 border-emerald-400/40 bg-black/60 shadow-lg">
+                  <img
+                    src={heroPhoto}
+                    alt="Abdul Hanan"
+                    fetchPriority="high"
+                    className="w-full h-full object-cover object-top scale-125 hover:scale-135 transition-transform duration-300"
+                  />
+                </div>
               </div>
 
             </div>
